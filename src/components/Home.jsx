@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import { AiOutlineSetting } from "react-icons/ai";
 import { FaFileAlt, FaFilm } from "react-icons/fa";
@@ -12,6 +12,43 @@ import { motion } from "framer-motion";
 const Home = () => {
   useDocumentTitle("");
   useTakeMeToTheTop();
+
+  // Array con todas las imágenes disponibles para el carrusel
+  const allSlideImages = [
+    "/img/slide1.jpg",
+    "/img/slide2.jpg",
+    "/img/slide3.jpg",
+    "/img/slide-1.jpg",
+    "/img/slide-2.jpg",
+    "/img/slide-3.jpg",
+    "/img/slide-4.jpg",
+    "/img/slide-5.jpg",
+    "/img/slide-6.jpg",
+  ];
+
+  // Estado para almacenar las imágenes seleccionadas aleatoriamente
+  const [selectedImages, setSelectedImages] = useState([]);
+
+  // Función para mezclar y seleccionar imágenes aleatorias
+  useEffect(() => {
+    const shuffleArray = (array) => {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    };
+
+    // Mezclar y seleccionar 3 imágenes aleatorias
+    const shuffled = shuffleArray(allSlideImages);
+    setSelectedImages(shuffled.slice(0, 3));
+  }, []); // Se ejecuta solo una vez al montar el componente
+
+  // Mostrar un placeholder mientras se cargan las imágenes
+  if (selectedImages.length === 0) {
+    return null;
+  }
   return (
     <>
       <div className="text-gray-600 bg-white dark:bg-[#0b1121] dark:text-white font-[Poppins]">
@@ -50,7 +87,7 @@ const Home = () => {
                 <Slider>
                   <Slide index={0}>
                     <img
-                      src="/img/slide1.jpg"
+                      src={selectedImages[0]}
                       alt="Slide 1"
                       className="w-full h-full object-cover"
                     />
@@ -61,14 +98,14 @@ const Home = () => {
                   </Slide>
                   <Slide index={1}>
                     <img
-                      src="/img/slide2.jpg"
+                      src={selectedImages[1]}
                       alt="Slide 2"
                       className="w-full h-full object-cover"
                     />
                   </Slide>
                   <Slide index={2}>
                     <img
-                      src="/img/slide3.jpg"
+                      src={selectedImages[2]}
                       alt="Slide 3"
                       className="w-full h-full object-cover"
                     />
