@@ -21,6 +21,7 @@ const Checkout = () => {
 
     const [orderComplete, setOrderComplete] = useState(false);
     const [orderDetails, setOrderDetails] = useState(null);
+    const [orderTotal, setOrderTotal] = useState(0);
 
     const TAX_RATE = parseFloat(process.env.REACT_APP_TAX_RATE || 0.16);
     const subtotal = getCartTotal();
@@ -86,6 +87,7 @@ const Checkout = () => {
     const onApprove = (data, actions) => {
         return actions.order.capture().then((details) => {
             setOrderDetails(details);
+            setOrderTotal(total); // Save the total before clearing cart
             setOrderComplete(true);
             clearCart();
             toast.success('Payment successful! Thank you for your order.');
@@ -132,7 +134,7 @@ const Checkout = () => {
                             <p className="mb-2">
                                 <strong>Total Paid:</strong>{' '}
                                 <span className="text-pink-500 font-bold">
-                                    {formatCurrency(total)}
+                                    {formatCurrency(orderTotal)}
                                 </span>
                             </p>
                         </div>
@@ -224,7 +226,6 @@ const Checkout = () => {
                                     </div>
                                 ))}
                             </div>
-
                             <div className="space-y-2 pt-4 border-t border-gray-300 dark:border-gray-600">
                                 <div className="flex justify-between">
                                     <span>Subtotal:</span>
