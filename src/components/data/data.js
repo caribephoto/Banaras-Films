@@ -1,59 +1,19 @@
 import { toast } from "react-toastify";
 
-export const marriageSamples = [
+export const marriageVideo = [
   {
-    groom: "Kanistha",
-    bride: "Saumya",
-    year: 2019,
-    videoId: "fAf_XpadCkk",
-    place: "Madurai",
-  },
-
-  {
-    groom: "Ishtmeet",
-    bride: "Jaspreet",
-    year: 2022,
-    videoId: "HQuogzrpda8",
-    place: "Jalandhar",
-  },
-
-  {
-    groom: "Yaad",
-    bride: "Kiran",
-    year: 2021,
-    videoId: "pvAAaLXH8NY",
-    place: "Varanasi",
-  },
-
-  {
-    groom: "Manpreet",
-    bride: "Gurkanwal",
-    year: 2022,
-    videoId: "KV5BILORgq8",
-    place: "Ghazipur",
-  },
-
-  {
-    groom: "Gaurav",
-    bride: "Lagan",
-    year: 2023,
-    videoId: "aqf8TLBR0HI",
-    place: "Varanasi",
+    groom: "Erik",
+    bride: "Lisa",
+    year: 2024,
+    videoId: "iTkZqzIs-CQ",
+    place: "Azul Beach Negril",
   },
   {
-    groom: "Fateh",
-    bride: "Prabh",
-    year: 2021,
-    videoId: "8YdFNkgZ4Fg",
-    place: "Chandigarh",
-  },
-
-  {
-    groom: "Maninder",
-    bride: "Noordeep",
-    year: 2022,
-    videoId: "VACmqrJmtFs",
-    place: "Amritsar",
+    groom: "Emily",
+    bride: "Dumisani",
+    year: 2024,
+    videoId: "BQDRczVwdvo",
+    place: "Azul Beach Negril",
   },
 ];
 
@@ -73,5 +33,3 @@ export const handleCopyText = (a) => {
     theme: "light",
   });
 };
-
-

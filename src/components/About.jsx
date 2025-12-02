@@ -1,24 +1,21 @@
 import React from "react";
-import emotional from "../images/emotional.jpg";
-import hny from "../images/hny.png";
-import santosh from "../images/sy.png";
-import saurabh from "../images/sy2.png";
+import about from "../images/about.jpg";
 import { useDocumentTitle, useTakeMeToTheTop } from "../components/hooks/hooks";
 
 import {
   AiOutlineMail,
   AiOutlineWhatsApp,
-  AiOutlineHeart,
   AiOutlineVideoCamera,
-  AiOutlinePlayCircle,
-  AiOutlineYoutube,
+  AiOutlineUser,
 } from "react-icons/ai";
-import { FiPhoneCall, FiFacebook, FiInstagram } from "react-icons/fi";
+import { MdOutlineTaskAlt } from "react-icons/md";
+import { AiOutlineTeam } from "react-icons/ai";
+import { HiOutlinePhotograph } from "react-icons/hi";
+import { FiPhoneCall } from "react-icons/fi";
 import { HiOutlineSpeakerphone } from "react-icons/hi";
-import { TbListCheck, TbUserCheck } from "react-icons/tb";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { handleCopyText, takeMeToTheTop } from "../components/data/data";
+import { handleCopyText } from "../components/data/data";
 import { fadeIn, staggerContainer, theOpacity } from "./data/motions";
 import { motion } from "framer-motion";
 
@@ -46,55 +43,53 @@ const About = () => {
         </div>
 
         <div className="wrapper flex flex-col justify-center items-center mx-12 lg:mx-16">
-          <div className="firstOne">
+          <motion.div
+            className="firstOne"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
             <img
               className="rounded-2xl scale-75 lg:scale-75"
-              src={emotional}
-              alt="emotional"
+              src={about}
+              alt="about"
             />
-          </div>
+          </motion.div>
 
           <div className="secondOne mx-auto container">
             <p className="text-base lg:text-xl">
-              Your wedding day is one of the most important days, and you want
-              to remember it for the rest of your life. We know it’s
-              overwhelming trying to find the videographer who is best for your
-              wedding.
+              Your wedding day is one of the most important days of your life,
+              and you want to remember it forever. We understand that finding
+              the right videographer for your wedding can be overwhelming. At
+              Caribe Photo, we recognize your concerns and share your dream of a
+              perfect day.
             </p>
 
             <p className="text-base lg:text-xl pt-2 lg:pt-4">
-              We know you want to feel confident you’re going to have a
-              cinematic film you’ll love forever. You’ve likely wondered if
-              there was a videographer you can trust to capture the moments
-              important to you and craft a unique wedding film that helps you
-              relive your wedding day over and over again.
+              At Caribephoto, we get it!
             </p>
 
             <p className="text-base lg:text-xl pt-2 lg:pt-4">
-              At Banaras Films, we get it!
-            </p>
-
-            <p className="text-base lg:text-xl pt-2 lg:pt-4">
-              It’s a big deal to be able to have a wedding film that helps you
-              remember one of the best days of your life. For over the past
-              decade, we’ve helped 1000s of brides just like you feel confident
-              their videographer will be fully prepared for their wedding and be
-              able to give them a fantastic wedding film.
+              We are here to help make that dream a reality. Over the past
+              decade, we have fulfilled the wishes of thousands of brides from
+              around the world who, like you, wanted their wedding captured in
+              beautiful and unforgettable images through stunning videos and
+              photographs.
             </p>
             <p className="text-base lg:text-xl pt-2 lg:pt-4">
-              Let's make your wedding film. Check Availability Now.
+              Let's make it real!. Check availability now!{" "}
             </p>
           </div>
 
-          <div className="thirdOne grid grid-cols-3 lg:grid-cols-3 gap-4 lg:gap-8 mt-3 lg:mt-5">
+          <div className="thirdOne grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8 mt-3 lg:mt-5">
             <a
-              href="mailto:FILMSBANARAS24X7@gmail.com"
+              href="mailto:info@caribephoto.com"
               target="_blank"
               rel="noopener noreferrer"
             >
               <button className="p-3 text-white bg-gray-500 hover:bg-gray-600 rounded-lg w-28 lg:w-60">
                 <span className="flex flex-row justify-center items-center space-x-2">
-                  {/* <span className="hidden lg:block">Contact via E-mail</span> */}
+                  {/* <span className="hidden lg:block">Contact via E-mail</span>  */}
                   <span>
                     <span className="hidden lg:block">Contact via E-mail</span>
                     <span className="lg:hidden">Contact</span>
@@ -123,7 +118,7 @@ const About = () => {
             </button>
 
             <a
-              href="https://wa.me/+919889901417"
+              href="https://wa.me/+529841578632"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -161,7 +156,7 @@ const About = () => {
                 className="One p-5 text-gray-600 bg-white dark:text-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg flex flex-col justify-center items-center space-y-1"
               >
                 <span className="text-3xl lg:text-5xl">
-                  <AiOutlineHeart />
+                  <AiOutlineUser />
                 </span>
                 <span className="text-3xl">Personal Attention</span>
                 <span className="">
@@ -176,7 +171,7 @@ const About = () => {
                 <span className="text-3xl lg:text-5xl">
                   <AiOutlineVideoCamera />
                 </span>
-                <span className="text-3xl">4K Cinematic Film</span>
+                <span className="text-3xl">4K Wedding Video</span>
                 <span className="">
                   You will love your professional wedding film.
                 </span>
@@ -200,7 +195,7 @@ const About = () => {
                 className="Four p-5 text-gray-600 bg-white dark:text-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg flex flex-col justify-center items-center space-y-1"
               >
                 <span className="text-3xl lg:text-5xl">
-                  <TbListCheck />
+                  <MdOutlineTaskAlt />
                 </span>
                 <span className="text-3xl">Feel Prepared</span>
                 <span className="">
@@ -214,7 +209,7 @@ const About = () => {
                 className="Five p-5 text-gray-600 bg-white dark:text-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg flex flex-col justify-center items-center space-y-1"
               >
                 <span className="text-3xl lg:text-5xl">
-                  <TbUserCheck />
+                  <AiOutlineTeam />
                 </span>
                 <span className="text-3xl">Proffessional Team</span>
                 <span className="">
@@ -228,12 +223,11 @@ const About = () => {
                 className="Six p-5 text-gray-600 bg-white dark:text-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg flex flex-col justify-center items-center space-y-1"
               >
                 <span className="text-3xl lg:text-5xl">
-                  <AiOutlinePlayCircle />
+                  <HiOutlinePhotograph />
                 </span>
-                <span className="text-3xl">Quick TT</span>
+                <span className="text-3xl">Rapid Moments</span>
                 <span className="">
-                  We know you’re excited to see your films quickly, and have
-                  faster than average turnaround times.
+                  We know you're excited to see your photos and video quickly.
                 </span>
               </motion.div>
             </motion.div>
@@ -247,40 +241,35 @@ const About = () => {
         <div className="WhatBridesSays flex flex-col justify-center items-center container mx-auto  pb-5 lg:pb-5 tracking-wider">
           <p className="text-base lg:text-xl mx-12 lg:mx-16">
             We are committed to exceeding your expectations so you can feel
-            confident you chose the videographer who is best for your wedding.
-            Our brides consistently rave about the experiences they had when
-            working with us and about how much joy their wedding films bring
-            them.
+            confident that you chose the photographer that is best for your
+            wedding. Our brides rave about the experience they have had working
+            with us and the joy their wedding photos have brought them.
           </p>
         </div>
 
-        <div className="parallax container mx-auto my-5 bg-blend-overlay text-white bg-cyan-900 h-[550px] md:h-[400px] lg:h-[550px] bg-fixed bg-center bg-no-repeat bg-cover bg-[url('https://www.wedding.film/wp-content/uploads/2020/09/V1A9522e-LLF.jpg')]">
-          <div className="flex flex-col justify-center items-center    pt-16 md:pt-20 lg:pt-44 ">
+        <div
+          className="parallax container mx-auto my-5 bg-blend-overlay text-white bg-gray-700 h-[550px] md:h-[400px] lg:h-[550px] bg-fixed bg-center bg-no-repeat bg-cover"
+          style={{ backgroundImage: `url('/img/background.jpg')` }}
+        >
+          <div className="flex flex-col justify-center items-center pt-16 md:pt-20 lg:pt-44 ">
             <div className="text-center text-3xl lg:text-4xl mx-12 lg:mx-16 ">
-              Love Your Wedding Film Forever
+              Enjoy Your Wedding Forever
             </div>
 
             <p className="text-base lg:text-xl pt-2 lg:pt-4 mx-12 lg:mx-16">
               Once you schedule your call, you’ll have taken the first step in
               experiencing the confidence you’ll feel knowing you chose the
-              right videographer for YOU. We believe your wedding day is one of
+              right videographer for you. We believe your wedding day is one of
               the most important days of your life, and you should be able to
               re-experience those memories whenever you want. You can be
-              confident Reverent Wedding Films will capture the special moments
-              of your day and give you a cinematic wedding film you’ll love
-              forever.
-            </p>
-
-            <p className="text-base lg:text-xl pt-2 lg:pt-4 mx-12 lg:mx-16">
-              Check our availability and schedule a call with our wedding
-              videography consultant so you can tell us all about your day and
-              we can get started!
+              confident Caribephoto capture the special moments of your day and
+              give you a wedding you’ll love forever.
             </p>
           </div>
         </div>
 
         <div className="text-center text-3xl lg:text-4xl mt-10 mb-5 ">
-          Meet Our Teams
+          Meet Our Photographer
         </div>
 
         <div className="flex flex-col justify-center items-center pb-10 lg:pb-10 mx-12 lg:mx-16">
@@ -295,16 +284,25 @@ const About = () => {
               variants={theOpacity(0.2, 1)}
               className="flex flex-col justify-center items-center space-y-2 p-5 text-gray-600 bg-white dark:text-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg"
             >
-              <img
-                src={hny}
-                alt="HNY"
-                className="rounded-full h-32 w-32 lg:h-40 lg:w-40 border-2 border-red-600"
-              />
-              <span>Harinarayan Yadav</span>
-              <span>Editor & Director</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className=" rounded-full h-32 w-32 lg:h-40 lg:w-40 border-2 border-gray-400"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                />
+              </svg>
+              <span>Jamaica</span>
+              <span>Photographer</span>
               <span className="flex flex-row justify-center items-center space-x-2 text-white">
                 <button
-                  onClick={() => handleCopyText("9889901417")}
+                  onClick={() => handleCopyText("529841578632")}
                   className="p-2 bg-blue-500 hover:bg-blue-600 rounded-full"
                 >
                   <span className="text-3xl">
@@ -312,38 +310,10 @@ const About = () => {
                   </span>
                 </button>
 
-                <a
-                  href="https://wa.me/+919889901417"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <button className="p-2 bg-green-500 hover:bg-green-600 rounded-full">
+                <a href="mailto:jamaica@caribephoto.com">
+                  <button className="border border-gray-300 p-2 bg-gray-500 dark:bg-gray-800 rounded-full">
                     <span className="text-3xl">
-                      <AiOutlineWhatsApp />
-                    </span>
-                  </button>
-                </a>
-
-                <a
-                  href="https://www.facebook.com/harinyadav17"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <button className="p-2 bg-blue-700 hover:bg-blue-800 rounded-full">
-                    <span className="text-3xl">
-                      <FiFacebook />
-                    </span>
-                  </button>
-                </a>
-
-                <a
-                  href="https://www.instagram.com/iharinyadav/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <button className="p-2 bg-gradient-to-bl from-[#833ab4] via-[#fd1d1d] to-[#fcb045]  rounded-full">
-                    <span className="text-3xl">
-                      <FiInstagram />
+                      <AiOutlineMail />
                     </span>
                   </button>
                 </a>
@@ -354,13 +324,22 @@ const About = () => {
               variants={theOpacity(0.4, 1)}
               className="flex flex-col justify-center items-center space-y-2 p-5 text-gray-600 bg-white dark:text-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg"
             >
-              <img
-                src={santosh}
-                alt="Santosh"
-                className="rounded-full h-32 w-32 lg:h-40 lg:w-40  border-2 border-green-700"
-              />
-              <span>Santosh Yadav</span>
-              <span>Editor</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className=" rounded-full h-32 w-32 lg:h-40 lg:w-40 border-2 border-gray-400"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                />
+              </svg>
+              <span>Margarita Ville Riviera Maya</span>
+              <span>Photographer</span>
               <span className="flex flex-row justify-center items-center space-x-2 text-white">
                 <button
                   onClick={() => handleCopyText("7398592004")}
@@ -371,38 +350,10 @@ const About = () => {
                   </span>
                 </button>
 
-                <a
-                  href="https://wa.me/+917398592004"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <button className="p-2 bg-green-500 hover:bg-green-600 rounded-full">
+                <a href="mailto:rrmphotoshop@caribephoto.com">
+                  <button className="border border-gray-300 p-2 bg-gray-500 dark:bg-gray-800 rounded-full">
                     <span className="text-3xl">
-                      <AiOutlineWhatsApp />
-                    </span>
-                  </button>
-                </a>
-
-                <a
-                  href="https://www.facebook.com/santosh.yadav7398592004"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <button className="p-2 bg-blue-700 hover:bg-blue-800 rounded-full">
-                    <span className="text-3xl">
-                      <FiFacebook />
-                    </span>
-                  </button>
-                </a>
-
-                <a
-                  href="https://www.instagram.com/santosh_banaras/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <button className="p-2 bg-gradient-to-bl from-[#833ab4] via-[#fd1d1d] to-[#fcb045]  rounded-full">
-                    <span className="text-3xl">
-                      <FiInstagram />
+                      <AiOutlineMail />
                     </span>
                   </button>
                 </a>
@@ -413,13 +364,22 @@ const About = () => {
               variants={theOpacity(0.6, 1)}
               className="flex flex-col justify-center items-center space-y-2 p-5 text-gray-600 bg-white dark:text-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg"
             >
-              <img
-                src={saurabh}
-                alt="HNY"
-                className="rounded-full h-32 w-32 lg:h-40 lg:w-40 border-2 border-blue-600"
-              />
-              <span>Saurabh Yadav</span>
-              <span>VFX & Editor</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className=" rounded-full h-32 w-32 lg:h-40 lg:w-40 border-2 border-gray-400"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                />
+              </svg>
+              <span>Margarita Ville Riviera Cancun </span>
+              <span>Photographer</span>
               <span className="flex flex-row justify-center items-center space-x-2 text-white">
                 <button
                   onClick={() => handleCopyText("7080226202")}
@@ -430,38 +390,50 @@ const About = () => {
                   </span>
                 </button>
 
-                <a
-                  href="https://wa.me/+917080226202"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <button className="p-2 bg-green-500 hover:bg-green-600 rounded-full">
+                <a href="mailto:mvphotoshop@caribephoto.com">
+                  <button className="border border-gray-300 p-2 bg-gray-500 dark:bg-gray-800 rounded-full">
                     <span className="text-3xl">
-                      <AiOutlineWhatsApp />
+                      <AiOutlineMail />
                     </span>
                   </button>
                 </a>
+              </span>
+            </motion.div>
 
-                <a
-                  href="https://www.facebook.com/profile.php?id=100004183422142"
-                  target="_blank"
-                  rel="noopener noreferrer"
+            <motion.div
+              variants={theOpacity(0.6, 1)}
+              className="flex flex-col justify-center items-center space-y-2 p-5 text-gray-600 bg-white dark:text-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className=" rounded-full h-32 w-32 lg:h-40 lg:w-40 border-2 border-gray-400"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                />
+              </svg>
+              <span>Republica Dominican Puntana</span>
+              <span>Photographer</span>
+              <span className="flex flex-row justify-center items-center space-x-2 text-white">
+                <button
+                  onClick={() => handleCopyText("7080226202")}
+                  className="p-2 bg-blue-500 hover:bg-blue-600 rounded-full"
                 >
-                  <button className="p-2 bg-blue-700 hover:bg-blue-800 rounded-full">
-                    <span className="text-3xl">
-                      <FiFacebook />
-                    </span>
-                  </button>
-                </a>
+                  <span className="text-3xl">
+                    <FiPhoneCall />
+                  </span>
+                </button>
 
-                <a
-                  href="https://www.instagram.com/saurabh_suhaan/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <button className="p-2 bg-gradient-to-bl from-[#833ab4] via-[#fd1d1d] to-[#fcb045]  rounded-full">
+                <a href="mailto:mvphotoshop@caribephoto.com">
+                  <button className="border border-gray-300 p-2 bg-gray-500 dark:bg-gray-800 rounded-full">
                     <span className="text-3xl">
-                      <FiInstagram />
+                      <AiOutlineMail />
                     </span>
                   </button>
                 </a>

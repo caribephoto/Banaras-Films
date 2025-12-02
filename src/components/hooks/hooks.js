@@ -6,7 +6,9 @@ export const useDocumentTitle = (title) => {
 
   useEffect(() => {
     document.title =
-      location.pathname === "/" ? "Banaras Films" : `${title} | Banaras Films`;
+      location.pathname === "/"
+        ? "Caribephoto - Destination Wedding"
+        : `${title} | CaribePhoto - Destination Wedding`;
   }, [title, location.pathname]);
 
   return null;

@@ -34,7 +34,6 @@ export const slideIn = (direction, type, delay, duration) => ({
       delay,
       duration,
       ease: "easeOut",
-      
     },
   },
 });
@@ -131,10 +130,6 @@ export const theOpacity = (delay, duration) => ({
   },
 });
 
-
-
-
-
 export const footerVariants = {
   hidden: {
     opacity: 0,
@@ -166,6 +161,17 @@ export const staggerChildren = {
   },
 };
 
+export const cardVariants = {
+  hidden: { opacity: 0, y: 50 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
 
 // export const getMenuStyles = (menuOpened) => {
 //   if (document.documentElement.clientWidth <= 640) {

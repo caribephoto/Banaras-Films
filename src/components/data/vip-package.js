@@ -1,0 +1,61 @@
+export const packagesVip = [
+  {
+    title: "VIP 12",
+    img: "/img/wedding-vip-12.jpg",
+    content: [
+      "You must have at least 1 hour of each service.",
+      "Coverage total time: 12hrs. In which you can choose and mix photo and video services depends on your needs (Example: 8hrs for photography service and 4hrs for video service).",
+      "4 x 30 minutes waiting time for free.",
+      "50 high-resolution photos in JPG format for each photo hour. In LINK with rights free for personal use.",
+      "Edited video with songs of your preference in Link. For further information about the final video, please consult the following link.",
+    ],
+    price: "$6,809.64 + Tax",
+  },
+  {
+    title: "VIP 8",
+    img: "/img/wedding-vip-8.jpg",
+    content: [
+      "You must have at least 1 hour of each service.",
+      "Coverage total time: 8hrs. In which you can choose and mix photo and video services depends on your needs (Example: 6hrs for photography service and 2hrs for video service).",
+      "2 x 60 minutes waiting time for free.",
+      "50 high resolution photos in JPG format for each photo hour in LINK with rights free for personal use.",
+      "Edited video with songs of your preferences in LINK. For further information about the final video, please consult the following link.",
+    ],
+    price: "$4,946.87 + Tax",
+  },
+  {
+    title: "VIP 6",
+    img: "/img/wedding-vip-6.jpg",
+    content: [
+      " You must have at least 1 hour of each service.",
+      " Coverage total time: 6hrs. In which you can choose and mix photo and video services depends on your needs (Example: 4hrs for photography service and 2hrs for video service).",
+      "2 x 30 minutes waiting time for free.",
+      "50 high resolution photos in JPG format for each photo hour in LINK with rights free for personal use. ",
+      "Edited video with songs of your preferences in LINK. For further information about the length of  the final video, please consult the following link.",
+    ],
+    price: "$4,173.65 + Tax",
+  },
+  {
+    title: "VIP 4",
+    img: "/img/wedding-vip-4.jpg",
+    content: [
+      "You must have at least 1 hour of each service.",
+      "Coverage total time: 4hrs. In which you can choose and mix photo and video services depends on your needs (Example: 3hrs for photography service and 1hr for video service).",
+      "30 minutes waiting time for free.",
+      "50 high resolution photos in JPG format for each photo hour in LINK with rights free for personal use.",
+      "Edited video with songs of your preferences in LINK. For further information about the final video, please consult the following link.",
+    ],
+    price: "$3,294.99 + Tax",
+  },
+  {
+    title: "VIP 2",
+    img: "/img/wedding-vip-2.jpg",
+    content: [
+      "Photography Coverage time: 1 hour",
+      "Around 80 high resolution photos in JPG format with rights free for personal use in LINK.",
+      "Video Coverage time: 1 hour",
+      "Edited video with songs of your preferences in LINK. For further information about the length of  the final video, please consult the following link.",
+    ],
+    price: "$1,924.27 + Tax",
+  },
+];
