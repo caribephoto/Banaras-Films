@@ -28,7 +28,7 @@ const Footer = () => {
       <div className="bg-[#0b1121]  text-white pb-10 font-[Poppins]">
         {/* Adding a new Contact Now Section */}
 
-        <div className="flex flex-col justify-center items-center px-12 lg:px-16 text-gray-600 bg-white dark:bg-[#0b1121] dark:text-white ">
+        <div className="flex flex-col justify-center items-center px-12 lg:px-16 pt-12 lg:pt-16 text-gray-600 bg-white dark:bg-[#0b1121] dark:text-white ">
           <div className="flex flex-col text-center w-full mb-5">
             <h1 className="lg:text-4xl text-2xl font-bold title-font">
               Contact Now

@@ -51,7 +51,7 @@ const Home = () => {
   }
   return (
     <>
-      <div className="text-gray-600 bg-white dark:bg-[#0b1121] dark:text-white font-[Poppins]">
+      <div className="text-gray-600 bg-white dark:bg-[#0b1121] dark:text-white font-[Poppins] pb-0">
         {/* Hero Section */}
 
         {/* The Carousel */}
@@ -65,13 +65,13 @@ const Home = () => {
             type: "spring",
             damping: 10,
           }}
-          className="py-0 lg:py-3 mx-1 lg:mx-0 transition-all ease-linear duration-500 lg:pb-[5rem]"
+          className="py-4 lg:py-8 mx-4 lg:mx-8 transition-all ease-linear duration-500"
         >
-          <div className="bg-gray-100 dark:bg-gray-900">
+          <div className="bg-gray-100 dark:bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
             <CarouselProvider
               className="overflow-hidden"
               naturalSlideWidth={100}
-              naturalSlideHeight={48}
+              naturalSlideHeight={45}
               totalSlides={3}
               isPlaying={true}
               interval={4000}
@@ -80,8 +80,8 @@ const Home = () => {
               orientation="horizontal"
             >
               <div className="relative w-full h-full">
-                {/* Fondo negro transparente fijo */}
-                <div className="absolute"></div>
+                {/* Overlay gradient for better text visibility */}
+                <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent z-10 pointer-events-none"></div>
 
                 {/* Carrusel */}
                 <Slider>
@@ -91,9 +91,14 @@ const Home = () => {
                       alt="Slide 1"
                       className="w-full h-full object-cover"
                     />
-                    {/* Texto fijo solo en la primera imagen */}
-                    <div className="absolute top-1/2 left-0 transform -translate-y-1/2 pl-8 text-white text-3xl font-bold z-20">
-                      Wedding
+                    {/* Texto mejorado con mejor diseño */}
+                    <div className="absolute top-1/2 left-8 lg:left-16 transform -translate-y-1/2 z-20">
+                      <h1 className="text-4xl lg:text-6xl font-bold text-white mb-2 drop-shadow-2xl">
+                        Wedding
+                      </h1>
+                      <p className="text-lg lg:text-xl text-white/90 font-light drop-shadow-lg">
+                        Destination Photography
+                      </p>
                     </div>
                   </Slide>
                   <Slide index={1}>
@@ -117,39 +122,41 @@ const Home = () => {
         </motion.div>
         {/* Thinking about Pricing & Services ? */}
 
-        <section className="mx-12 lg:mx-16">
-          <div className="container px-5 pt-6 pb-14 mx-auto">
-            {/* <div className="container px-5 pt-6 pb-14 mx-auto"> */}
-            <div className="flex flex-col text-center w-full mb-14">
-              <h1 className="lg:text-4xl text-2xl font-bold title-font">
+        <section className="mx-4 lg:mx-16 mt-12 lg:mt-20 mb-0 pb-0">
+          <div className="container px-5 pt-6 pb-0 mx-auto">
+            <div className="flex flex-col text-center w-full mb-16">
+              <h2 className="text-sm text-pink-500 tracking-widest font-semibold title-font mb-2 uppercase">
+                Explore Our Services
+              </h2>
+              <h1 className="lg:text-5xl text-3xl font-bold title-font mb-4">
                 Thinking about services?
               </h1>
-              <h2 className="text-lg text-pink-500 tracking-widest font-bold title-font mb-1">
-                Let Me Help You
-              </h2>
+              <p className="lg:w-2/3 mx-auto leading-relaxed text-base text-gray-600 dark:text-gray-400">
+                Let us help you capture your special moments with our professional photography and videography services
+              </p>
             </div>
             <motion.div
               variants={staggerContainer}
               initial="hidden"
               whileInView="show"
               viewport={{ once: true, amount: 0.25 }}
-              className="flex flex-wrap -m-4"
+              className="flex flex-wrap -m-4 pb-0"
             >
               <motion.div
                 variants={fadeIn("right", "tween", 0.2, 1)}
                 className="p-4 md:p-1 lg:p-4 md:w-1/3"
               >
-                <div className="flex rounded-lg h-full bg-gray-200 dark:bg-gray-800 p-8 flex-col">
-                  <div className="flex items-center mb-3">
-                    <div className="w-8 h-8 mr-3 inline-flex items-center justify-center rounded-full bg-pink-500 text-white flex-shrink-0">
+                <div className="flex rounded-2xl h-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-8 flex-col shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 mr-4 inline-flex items-center justify-center rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 text-white flex-shrink-0 shadow-lg">
                       <span className="text-2xl">
                         <FaFilm />
                       </span>
                     </div>
-                    <h2 className=" text-lg title-font font-medium">Videos </h2>
+                    <h2 className="text-xl title-font font-bold">Videos</h2>
                   </div>
                   <div className="flex-grow">
-                    <p className="leading-relaxed text-base">
+                    <p className="leading-relaxed text-base mb-4">
                       We have added some videos so that you can watch them and
                       then you can decide.
                     </p>
@@ -157,7 +164,7 @@ const Home = () => {
                       to="/video"
                       className="mt-3 text-pink-500 inline-flex items-center"
                     >
-                      <button className="inline-flex text-white bg-pink-500 border-0 py-2 px-6 md:py-2 md:px-2 lg:py-2 lg:px-6 focus:outline-none hover:bg-pink-600 rounded text-lg">
+                      <button className="inline-flex text-white bg-gradient-to-r from-pink-500 to-pink-600 border-0 py-3 px-8 focus:outline-none hover:from-pink-600 hover:to-pink-700 rounded-lg text-base font-semibold shadow-md hover:shadow-lg transition-all duration-300">
                         Show Videos
                       </button>
                     </Link>
@@ -168,19 +175,19 @@ const Home = () => {
                 variants={fadeIn("right", "tween", 0.4, 1)}
                 className="p-4 md:p-1 lg:p-4 md:w-1/3"
               >
-                <div className="flex rounded-lg h-full bg-gray-200 dark:bg-gray-800 p-8 flex-col">
-                  <div className="flex items-center mb-3">
-                    <div className="w-8 h-8 mr-3 inline-flex items-center justify-center rounded-full bg-pink-500 text-white flex-shrink-0">
+                <div className="flex rounded-2xl h-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-8 flex-col shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 mr-4 inline-flex items-center justify-center rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 text-white flex-shrink-0 shadow-lg">
                       <span className="text-2xl">
                         <AiOutlineSetting />
                       </span>
                     </div>
-                    <h2 className=" text-lg title-font font-medium">
+                    <h2 className="text-xl title-font font-bold">
                       Our Services
                     </h2>
                   </div>
                   <div className="flex-grow">
-                    <p className="leading-relaxed text-base">
+                    <p className="leading-relaxed text-base mb-4">
                       Caribephoto makes your wedding's Visual Experience Awesome
                       with our services.
                     </p>
@@ -188,7 +195,7 @@ const Home = () => {
                       to="/services"
                       className="mt-3 text-pink-500 inline-flex items-center"
                     >
-                      <button className="inline-flex text-white bg-pink-500 border-0 py-2 px-6 md:py-2 md:px-2 lg:py-2 lg:px-6 focus:outline-none hover:bg-pink-600 rounded text-lg">
+                      <button className="inline-flex text-white bg-gradient-to-r from-pink-500 to-pink-600 border-0 py-3 px-8 focus:outline-none hover:from-pink-600 hover:to-pink-700 rounded-lg text-base font-semibold shadow-md hover:shadow-lg transition-all duration-300">
                         Show Services
                       </button>
                     </Link>
@@ -199,26 +206,26 @@ const Home = () => {
                 variants={fadeIn("right", "tween", 0.6, 1)}
                 className="p-4 md:p-1 lg:p-4 md:w-1/3"
               >
-                <div className="flex rounded-lg h-full bg-gray-200 dark:bg-gray-800 p-8 flex-col">
-                  <div className="flex items-center mb-3">
-                    <div className="w-8 h-8 mr-3 inline-flex items-center justify-center rounded-full bg-pink-500 text-white flex-shrink-0">
+                <div className="flex rounded-2xl h-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-8 flex-col shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center mb-4">
+                    <div className="w-12 h-12 mr-4 inline-flex items-center justify-center rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 text-white flex-shrink-0 shadow-lg">
                       <span className="text-2xl">
                         <FaFileAlt />
                       </span>
                     </div>
-                    <h2 className=" text-lg title-font font-medium">
+                    <h2 className="text-xl title-font font-bold">
                       Terms & Conditions
                     </h2>
                   </div>
                   <div className="flex-grow">
-                    <p className="leading-relaxed text-base">
+                    <p className="leading-relaxed text-base mb-4">
                       Read the terms and conditions included in our packages.
                     </p>
                     <Link
                       to="/terms"
                       className="mt-3 text-pink-500 inline-flex items-center"
                     >
-                      <button className="inline-flex text-white bg-pink-500 border-0 py-2 px-6 md:py-2 md:px-2 lg:py-2 lg:px-6 focus:outline-none hover:bg-pink-600 rounded text-lg">
+                      <button className="inline-flex text-white bg-gradient-to-r from-pink-500 to-pink-600 border-0 py-3 px-8 focus:outline-none hover:from-pink-600 hover:to-pink-700 rounded-lg text-base font-semibold shadow-md hover:shadow-lg transition-all duration-300">
                         Terms and Conditions
                       </button>
                     </Link>
