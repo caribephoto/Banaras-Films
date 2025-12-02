@@ -6,10 +6,15 @@ import Video from "./components/Video";
 import About from "./components/About";
 import Error from "./components/Error";
 import Footer from "./components/Footer";
+import Cart from "./components/Cart";
+import Checkout from "./components/Checkout";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Terms from "./components/Terms";
 import ScrollToTop from "./components/ScrollToTop";
+import { CartProvider } from "./context/CartContext";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [theme, setTheme] = useState(
@@ -63,21 +68,26 @@ function App() {
 
   return (
     <>
-      <Router>
-        <Header theme={theme} setTheme={setTheme} />
+      <CartProvider>
+        <Router>
+          <Header theme={theme} setTheme={setTheme} />
 
-        <Routes>
-          <Route path="/" exact element={<Home />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/video" element={<Video />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="*" element={<Error />} />
-        </Routes>
-        <Footer />
-        <ScrollToTop />
-      </Router>
+          <Routes>
+            <Route path="/" exact element={<Home />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/video" element={<Video />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="*" element={<Error />} />
+          </Routes>
+          <Footer />
+          <ScrollToTop />
+        </Router>
+        <ToastContainer />
+      </CartProvider>
     </>
   );
 }

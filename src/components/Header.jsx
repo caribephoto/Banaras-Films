@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import { BsMoon, BsSun } from "react-icons/bs";
 import { motion } from "framer-motion";
+import CartIcon from "./CartIcon";
 
 const Header = (props) => {
   let Pages = [
@@ -36,20 +37,23 @@ const Header = (props) => {
                 <span>Caribephoto</span>
               </span>
             </Link>
-            <span
-              className=" flex justify-center items-center text-2xl lg:text-2xl p-2 lg:p-3 rounded-full border border-indigo-300 bg-gray-200 dark:bg-gray-800 "
+            <div className="flex items-center gap-3">
+              <CartIcon />
+              <span
+                className=" flex justify-center items-center text-2xl lg:text-2xl p-2 lg:p-3 rounded-full border border-indigo-300 bg-gray-200 dark:bg-gray-800 "
               // onClick={props.toggleDarkMode}
-            >
-              {props.theme === "dark" ? (
-                <button onClick={() => props.setTheme("light")}>
-                  <BsSun />
-                </button>
-              ) : (
-                <button onClick={() => props.setTheme("dark")}>
-                  <BsMoon />
-                </button>
-              )}
-            </span>
+              >
+                {props.theme === "dark" ? (
+                  <button onClick={() => props.setTheme("light")}>
+                    <BsSun />
+                  </button>
+                ) : (
+                  <button onClick={() => props.setTheme("dark")}>
+                    <BsMoon />
+                  </button>
+                )}
+              </span>
+            </div>
           </div>
 
           <div
@@ -66,7 +70,7 @@ const Header = (props) => {
               open
                 ? "top-16 md:top-14 opacity-100"
                 : "top-[-500px] opacity-0 md:opacity-100"
-            } `}
+              } `}
           >
             {Pages.map((page, i) => {
               return (

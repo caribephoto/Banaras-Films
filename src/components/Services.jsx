@@ -6,10 +6,13 @@ import { packagesVip } from "./data/vip-package";
 import { pkg } from "./data/package";
 import { Link } from "react-router-dom";
 import { morePkg } from "./data/morePackage";
+import { useCart } from "../context/CartContext";
+import { BsInfoCircle } from "react-icons/bs";
 
 const Services = () => {
   useDocumentTitle("Services");
   useTakeMeToTheTop();
+  const { addToCart, isInCart } = useCart();
   return (
     <>
       <motion.div
@@ -62,27 +65,23 @@ const Services = () => {
                         {vip.price}
                       </p>
                     </div>
-                    <div className="mt-auto">
+                    <div className="mt-auto flex gap-2">
+                      <button
+                        onClick={() => addToCart(vip, "VIP Package")}
+                        disabled={isInCart(vip.id)}
+                        className={`flex-1 text-center flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-white transition-colors duration-200 ${isInCart(vip.id)
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : "bg-pink-500 hover:bg-pink-600"
+                          }`}
+                      >
+                        {isInCart(vip.id) ? "In Cart" : "Add to Cart"}
+                      </button>
                       <Link
                         to={"/terms"}
-                        className="w-full text-center flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-white bg-pink-500 hover:bg-pink-600 transition-colors duration-200"
+                        className="p-2 rounded-md text-pink-500 border border-pink-500 hover:bg-pink-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                        title="Read more"
                       >
-                        Read more
-                        <svg
-                          className="rotate-0 w-3.5 h-3.5 ms-2"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 14 10"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M1 5h12m0 0L9 1m4 4L9 9"
-                          />
-                        </svg>
+                        <BsInfoCircle className="text-xl" />
                       </Link>
                     </div>
                   </div>
@@ -127,27 +126,23 @@ const Services = () => {
                         {packages.price}
                       </p>
                     </div>
-                    <div className="mt-auto">
+                    <div className="mt-auto flex gap-2">
+                      <button
+                        onClick={() => addToCart(packages, "Package")}
+                        disabled={isInCart(packages.id)}
+                        className={`flex-1 text-center flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-white transition-colors duration-200 ${isInCart(packages.id)
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-pink-500 hover:bg-pink-600"
+                          }`}
+                      >
+                        {isInCart(packages.id) ? "In Cart" : "Add to Cart"}
+                      </button>
                       <Link
                         to={"/terms"}
-                        className="w-full text-center mt-auto flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-white bg-pink-500 hover:bg-pink-600 transition-colors duration-200"
+                        className="p-2 rounded-md text-pink-500 border border-pink-500 hover:bg-pink-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                        title="Read more"
                       >
-                        Read more
-                        <svg
-                          className="rotate-0 w-3.5 h-3.5 ms-2"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 14 10"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M1 5h12m0 0L9 1m4 4L9 9"
-                          />
-                        </svg>
+                        <BsInfoCircle className="text-xl" />
                       </Link>
                     </div>
                   </div>
@@ -192,27 +187,23 @@ const Services = () => {
                         {morepkg.price}
                       </p>
                     </div>
-                    <div className="mt-auto">
+                    <div className="mt-auto flex gap-2">
+                      <button
+                        onClick={() => addToCart(morepkg, "Additional Service")}
+                        disabled={isInCart(morepkg.id)}
+                        className={`flex-1 text-center flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-white transition-colors duration-200 ${isInCart(morepkg.id)
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-pink-500 hover:bg-pink-600"
+                          }`}
+                      >
+                        {isInCart(morepkg.id) ? "In Cart" : "Add to Cart"}
+                      </button>
                       <Link
                         to={"/terms"}
-                        className="w-full text-center mt-auto flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-white bg-pink-500 hover:bg-pink-600 transition-colors duration-200"
+                        className="p-2 rounded-md text-pink-500 border border-pink-500 hover:bg-pink-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                        title="Read more"
                       >
-                        Read more
-                        <svg
-                          className="rotate-0 w-3.5 h-3.5 ms-2"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 14 10"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M1 5h12m0 0L9 1m4 4L9 9"
-                          />
-                        </svg>
+                        <BsInfoCircle className="text-xl" />
                       </Link>
                     </div>
                   </div>
