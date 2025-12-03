@@ -1,20 +1,23 @@
-import Header from "./components/Header";
-import Home from "./components/Home";
-import Services from "./components/Services";
-import Pricing from "./components/Pricing";
-import Video from "./components/Video";
-import About from "./components/About";
-import Error from "./components/Error";
-import Footer from "./components/Footer";
-import Cart from "./components/Cart";
-import Checkout from "./components/Checkout";
+import Header from "./components/layout/Header";
+import Footer from "./components/layout/Footer";
+import ScrollToTop from "./components/layout/ScrollToTop";
+import Home from "./pages/Home";
+import Services from "./pages/Services";
+import Pricing from "./pages/Pricing";
+import Video from "./pages/Video";
+import About from "./pages/About";
+import Terms from "./pages/Terms";
+import Error from "./components/common/Error";
+import Cart from "./components/cart/Cart";
+import Checkout from "./components/cart/Checkout";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Terms from "./components/Terms";
-import ScrollToTop from "./components/ScrollToTop";
 import { CartProvider } from "./context/CartContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import getTheme from "./theme/theme";
 
 function App() {
   const [theme, setTheme] = useState(
@@ -51,7 +54,6 @@ function App() {
 
       default:
         localStorage.removeItem("theme");
-
         break;
     }
   }, [theme, element]);
@@ -66,8 +68,14 @@ function App() {
     }
   });
 
+  // Calculate effective theme for MUI
+  const systemTheme = darkQuery.matches ? "dark" : "light";
+  const effectiveTheme = theme === "system" ? systemTheme : theme;
+  const muiTheme = getTheme(effectiveTheme);
+
   return (
-    <>
+    <ThemeProvider theme={muiTheme}>
+      <CssBaseline />
       <CartProvider>
         <Router>
           <Header theme={theme} setTheme={setTheme} />
@@ -88,7 +96,7 @@ function App() {
         </Router>
         <ToastContainer />
       </CartProvider>
-    </>
+    </ThemeProvider>
   );
 }
 

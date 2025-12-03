@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { BsCart3 } from 'react-icons/bs';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../../context/CartContext';
 import { motion } from 'framer-motion';
 
 const CartIcon = () => {

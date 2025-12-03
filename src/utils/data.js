@@ -2,20 +2,29 @@ import { toast } from "react-toastify";
 
 export const marriageVideo = [
   {
+    id: "video-1",
     groom: "Erik",
     bride: "Lisa",
+    coupleName: "Erik & Lisa",
     year: 2024,
     videoId: "iTkZqzIs-CQ",
-    place: "Azul Beach Negril",
+    venue: "Azul Beach Resort Negril",
+    country: "Jamaica",
+    thumbnail: "https://img.youtube.com/vi/iTkZqzIs-CQ/maxresdefault.jpg",
   },
   {
+    id: "video-2",
     groom: "Emily",
     bride: "Dumisani",
+    coupleName: "Emily & Dumisani",
     year: 2024,
     videoId: "BQDRczVwdvo",
-    place: "Azul Beach Negril",
+    venue: "Azul Beach Resort Negril",
+    country: "Jamaica",
+    thumbnail: "https://img.youtube.com/vi/BQDRczVwdvo/maxresdefault.jpg",
   },
 ];
+
 
 export const handleCopyText = (a) => {
   let alertText = a;

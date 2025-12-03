@@ -1,5 +1,5 @@
 import React from "react";
-import { useDocumentTitle } from "../components/hooks/hooks";
+import { useDocumentTitle } from "../../hooks/hooks";
 
 const Error = () => {
   useDocumentTitle("Error 404");
