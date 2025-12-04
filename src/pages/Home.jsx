@@ -57,21 +57,21 @@ const Home = () => {
 
   const services = [
     {
-      icon: <MovieIcon sx={{ fontSize: 32 }} />,
+      icon: <MovieIcon sx={{ fontSize: 30 }} />,
       title: "Videos",
       description: "We have added some videos so that you can watch them and then you can decide.",
       link: "/video",
       buttonText: "Show Videos"
     },
     {
-      icon: <SettingsIcon sx={{ fontSize: 32 }} />,
+      icon: <SettingsIcon sx={{ fontSize: 30 }} />,
       title: "Our Services",
       description: "Caribephoto makes your wedding's Visual Experience Awesome with our services.",
       link: "/services",
       buttonText: "Show Services"
     },
     {
-      icon: <DescriptionIcon sx={{ fontSize: 32 }} />,
+      icon: <DescriptionIcon sx={{ fontSize: 30 }} />,
       title: "Terms & Conditions",
       description: "Read the terms and conditions included in our packages.",
       link: "/terms",
@@ -327,7 +327,7 @@ const Home = () => {
                       xs: "0.9rem",
                       sm: "1.1rem",
                       md: "1.3rem",
-                      lg: "1.5rem"
+                      lg: "1.0rem"
                     }
                   }}>
                     {service.description}
@@ -354,8 +354,8 @@ const Home = () => {
                       fontSize: {
                         xs: "0.9rem",
                         sm: "1.1rem",
-                        md: "1.3rem",
-                        lg: "1.5rem"
+                        md: "1.0rem",
+                        lg: "1.0rem"
                       }
                     }}
                   >
