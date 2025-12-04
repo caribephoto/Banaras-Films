@@ -351,41 +351,77 @@ const Checkout = () => {
                             </Paper>
 
                             {/* Payment */}
-                            <Paper sx={{ p: 3 }}>
+                            <Paper sx={{
+                                p: 3,
+                                minHeight: 280,// Altura mínima fija
+                                width: '100%',
+                            }}>
                                 <Typography variant="h5" component="h2" gutterBottom fontWeight="bold">
                                     Payment
                                 </Typography>
-                                {!isFormValid() && (
-                                    <Alert
-                                        severity="warning"
-                                        sx={{
-                                            mb: 2,
-                                            bgcolor: 'rgba(255, 152, 0, 0.1)',
-                                            border: '1px solid',
-                                            borderColor: 'warning.main',
-                                            '& .MuiAlert-icon': {
-                                                color: 'warning.main',
-                                            },
-                                            '& .MuiAlert-message': {
-                                                color: 'text.primary',
-                                                fontWeight: 500,
-                                            }
-                                        }}
-                                    >
-                                        Please complete all customer information before proceeding with payment.
-                                    </Alert>
-                                )}
-                                <Box sx={{ mt: 2 }}>
-                                    <PayPalScriptProvider options={initialOptions}>
-                                        <PayPalButtons
-                                            style={{ layout: 'vertical' }}
-                                            createOrder={createOrder}
-                                            onApprove={onApprove}
-                                            onError={onError}
-                                            disabled={!isFormValid()}
-                                        />
-                                    </PayPalScriptProvider>
-                                </Box>
+
+                                <Stack spacing={2}>
+                                    {/* Contenedor con altura fija para mantener el layout estable */}
+                                    <Box sx={{
+                                        height: 60, // Altura fija para evitar cambios en el layout
+                                        minWidth: 60,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        mb: 2
+                                    }}>
+                                        {!isFormValid() ? (
+                                            <Alert
+                                                severity="warning"
+                                                sx={{
+
+                                                    bgcolor: 'rgba(255, 152, 0, 0.1)',
+                                                    border: '1px solid',
+                                                    borderColor: 'warning.main',
+                                                    '& .MuiAlert-icon': {
+                                                        color: 'warning.main',
+                                                    },
+                                                    '& .MuiAlert-message': {
+                                                        color: 'text.primary',
+                                                        fontWeight: 500,
+                                                    }
+                                                }}
+                                            >
+                                                Please complete all customer information before proceeding with payment.
+                                            </Alert>
+                                        ) : (
+                                            <Alert
+                                                severity="success"
+                                                sx={{
+
+                                                    bgcolor: 'rgba(46, 125, 50, 0.1)', // Verde más suave para success
+                                                    border: '1px solid',
+                                                    borderColor: 'success.main',
+                                                    '& .MuiAlert-icon': {
+                                                        color: 'success.main',
+                                                    },
+                                                    '& .MuiAlert-message': {
+                                                        color: 'text.primary',
+                                                        fontWeight: 500,
+                                                    }
+                                                }}
+                                            >
+                                                ✓ All information complete! You can safely proceed with payment.
+                                            </Alert>
+                                        )}
+                                    </Box>
+
+                                    <Box sx={{ flex: 1 }}>
+                                        <PayPalScriptProvider options={initialOptions}>
+                                            <PayPalButtons
+                                                style={{ layout: 'vertical' }}
+                                                createOrder={createOrder}
+                                                onApprove={onApprove}
+                                                onError={onError}
+                                                disabled={!isFormValid()}
+                                            />
+                                        </PayPalScriptProvider>
+                                    </Box>
+                                </Stack>
                             </Paper>
                         </Stack>
                     </Grid>
