@@ -46,6 +46,9 @@ export const CartProvider = ({ children }) => {
         toast.success(`Increased quantity of ${packageItem.title}`, {
           position: 'top-right',
           autoClose: 2000,
+          progressStyle: {
+            background: '#ec4899',
+          },
         });
         return updatedCart;
       } else {
@@ -53,6 +56,9 @@ export const CartProvider = ({ children }) => {
         toast.success(`${packageItem.title} added to cart!`, {
           position: 'top-right',
           autoClose: 2000,
+          progressStyle: {
+            background: '#ec4899',
+          },
         });
         return [
           ...prevCart,
@@ -75,6 +81,9 @@ export const CartProvider = ({ children }) => {
         toast.info(`${item.title} removed from cart`, {
           position: 'top-right',
           autoClose: 2000,
+          progressStyle: {
+            background: '#ec4899',
+          },
         });
       }
       return prevCart.filter((item) => item.id !== packageId);
@@ -99,6 +108,9 @@ export const CartProvider = ({ children }) => {
     toast.success('Cart cleared successfully', {
       position: 'top-right',
       autoClose: 2000,
+      progressStyle: {
+        background: '#ec4899',
+      },
     });
   };
 

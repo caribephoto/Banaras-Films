@@ -99,11 +99,61 @@ const Checkout = () => {
         });
     };
 
+    // Send order confirmation email
+    const sendOrderEmail = async (orderId, items) => {
+        try {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+            const emailData = {
+                customerInfo: {
+                    name: customerInfo.name,
+                    email: customerInfo.email,
+                    phone: customerInfo.phone,
+                },
+                orderDetails: {
+                    orderId: orderId,
+                    items: items.map(item => ({
+                        title: item.title,
+                        quantity: item.quantity || 1,
+                        price: item.numericPrice,
+                    })),
+                    subtotal: subtotal,
+                    tax: tax,
+                    total: total,
+                },
+            };
+
+            const response = await fetch(`${API_URL}/api/send-order-email`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(emailData),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                console.log('✅ Order confirmation emails sent successfully');
+            } else {
+                console.error('❌ Failed to send emails:', result.message);
+                toast.warning('Order confirmed, but email notification failed. We will contact you soon.');
+            }
+        } catch (error) {
+            console.error('❌ Error sending email:', error);
+            toast.warning('Order confirmed, but email notification failed. We will contact you soon.');
+        }
+    };
+
     const onApprove = (data, actions) => {
         return actions.order.capture().then((details) => {
             setOrderDetails(details);
             setOrderTotal(total);
             setOrderComplete(true);
+
+            // Send order confirmation email
+            sendOrderEmail(details.id, cart);
+
             clearCart();
             toast.success('Payment successful! Thank you for your order.');
         });

@@ -65,28 +65,28 @@ const About = () => {
 
   const photographers = [
     {
-      location: "Jamaica",
+      location: "Azul Beach Resort Negril - Jamaica",
       role: "Photographer",
       phone: "529841578632",
       email: "jamaica@caribephoto.com",
       image: "jamaica"
     },
     {
-      location: "Margarita Ville Riviera Maya",
+      location: "Margaritaville Island Reserve Riviera Maya - Mexico",
       role: "Photographer",
       phone: "7398592004",
       email: "rrmphotoshop@caribephoto.com",
       image: "margarita"
     },
     {
-      location: "Margarita Ville Riviera Cancun",
+      location: "Margaritaville Island Reserve Riviera Cancun - Mexico",
       role: "Photographer",
       phone: "7080226202",
       email: "mvphotoshop@caribephoto.com",
       image: "cancun"
     },
     {
-      location: "Republica Dominican Puntana",
+      location: "Nickelodeon Hotels & Resorts Punta Cana - Dominican Republic",
       role: "Photographer",
       phone: "7080226202",
       email: "mvphotoshop@caribephoto.com",
