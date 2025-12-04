@@ -45,15 +45,15 @@ const Footer = () => {
       {/* Contact Section */}
       <Container maxWidth="lg">
         <Box sx={{ textAlign: "center", mb: 8 }}>
-          <Typography variant="h4" component="h2" gutterBottom fontWeight="bold">
+          <Typography variant="h4" component="h2" gutterBottom fontWeight="bold" sx={{ fontSize: { xs: "1.5rem", md: "2rem" } }}>
             Contact Now
           </Typography>
-          <Typography variant="body1" color="text.secondary" paragraph>
+          <Typography variant="body1" color="text.secondary" paragraph sx={{ fontSize: { xs: "0.9rem", md: "1.1rem" } }}>
             We are always ready to hear you. <br />
             For any query like bookings, pricings, availability, please feel free to contact us.
           </Typography>
 
-          <Grid container spacing={2} justifyContent="center" sx={{ mt: 2 }}>
+          <Grid container spacing={2} justifyContent="center" sx={{ mt: 2, width: { xs: "80%", sm: "80%", md: "60%" }, mx: "auto" }}>
             {socialIcons.map((item, index) => (
               <Grid item key={index}>
                 {item.href ? (
@@ -117,7 +117,7 @@ const Footer = () => {
                   sx={{
                     textTransform: "uppercase",
                     mb: 1,
-                    fontSize: { xs: "2rem", md: "2.8rem" }
+                    fontSize: { xs: "1.8rem", md: "2.5rem" }
                   }}
                 >
                   Invest Once
@@ -128,7 +128,7 @@ const Footer = () => {
                   fontWeight="800"
                   sx={{
                     textTransform: "uppercase",
-                    fontSize: { xs: "2rem", md: "2.8rem" }
+                    fontSize: { xs: "1.8rem", md: "2.5rem" }
                   }}
                 >
                   Enjoy Forever
@@ -161,9 +161,10 @@ const Footer = () => {
           </Grid>
         </Box>
 
+        <Divider sx={{ my: 4 }} />
 
         {/* Links Section */}
-        <Grid container spacing={4} justifyContent="center" sx={{ mb: 4 }}>
+        <Grid container spacing={4} justifyContent={{ xs: 'center', md: 'center' }} sx={{ mb: 4 }}>
           <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'center', md: 'left' } }}>
             <Typography variant="subtitle1" fontWeight="bold" gutterBottom sx={{ textTransform: "uppercase" }}>
               Navigations

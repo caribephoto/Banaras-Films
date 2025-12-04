@@ -68,25 +68,29 @@ const About = () => {
       location: "Jamaica",
       role: "Photographer",
       phone: "529841578632",
-      email: "jamaica@caribephoto.com"
+      email: "jamaica@caribephoto.com",
+      image: "jamaica"
     },
     {
       location: "Margarita Ville Riviera Maya",
       role: "Photographer",
       phone: "7398592004",
-      email: "rrmphotoshop@caribephoto.com"
+      email: "rrmphotoshop@caribephoto.com",
+      image: "margarita"
     },
     {
       location: "Margarita Ville Riviera Cancun",
       role: "Photographer",
       phone: "7080226202",
-      email: "mvphotoshop@caribephoto.com"
+      email: "mvphotoshop@caribephoto.com",
+      image: "cancun"
     },
     {
       location: "Republica Dominican Puntana",
       role: "Photographer",
       phone: "7080226202",
-      email: "mvphotoshop@caribephoto.com"
+      email: "mvphotoshop@caribephoto.com",
+      image: "dominican"
     }
   ];
 
@@ -281,55 +285,200 @@ const About = () => {
           Meet Our Photographer
         </Typography>
 
-        <Grid container spacing={4} sx={{ pb: 10 }}>
+        <Typography variant="h4" align="center" gutterBottom sx={{ mt: 10, mb: 6 }}>
+          Meet Our Photographer
+        </Typography>
+
+        <Grid
+          container
+          spacing={4}
+          justifyContent="center"
+          sx={{ pb: 10 }}
+        >
           {photographers.map((photographer, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Card sx={{ height: "100%", textAlign: "center", p: 2, borderRadius: 2, width: 250 }}>
-                <Avatar
-                  sx={{
-                    width: { xs: 128, lg: 160 },
-                    height: { xs: 128, lg: 160 },
-                    mx: 'auto',
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={3}
+              key={index}
+              sx={{
+                display: "flex",
+                justifyContent: "center"
+              }}
+            >
+              <Card
+                sx={{
+                  height: "380px", // 🔥 ALTURA FIJA para todas
+                  width: "280px", // 🔥 ANCHO FIJO para todas
+                  textAlign: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                  borderRadius: 2,
+                  overflow: "hidden", // 🔥 Para que nada se salga
+                }}
+              >
+                <CardContent sx={{
+                  flex: 1, // 🔥 Ocupa todo el espacio disponible
+                  display: "flex",
+                  flexDirection: "column",
+                  p: 3,
+                  '&:last-child': { pb: 3 } // 🔥 Elimina padding extra
+                }}>
+                  {/* Imagen del hotel - Parte superior */}
+                  <Box sx={{
+                    flexShrink: 0,
                     mb: 2,
-                    border: 2,
-                    borderColor: 'divider'
-                  }}
-                >
-                  <PersonIcon sx={{ fontSize: 80 }} />
-                </Avatar>
-                <Typography variant="body1" gutterBottom>
-                  {photographer.location}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  {photographer.role}
-                </Typography>
-                <Stack direction="row" spacing={1} justifyContent="center" sx={{ mt: 2 }}>
-                  <IconButton
-                    onClick={() => handleCopyText(photographer.phone)}
+                    height: "140px",
+                    width: "100%",
+                    overflow: "hidden",
+                    borderRadius: 1,
+                    position: "relative"
+                  }}>
+                    <Box
+                      component="img"
+                      src={`/img/${photographer.image.toLowerCase().replace(/\s+/g, '-')}.jpg`}
+                      alt={`${photographer.image} hotel`}
+                      sx={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        transition: "transform 0.3s ease",
+                        "&:hover": {
+                          transform: "scale(1.05)"
+                        }
+                      }}
+                      onError={(e) => {
+                        // Si la imagen no existe, mostrar una imagen por defecto
+                        e.target.src = "/img/wedding-vip-12.jpg";
+                      }}
+                    />
+                    {/* Badge del fotógrafo */}
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: 8,
+                        right: 8,
+                        bgcolor: "primary.main",
+                        color: "white",
+                        px: 1.5,
+                        py: 0.5,
+                        borderRadius: 1,
+                        fontSize: "0.75rem",
+                        fontWeight: "bold"
+                      }}
+                    >
+                      Photographer
+                    </Box>
+                  </Box>
+
+                  {/* Texto - Parte media que crece */}
+                  <Box sx={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    minHeight: "80px", // 🔥 Espacio mínimo para el texto
+                    mb: 2
+                  }}>
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      sx={{
+                        fontWeight: 600,
+                        textAlign: "center",
+                        lineHeight: 1.2,
+                        fontSize: "1rem", // 🔥 Tamaño fijo
+                        height: "2.4em", // 🔥 Altura fija para 2 líneas
+                        overflow: "hidden",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2, // 🔥 Limita a 2 líneas máximo
+                        WebkitBoxOrient: "vertical",
+                      }}
+                    >
+                      {photographer.location}
+                    </Typography>
+
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        textAlign: "center",
+                        lineHeight: 1.2
+                      }}
+                    >
+                      {photographer.role}
+                    </Typography>
+                  </Box>
+
+                  {/* Información de contacto */}
+                  <Box sx={{
+                    flexShrink: 0,
+                    mb: 2,
+                    textAlign: "center"
+                  }}>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{
+                        display: "block",
+                        mb: 0.5
+                      }}
+                    >
+                      Contact:
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontSize: "0.8rem",
+                        fontWeight: 500
+                      }}
+                    >
+                      {photographer.email.split('@')[0]}
+                    </Typography>
+                  </Box>
+
+                  {/* Botones - Parte inferior fija */}
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                    justifyContent="center"
                     sx={{
-                      bgcolor: 'info.main',
-                      color: 'white',
-                      '&:hover': { bgcolor: 'info.dark' }
+                      flexShrink: 0, // 🔥 No se reduce
+                      mt: "auto" // 🔥 Empuja hacia abajo
                     }}
                   >
-                    <PhoneIcon />
-                  </IconButton>
-                  <IconButton
-                    component="a"
-                    href={`mailto:${photographer.email}`}
-                    sx={{
-                      bgcolor: 'grey.600',
-                      color: 'white',
-                      '&:hover': { bgcolor: 'grey.700' }
-                    }}
-                  >
-                    <EmailIcon />
-                  </IconButton>
-                </Stack>
+                    <IconButton
+                      onClick={() => handleCopyText(photographer.phone)}
+                      sx={{
+                        bgcolor: "info.main",
+                        color: "white",
+                        "&:hover": { bgcolor: "info.dark" },
+                      }}
+                      title="Call photographer"
+                    >
+                      <PhoneIcon />
+                    </IconButton>
+
+                    <IconButton
+                      component="a"
+                      href={`mailto:${photographer.email}`}
+                      sx={{
+                        bgcolor: "grey.600",
+                        color: "white",
+                        "&:hover": { bgcolor: "grey.700" },
+                      }}
+                      title="Email photographer"
+                    >
+                      <EmailIcon />
+                    </IconButton>
+                  </Stack>
+                </CardContent>
               </Card>
             </Grid>
           ))}
         </Grid>
+
       </Container>
     </Box>
   );

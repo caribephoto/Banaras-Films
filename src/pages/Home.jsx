@@ -33,24 +33,26 @@ const Home = () => {
     "/img/slide-2.jpg",
     "/img/slide-3.jpg",
     "/img/slide-4.jpg",
-    "/img/slide-5.jpg",
     "/img/slide-6.jpg",
   ];
 
   const [selectedImages, setSelectedImages] = useState([]);
+  const shuffleArray = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
 
   useEffect(() => {
-    const shuffleArray = (array) => {
-      const shuffled = [...array];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      return shuffled;
-    };
+    const uniqueWithRandomQuery = allSlideImages.map(
+      img => `${img}?rand=${Math.random()}`
+    );
 
-    const shuffled = shuffleArray(allSlideImages);
-    setSelectedImages(shuffled.slice(0, 3));
+    const shuffled = shuffleArray(uniqueWithRandomQuery);
+    setSelectedImages(shuffled.slice(0, 6));
   }, []);
 
   const services = [
@@ -104,12 +106,12 @@ const Home = () => {
         }}>
           <CarouselProvider
             className="overflow-hidden"
-            naturalSlideWidth={100}
-            naturalSlideHeight={45}
-            totalSlides={3}
+            naturalSlideWidth={200}
+            naturalSlideHeight={85}
+            totalSlides={5}
             isPlaying={true}
-            interval={4000}
-            playDirection="forward"
+            interval={6000}
+            playDirection="backward"
             infinite={true}
             orientation="horizontal"
           >
@@ -129,20 +131,28 @@ const Home = () => {
                     alt="Slide 1"
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
-                  <Box sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: { xs: 4, lg: 8 },
-                    transform: 'translateY(-50%)',
-                    zIndex: 20
-                  }}>
+
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: { xs: 4, lg: 8 },
+                      transform: 'translateY(-50%)',
+                      zIndex: 20,
+                    }}
+                  >
                     <Typography
                       variant="h2"
                       sx={{
-                        color: 'white',
-                        fontWeight: 'bold',
-                        textShadow: '0 10px 30px rgba(0,0,0,0.5)',
-                        fontSize: { xs: '2rem', lg: '3.75rem' }
+                        color: "white",
+                        fontWeight: "bold",
+                        textShadow: "0 10px 30px rgba(0,0,0,0.5)",
+                        fontSize: {
+                          xs: "1.5rem",   // móviles
+                          sm: "2rem",     // tablets pequeñas
+                          md: "3rem",     // laptops
+                          lg: "3.75rem"   // pantallas grandes
+                        }
                       }}
                     >
                       Wedding
@@ -150,16 +160,22 @@ const Home = () => {
                     <Typography
                       variant="h5"
                       sx={{
-                        color: 'rgba(255,255,255,0.9)',
+                        color: "rgba(255,255,255,0.9)",
                         fontWeight: 300,
-                        textShadow: '0 5px 15px rgba(0,0,0,0.5)',
-                        fontSize: { xs: '1.125rem', lg: '1.5rem' }
+                        textShadow: "0 5px 15px rgba(0,0,0,0.5)",
+                        fontSize: {
+                          xs: "0.9rem",
+                          sm: "1.1rem",
+                          md: "1.3rem",
+                          lg: "1.5rem"
+                        }
                       }}
                     >
                       Destination Photography
                     </Typography>
                   </Box>
                 </Slide>
+
                 <Slide index={1}>
                   <img
                     src={selectedImages[1]}
@@ -171,6 +187,20 @@ const Home = () => {
                   <img
                     src={selectedImages[2]}
                     alt="Slide 3"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </Slide>
+                <Slide index={3}>
+                  <img
+                    src={selectedImages[3]}
+                    alt="Slide 4"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </Slide>
+                <Slide index={4}>
+                  <img
+                    src={selectedImages[4]}
+                    alt="Slide 5"
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 </Slide>
@@ -190,18 +220,40 @@ const Home = () => {
               fontWeight: 600,
               letterSpacing: 2,
               display: 'block',
-              mb: 1
+              mb: 1,
+              fontSize: {
+                xs: "0.9rem",
+                sm: "1.1rem",
+                md: "1.3rem",
+                lg: "1.5rem"
+              }
             }}
           >
             Explore Our Services
           </Typography>
-          <Typography variant="h3" component="h1" gutterBottom fontWeight="bold">
+          <Typography variant="h3" component="h1" gutterBottom fontWeight="bold"
+            sx={{
+              fontSize: {
+                xs: "1.5rem",
+                sm: "2rem",
+                md: "3rem",
+                lg: "3.75rem"
+              }
+            }}>
             Thinking about services?
           </Typography>
           <Typography
             variant="body1"
             color="text.secondary"
-            sx={{ maxWidth: '66%', mx: 'auto' }}
+            sx={{
+              maxWidth: '66%', mx: 'auto',
+              fontSize: {
+                xs: "0.9rem",
+                sm: "1.1rem",
+                md: "1.3rem",
+                lg: "1.5rem"
+              }
+            }}
           >
             Let us help you capture your special moments with our professional photography and videography services
           </Typography>
@@ -245,7 +297,7 @@ const Home = () => {
                   }
                 }}
               >
-                <CardContent sx={{ flexGrow: 1, p: 4, display: 'flex', flexDirection: 'column', maxWidth: 360 }}>
+                <CardContent sx={{ flexGrow: 1, p: 4, display: 'flex', flexDirection: 'column', maxWidth: { xs: "100%", md: "360px" } }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                     <Avatar
                       sx={{
@@ -259,11 +311,25 @@ const Home = () => {
                     >
                       {service.icon}
                     </Avatar>
-                    <Typography variant="h6" component="h2" fontWeight="bold">
+                    <Typography variant="h6" component="h2" fontWeight="bold" sx={{
+                      fontSize: {
+                        xs: "0.9rem",
+                        sm: "1.1rem",
+                        md: "1.3rem",
+                        lg: "1.5rem"
+                      }
+                    }}>
                       {service.title}
                     </Typography>
                   </Box>
-                  <Typography variant="body2" color="text.secondary" paragraph sx={{ flexGrow: 1 }}>
+                  <Typography variant="body2" color="text.secondary" paragraph sx={{
+                    fontSize: {
+                      xs: "0.9rem",
+                      sm: "1.1rem",
+                      md: "1.3rem",
+                      lg: "1.5rem"
+                    }
+                  }}>
                     {service.description}
                   </Typography>
                   <Button
@@ -283,6 +349,13 @@ const Home = () => {
                       boxShadow: 2,
                       '&:hover': {
                         boxShadow: 4,
+                      },
+
+                      fontSize: {
+                        xs: "0.9rem",
+                        sm: "1.1rem",
+                        md: "1.3rem",
+                        lg: "1.5rem"
                       }
                     }}
                   >
