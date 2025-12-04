@@ -231,20 +231,43 @@ const Checkout = () => {
     }
 
     return (
-        <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', py: 8 }}>
+        <Box sx={{
+            minHeight: '100vh',
+            bgcolor: 'background.default',
+            display: 'flex',
+            alignItems: 'center',
+            py: { xs: 4, md: 8 }
+        }}>
             <Container maxWidth="lg">
-                <Typography variant="h3" component="h1" align="center" gutterBottom fontWeight="bold" sx={{ mb: 6 }}>
+                <Typography
+                    variant="h3"
+                    component="h1"
+                    align="center"
+                    gutterBottom
+                    fontWeight="bold"
+                    sx={{ mb: 6 }}
+                >
                     Checkout
                 </Typography>
 
-                <Grid container spacing={4}>
+                <Grid
+                    container
+                    spacing={4}
+                    justifyContent="center"
+                    alignItems="stretch"
+                >
                     {/* Customer Information */}
                     <Grid item xs={12} md={6}>
-                        <Paper sx={{ p: 3 }}>
+                        <Paper sx={{
+                            p: 3,
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column'
+                        }}>
                             <Typography variant="h5" component="h2" gutterBottom fontWeight="bold">
                                 Customer Information
                             </Typography>
-                            <Stack spacing={3} sx={{ mt: 3 }}>
+                            <Stack spacing={3} sx={{ mt: 3, flex: 1 }}>
                                 <TextField
                                     fullWidth
                                     label="Full Name"
@@ -280,9 +303,9 @@ const Checkout = () => {
 
                     {/* Order Summary & Payment */}
                     <Grid item xs={12} md={6}>
-                        <Stack spacing={3}>
+                        <Stack spacing={3} height="100%">
                             {/* Order Summary */}
-                            <Paper sx={{ p: 3 }}>
+                            <Paper sx={{ p: 3, flex: 1 }}>
                                 <Typography variant="h5" component="h2" gutterBottom fontWeight="bold">
                                     Order Summary
                                 </Typography>
@@ -333,7 +356,22 @@ const Checkout = () => {
                                     Payment
                                 </Typography>
                                 {!isFormValid() && (
-                                    <Alert severity="warning" sx={{ mb: 2 }}>
+                                    <Alert
+                                        severity="warning"
+                                        sx={{
+                                            mb: 2,
+                                            bgcolor: 'rgba(255, 152, 0, 0.1)',
+                                            border: '1px solid',
+                                            borderColor: 'warning.main',
+                                            '& .MuiAlert-icon': {
+                                                color: 'warning.main',
+                                            },
+                                            '& .MuiAlert-message': {
+                                                color: 'text.primary',
+                                                fontWeight: 500,
+                                            }
+                                        }}
+                                    >
                                         Please complete all customer information before proceeding with payment.
                                     </Alert>
                                 )}

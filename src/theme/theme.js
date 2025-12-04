@@ -13,12 +13,12 @@ const getTheme = (mode) => createTheme({
             main: '#f472b6', // pink-400
         },
         background: {
-            default: mode === 'dark' ? '#0b1121' : '#ffffff',
+            default: mode === 'dark' ? '#0b1121' : '#dbdde0ff',
             paper: mode === 'dark' ? '#1f2937' : '#ffffff',
         },
         text: {
-            primary: mode === 'dark' ? '#ffffff' : '#4b5563', // gray-600
-            secondary: mode === 'dark' ? '#9ca3af' : '#6b7280', // gray-400/500
+            primary: mode === 'dark' ? '#ffffff' : '#1f2937', // gray-600
+            secondary: mode === 'dark' ? '#9ca3af' : '#4b5563', // gray-400/500
         },
     },
     typography: {

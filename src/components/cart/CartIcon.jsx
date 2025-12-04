@@ -1,30 +1,44 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BsCart3 } from 'react-icons/bs';
 import { useCart } from '../../context/CartContext';
 import { motion } from 'framer-motion';
+import { Badge, IconButton } from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const CartIcon = () => {
     const { getCartCount } = useCart();
     const cartCount = getCartCount();
 
     return (
-        <Link to="/cart" className="relative">
+        <Link to="/cart" style={{ textDecoration: 'none' }}>
             <motion.div
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex justify-center items-center text-2xl lg:text-2xl p-2 lg:p-3 rounded-full border border-indigo-300 bg-gray-200 dark:bg-gray-800 cursor-pointer"
             >
-                <BsCart3 />
-                {cartCount > 0 && (
-                    <motion.span
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
+                <Badge
+                    badgeContent={cartCount}
+                    color="primary"
+                    max={9}
+                    sx={{
+                        '& .MuiBadge-badge': {
+                            fontWeight: 'bold',
+                            fontSize: '0.75rem',
+                        }
+                    }}
+                >
+                    <IconButton
+                        sx={{
+                            border: 1,
+                            borderColor: 'divider',
+                            bgcolor: 'background.paper',
+                            '&:hover': {
+                                bgcolor: 'action.hover',
+                            }
+                        }}
                     >
-                        {cartCount > 9 ? '9+' : cartCount}
-                    </motion.span>
-                )}
+                        <ShoppingCartIcon />
+                    </IconButton>
+                </Badge>
             </motion.div>
         </Link>
     );

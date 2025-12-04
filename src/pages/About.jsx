@@ -285,10 +285,6 @@ const About = () => {
           Meet Our Photographer
         </Typography>
 
-        <Typography variant="h4" align="center" gutterBottom sx={{ mt: 10, mb: 6 }}>
-          Meet Our Photographer
-        </Typography>
-
         <Grid
           container
           spacing={4}

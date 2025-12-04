@@ -134,7 +134,7 @@ const Cart = () => {
                                                     sx={{
                                                         px: 2,
                                                         py: 0.5,
-                                                        bgcolor: 'background.default',
+
                                                         borderRadius: 1,
                                                         fontWeight: 600,
                                                         minWidth: 40,
