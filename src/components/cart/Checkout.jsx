@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { useCart } from '../../context/CartContext';
@@ -34,6 +34,14 @@ const Checkout = () => {
         phone: '',
     });
 
+    const [fieldErrors, setFieldErrors] = useState({
+        name: '',
+        email: '',
+        phone: ''
+    });
+
+    const [formIsValid, setFormIsValid] = useState(false);
+
     const [orderComplete, setOrderComplete] = useState(false);
     const [orderDetails, setOrderDetails] = useState(null);
     const [orderTotal, setOrderTotal] = useState(0);
@@ -50,6 +58,69 @@ const Checkout = () => {
         }).format(amount);
     };
 
+    // Función de validación memoizada
+    const validateForm = useCallback(() => {
+        const errors = {
+            name: '',
+            email: '',
+            phone: ''
+        };
+
+        let isValid = true;
+
+        // Validar nombre
+        if (!customerInfo.name || customerInfo.name.trim().length === 0) {
+            errors.name = 'Name is required';
+            isValid = false;
+        } else if (customerInfo.name.trim().length < 2) {
+            errors.name = 'Name must be at least 2 characters';
+            isValid = false;
+        } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s-]+$/.test(customerInfo.name.trim())) {
+            errors.name = 'Name contains invalid characters';
+            isValid = false;
+        }
+
+        // Validar email
+        if (!customerInfo.email || customerInfo.email.trim().length === 0) {
+            errors.email = 'Email is required';
+            isValid = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerInfo.email.trim())) {
+            errors.email = 'Please enter a valid email address';
+            isValid = false;
+        }
+
+        // Validar teléfono
+        if (!customerInfo.phone || customerInfo.phone.trim().length === 0) {
+            errors.phone = 'Phone number is required';
+            isValid = false;
+        } else {
+            const cleanPhone = customerInfo.phone.replace(/[\s\-()]/g, '');
+
+            if (!/^\+?[0-9]+$/.test(cleanPhone)) {
+                errors.phone = 'Phone number must contain only digits and optional +';
+                isValid = false;
+            } else {
+                const digitsOnly = cleanPhone.replace('+', '');
+                if (digitsOnly.length < 8) {
+                    errors.phone = 'Phone number is too short';
+                    isValid = false;
+                } else if (digitsOnly.length > 15) {
+                    errors.phone = 'Phone number is too long';
+                    isValid = false;
+                }
+            }
+        }
+
+        return { errors, isValid };
+    }, [customerInfo.name, customerInfo.email, customerInfo.phone]);
+
+    // Efecto para validar el formulario cuando cambian los datos
+    useEffect(() => {
+        const validation = validateForm();
+        setFieldErrors(validation.errors);
+        setFormIsValid(validation.isValid);
+    }, [validateForm]);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setCustomerInfo((prev) => ({
@@ -58,8 +129,14 @@ const Checkout = () => {
         }));
     };
 
-    const isFormValid = () => {
-        return customerInfo.name && customerInfo.email && customerInfo.phone;
+    // Validar al perder el foco
+    const handleBlur = (e) => {
+        const { name } = e.target;
+        const validation = validateForm();
+        setFieldErrors(prev => ({
+            ...prev,
+            [name]: validation.errors[name]
+        }));
     };
 
     // PayPal configuration
@@ -70,8 +147,12 @@ const Checkout = () => {
     };
 
     const createOrder = (data, actions) => {
-        if (!isFormValid()) {
-            toast.error('Please complete all customer information.');
+        const validation = validateForm();
+
+        if (!validation.isValid) {
+            // Mostrar todos los errores
+            setFieldErrors(validation.errors);
+            toast.error('Please complete all customer information correctly.');
             return Promise.reject();
         }
 
@@ -208,9 +289,21 @@ const Checkout = () => {
                                 </Typography>
                             </Stack>
                         </Paper>
-                        <Typography color="text.secondary" paragraph>
-                            A confirmation email has been sent to {customerInfo.email}
+                        <Typography color="text.secondary" paragraph sx={{ mb: 2 }}>
+                            ✓ Confirmation email sent to: <strong>{customerInfo.email}</strong>
                         </Typography>
+                        <Alert
+                            severity="info"
+                            sx={{
+                                bgcolor: 'rgba(33, 150, 243, 0.1)',
+                                '& .MuiAlert-icon': { color: 'info.main' },
+                                mb: 2
+                            }}
+                        >
+                            <Typography variant="body2">
+                                <strong>Important:</strong> Check both your inbox and spam folder for our email.
+                            </Typography>
+                        </Alert>
                         <Button
                             variant="contained"
                             size="large"
@@ -274,8 +367,11 @@ const Checkout = () => {
                                     name="name"
                                     value={customerInfo.name}
                                     onChange={handleInputChange}
+                                    onBlur={handleBlur}
                                     required
                                     variant="outlined"
+                                    error={!!fieldErrors.name}
+                                    helperText={fieldErrors.name}
                                 />
                                 <TextField
                                     fullWidth
@@ -284,8 +380,11 @@ const Checkout = () => {
                                     type="email"
                                     value={customerInfo.email}
                                     onChange={handleInputChange}
+                                    onBlur={handleBlur}
                                     required
                                     variant="outlined"
+                                    error={!!fieldErrors.email}
+                                    helperText={fieldErrors.email}
                                 />
                                 <TextField
                                     fullWidth
@@ -294,8 +393,11 @@ const Checkout = () => {
                                     type="tel"
                                     value={customerInfo.phone}
                                     onChange={handleInputChange}
+                                    onBlur={handleBlur}
                                     required
                                     variant="outlined"
+                                    error={!!fieldErrors.phone}
+                                    helperText={fieldErrors.phone}
                                 />
                             </Stack>
                         </Paper>
@@ -353,7 +455,7 @@ const Checkout = () => {
                             {/* Payment */}
                             <Paper sx={{
                                 p: 3,
-                                minHeight: 280,// Altura mínima fija
+                                minHeight: 280,
                                 width: '100%',
                             }}>
                                 <Typography variant="h5" component="h2" gutterBottom fontWeight="bold">
@@ -361,19 +463,17 @@ const Checkout = () => {
                                 </Typography>
 
                                 <Stack spacing={2}>
-                                    {/* Contenedor con altura fija para mantener el layout estable */}
                                     <Box sx={{
-                                        height: 60, // Altura fija para evitar cambios en el layout
-                                        minWidth: 60,
+                                        height: 60,
                                         display: 'flex',
                                         alignItems: 'center',
                                         mb: 2
                                     }}>
-                                        {!isFormValid() ? (
+                                        {!formIsValid ? (
                                             <Alert
                                                 severity="warning"
                                                 sx={{
-
+                                                    width: '100%',
                                                     bgcolor: 'rgba(255, 152, 0, 0.1)',
                                                     border: '1px solid',
                                                     borderColor: 'warning.main',
@@ -392,8 +492,8 @@ const Checkout = () => {
                                             <Alert
                                                 severity="success"
                                                 sx={{
-
-                                                    bgcolor: 'rgba(46, 125, 50, 0.1)', // Verde más suave para success
+                                                    width: '100%',
+                                                    bgcolor: 'rgba(46, 125, 50, 0.1)',
                                                     border: '1px solid',
                                                     borderColor: 'success.main',
                                                     '& .MuiAlert-icon': {
@@ -417,7 +517,7 @@ const Checkout = () => {
                                                 createOrder={createOrder}
                                                 onApprove={onApprove}
                                                 onError={onError}
-                                                disabled={!isFormValid()}
+                                                disabled={!formIsValid}
                                             />
                                         </PayPalScriptProvider>
                                     </Box>
