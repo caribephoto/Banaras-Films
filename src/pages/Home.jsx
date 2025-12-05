@@ -342,14 +342,12 @@ const Home = () => {
                       background: 'linear-gradient(to right, #ec4899, #db2777)',
                       '&:hover': {
                         background: 'linear-gradient(to right, #db2777, #be185d)',
+                        boxShadow: 4,
                       },
                       borderRadius: 2,
                       py: 1.5,
                       fontWeight: 600,
                       boxShadow: 2,
-                      '&:hover': {
-                        boxShadow: 4,
-                      },
 
                       fontSize: {
                         xs: "0.9rem",
