@@ -259,18 +259,61 @@ const Checkout = () => {
         }
     };
 
-    const onApprove = (data, actions) => {
-        return actions.order.capture().then((details) => {
+    const onApprove = async (data, actions) => {
+        try {
+            const details = await actions.order.capture();
+
             setOrderDetails(details);
             setOrderTotal(total);
             setOrderComplete(true);
 
-            // Send order confirmation email
-            sendOrderEmail(details.id, cart);
+            // 1. Save order to Supabase database
+            try {
+                const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
+                const saveResponse = await fetch(`${API_URL}/api/save-order`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        paypalOrderId: details.id,
+                        customerInfo: {
+                            ...customerInfo,
+                            hotel_id: selectedHotel
+                        },
+                        orderDetails: {
+                            items: cart,
+                            subtotal: subtotal,
+                            tax: tax,
+                            total: total
+                        }
+                    })
+                });
+
+                const saveResult = await saveResponse.json();
+
+                if (saveResult.success) {
+                    console.log('✅ Order saved to database:', saveResult.data);
+                } else {
+                    console.warn('⚠️ Order not saved to database:', saveResult.message);
+                }
+            } catch (saveError) {
+                console.error('❌ Error saving order to database:', saveError);
+                // Don't block the flow if Supabase fails
+            }
+
+            // 2. Send order confirmation email
+            await sendOrderEmail(details.id, cart);
+
+            // 3. Clear cart and show success
             clearCart();
             toast.success('Payment successful! Thank you for your order.');
-        });
+
+        } catch (error) {
+            console.error('PayPal capture error:', error);
+            toast.error('Payment capture failed. Please contact support.');
+        }
     };
 
     const onError = (err) => {
