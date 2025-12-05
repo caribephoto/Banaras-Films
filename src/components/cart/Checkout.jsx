@@ -283,10 +283,15 @@ const Checkout = () => {
                             hotel_id: selectedHotel
                         },
                         orderDetails: {
-                            items: cart,
-                            subtotal: subtotal,
-                            tax: tax,
-                            total: total
+                            items: cart.map(item => ({
+                                id: item.id,
+                                title: item.title,
+                                quantity: item.quantity || 1,
+                                price: item.numericPrice || parseFloat(item.price.replace(/[^0-9.-]+/g, ''))
+                            })),
+                            subtotal: parseFloat(subtotal.toFixed(2)),
+                            tax: parseFloat(tax.toFixed(2)),
+                            total: parseFloat(total.toFixed(2))
                         }
                     })
                 });
