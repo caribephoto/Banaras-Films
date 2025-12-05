@@ -19,11 +19,13 @@ import {
     Alert,
     Stack,
     Card,
-    CardContent
+    CardContent,
+    IconButton,
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PlaceIcon from '@mui/icons-material/Place';
 import StarIcon from '@mui/icons-material/Star';
+import CloseIcon from '@mui/icons-material/Close';
 import HotelSelector from './HotelSelector';
 import hotels from '../../utils/hotelData';
 
@@ -38,6 +40,7 @@ const Checkout = () => {
         name: '',
         email: '',
         phone: '',
+        hotel: ''
     });
 
     const [fieldErrors, setFieldErrors] = useState({
@@ -359,142 +362,239 @@ const Checkout = () => {
     {/* Hotel Selection with confirmation modal */ }
     if (!selectedHotel) {
         return (
-            <Grid item xs={12}>
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: '100%',
-                        textAlign: 'center',
-                    }}
-                >
-                    <Paper sx={{ p: 3, width: '100%' }}>
-                        <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
-                            Where would you like to stay?
-                        </Typography>
+            <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', py: 8 }}>
 
-                        <Grid
-                            container
-                            spacing={3}
-                            justifyContent="center"
+                <Box sx={{ position: 'relative' }}>
+                    {fieldErrors.hotel && (
+                        <Alert
+                            severity="error"
+                            sx={{
+                                position: 'absolute',
+                                top: { xs: -50, md: -50, lg: 10 },
+                                right: { xs: 20, md: 20, lg: 20 },
+
+                            }}
                         >
+                            {fieldErrors.hotel}
+                        </Alert>
+                    )}
+
+                    <Container maxWidth="lg">
+                        <Typography
+                            variant="h3"
+                            component="h1"
+                            align="center"
+                            gutterBottom
+                            fontWeight="bold"
+                            sx={{ mb: 2 }}
+                        >
+                            Select Your Wedding Venue
+                        </Typography>
+                        <Typography
+                            variant="h6"
+                            align="center"
+                            color="text.secondary"
+                            sx={{ mb: 6 }}
+                        >
+                            Choose the perfect location for your special day
+                        </Typography>
+                        <Grid container spacing={{ xs: 3, md: 4 }} justifyContent="center">
                             {hotels.map((hotel) => (
                                 <Grid
                                     item
                                     xs={12}
                                     sm={6}
-                                    md={3}
+                                    md={4}
                                     lg={3}
                                     key={hotel.id}
-                                    sx={{ display: 'flex', justifyContent: 'center' }}
+                                    sx={{ display: 'flex' }}  // contenedor flex de item
                                 >
                                     <Card
-                                        elevation={1}
+                                        component={motion.div}
+                                        whileHover={{
+                                            scale: 1.05,
+                                            boxShadow: "0px 10px 30px rgba(236, 72, 153, 0.3)",
+                                        }}
+                                        transition={{ type: "spring", stiffness: 100 }}
                                         sx={{
-                                            width: '100%',
-                                            maxWidth: 260,     // 🔥 tarjeta compacta
-                                            cursor: 'pointer',
-                                            border: '1px solid #e0e0e0',
+                                            height: '100%',                 // importante: tarjeta toma todo el alto del Grid item
                                             display: 'flex',
                                             flexDirection: 'column',
-                                            '&:hover': {
-                                                borderColor: 'primary.main',
-                                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-                                            }
+                                            borderRadius: 3,
+                                            overflow: 'hidden',
+                                            maxWidth: 250,
+                                            cursor: 'pointer',
                                         }}
                                         onClick={() => setSelectedHotelPreview(hotel)}
                                     >
                                         <CardMedia
                                             component="img"
-                                            height="120"     // 🔥 imagen más pequeña
+                                            sx={{
+                                                objectFit: 'cover',
+                                                width: '100%',
+                                                height: 180,
+                                                flexShrink: 0,
+                                            }}
                                             image={hotel.image || '/hotel-placeholder.jpg'}
                                             alt={hotel.name}
-                                            sx={{ objectFit: 'cover' }}
                                         />
-
-                                        <CardContent sx={{ p: 1.5 }}>
-                                            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 0.5 }}>
+                                        <CardContent sx={{
+                                            flexGrow: 1,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            p: 2.5
+                                        }}>
+                                            <Typography variant="h6" component="h3" gutterBottom fontWeight="bold" sx={{ mb: 1 }}>
                                                 {hotel.name}
                                             </Typography>
-
-                                            <Typography
-                                                variant="body2"
-                                                sx={{
-                                                    color: 'text.secondary',
-                                                    mb: 1
-                                                }}
-                                            >
-                                                {hotel.location}
-                                            </Typography>
-
+                                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                                <PlaceIcon sx={{ fontSize: 16, mr: 0.5, color: 'text.secondary' }} />
+                                                <Typography
+                                                    variant="body2"
+                                                    color="text.secondary"
+                                                    sx={{
+                                                        overflow: 'hidden',
+                                                        textOverflow: 'ellipsis',
+                                                        display: '-webkit-box',
+                                                        WebkitLineClamp: 2,
+                                                        WebkitBoxOrient: 'vertical',
+                                                    }}
+                                                >
+                                                    {hotel.location}
+                                                </Typography>
+                                            </Box>
                                             {hotel.rating && (
-                                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                                    <StarIcon sx={{ color: '#ffc107', fontSize: 16 }} />
-                                                    <Typography variant="body2" sx={{ ml: 0.5 }}>
-                                                        {hotel.rating}
+                                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                                                    <StarIcon sx={{ color: '#ffc107', fontSize: 18, mr: 0.5 }} />
+                                                    <Typography variant="body2" fontWeight="600">
+                                                        {hotel.rating} / 5.0
                                                     </Typography>
                                                 </Box>
                                             )}
-
-                                            <Typography
-                                                variant="body2"
-                                                sx={{ fontWeight: 600 }}
-                                            >
-                                                {hotel.price ? `$${hotel.price}/night` : 'Contact for price'}
-                                            </Typography>
+                                            {/* Si agregas descripción, asegurate de truncarla o limitar líneas */}
+                                            <Box sx={{ mt: 'auto' }}>
+                                                <Button
+                                                    variant="contained"
+                                                    fullWidth
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setSelectedHotelPreview(hotel);
+                                                    }}
+                                                    sx={{
+                                                        background: 'linear-gradient(to right, #ec4899, #db2777)',
+                                                        '&:hover': {
+                                                            background: 'linear-gradient(to right, #db2777, #be185d)',
+                                                        },
+                                                    }}
+                                                >
+                                                    Select Venue
+                                                </Button>
+                                            </Box>
                                         </CardContent>
                                     </Card>
                                 </Grid>
                             ))}
                         </Grid>
 
-
                         {/* Confirmation Dialog */}
                         <Dialog
                             open={!!selectedHotelPreview}
                             onClose={() => setSelectedHotelPreview(null)}
-                            maxWidth="sm"
+                            maxWidth="md"
                             fullWidth
+                            PaperProps={{
+                                sx: {
+                                    borderRadius: 3,
+                                }
+                            }}
                         >
-                            <DialogTitle sx={{ fontWeight: 600 }}>
-                                Confirm Selection
+                            <DialogTitle sx={{ fontWeight: 'bold', fontSize: '1.5rem', pb: 1 }}>
+                                Confirm Your Selection
                             </DialogTitle>
                             <DialogContent>
                                 {selectedHotelPreview && (
                                     <>
-                                        <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+                                        {/*  <CardMedia
+                                        component="img"
+                                        height="50%"
+                                        width="50%"
+                                        image={selectedHotelPreview.image}
+                                        alt={selectedHotelPreview.name}
+                                        sx={{ borderRadius: 2, mb: 3, objectFit: 'contain' }}
+                                    />*/}
+                                        <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
                                             {selectedHotelPreview.name}
                                         </Typography>
-                                        <Typography variant="body1" paragraph>
-                                            Are you sure you want to book at {selectedHotelPreview.name}?
-                                        </Typography>
-
-                                        <Box sx={{ mb: 2 }}>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                                <PlaceIcon fontSize="small" sx={{ mr: 1, color: 'text.secondary' }} />
-                                                <Typography variant="body2" color="text.secondary">
-                                                    {selectedHotelPreview.location}
-                                                </Typography>
+                                        <Box sx={{ mb: 3 }}>
+                                            <Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
+                                                <PlaceIcon sx={{ mr: 1, color: 'primary.main', mt: 0.5 }} />
+                                                <Box>
+                                                    <Typography variant="body2" color="text.secondary" fontWeight="600">
+                                                        Location
+                                                    </Typography>
+                                                    <Typography variant="body1">
+                                                        {selectedHotelPreview.location}
+                                                    </Typography>
+                                                </Box>
                                             </Box>
-
                                             {selectedHotelPreview.rating && (
-                                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                                    <StarIcon sx={{ color: '#ffc107', fontSize: 18, mr: 0.5 }} />
-                                                    <Typography variant="body2">
-                                                        Rating: <strong>{selectedHotelPreview.rating}</strong> ({selectedHotelPreview.reviewCount} reviews)
+                                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                                                    <StarIcon sx={{ color: '#ffc107', fontSize: 20, mr: 1 }} />
+                                                    <Typography variant="body1">
+                                                        Rating: <strong>{selectedHotelPreview.rating}</strong> / 5.0
                                                     </Typography>
                                                 </Box>
                                             )}
+                                            <Typography variant="body1" paragraph sx={{ mt: 2 }}>
+                                                {selectedHotelPreview.description}
+                                            </Typography>
+                                            {selectedHotelPreview.features && selectedHotelPreview.features.length > 0 && (
+                                                <Box sx={{ mt: 2 }}>
+                                                    <Typography variant="body2" color="text.secondary" fontWeight="600" sx={{ mb: 1 }}>
+                                                        Features & Amenities
+                                                    </Typography>
+                                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                                                        {selectedHotelPreview.features.map((feature, index) => (
+                                                            <Box
+                                                                key={index}
+                                                                sx={{
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    bgcolor: 'action.hover',
+                                                                    px: 1.5,
+                                                                    py: 0.5,
+                                                                    borderRadius: 1,
+                                                                }}
+                                                            >
+                                                                <CheckCircleIcon sx={{ fontSize: 14, mr: 0.5, color: 'primary.main' }} />
+                                                                <Typography variant="body2">{feature}</Typography>
+                                                            </Box>
+                                                        ))}
+                                                    </Box>
+                                                </Box>
+                                            )}
+                                            {selectedHotelPreview.capacity && (
+                                                <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                                                    <strong>Capacity:</strong> {selectedHotelPreview.capacity}
+                                                </Typography>
+                                            )}
+                                            {selectedHotelPreview.url && (
+                                                <Button
+                                                    variant="outlined"
+                                                    href={selectedHotelPreview.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    sx={{ mt: 2 }}
+                                                    fullWidth
+                                                >
+                                                    View on Google Maps
+                                                </Button>
+                                            )}
                                         </Box>
-
-                                        <Typography variant="body2" color="text.secondary">
-                                            Price per night: <strong>${selectedHotelPreview.price}</strong>
-                                        </Typography>
                                     </>
                                 )}
                             </DialogContent>
-                            <DialogActions sx={{ px: 3, pb: 2 }}>
+                            <DialogActions sx={{ px: 3, pb: 3 }}>
                                 <Button
                                     onClick={() => setSelectedHotelPreview(null)}
                                     sx={{ textTransform: 'none' }}
@@ -504,24 +604,26 @@ const Checkout = () => {
                                 <Button
                                     variant="contained"
                                     onClick={() => {
-                                        handleHotelSelect(selectedHotelPreview);
+                                        handleHotelSelect(selectedHotelPreview.id);
                                         setSelectedHotelPreview(null);
                                     }}
-                                    sx={{ textTransform: 'none' }}
+                                    sx={{
+                                        textTransform: 'none',
+                                        background: 'linear-gradient(to right, #ec4899, #db2777)',
+                                        '&:hover': {
+                                            background: 'linear-gradient(to right, #db2777, #be185d)',
+                                        },
+                                    }}
                                 >
                                     Confirm Selection
                                 </Button>
                             </DialogActions>
                         </Dialog>
 
-                        {fieldErrors.hotel && (
-                            <Typography color="error" variant="body2" sx={{ mt: 2 }}>
-                                {fieldErrors.hotel}
-                            </Typography>
-                        )}
-                    </Paper>
+                    </Container>
                 </Box>
-            </Grid >
+
+            </Box>
         );
     }
 
@@ -602,6 +704,31 @@ const Checkout = () => {
                                     error={!!fieldErrors.phone}
                                     helperText={fieldErrors.phone}
                                 />
+
+                                <TextField
+                                    fullWidth
+                                    label="Hotel"
+                                    name="hotel"
+                                    type="text"
+                                    value={getSelectedHotelName()}
+                                    onChange={handleInputChange}
+                                    onBlur={handleBlur}
+                                    required
+                                    variant="outlined"
+                                    error={!!fieldErrors.hotel}
+                                    helperText={fieldErrors.hotel}
+                                    InputProps={{
+                                        endAdornment: selectedHotel && (
+                                            <IconButton
+                                                onClick={() => setSelectedHotel(null)}
+                                                edge="end"
+                                            >
+                                                <CloseIcon />
+                                            </IconButton>
+                                        )
+                                    }}
+                                />
+
                             </Stack>
                         </Paper>
                     </Grid>

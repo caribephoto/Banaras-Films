@@ -65,32 +65,36 @@ const About = () => {
 
   const photographers = [
     {
-      location: "Azul Beach Resort Negril - Jamaica",
+      location: "Azul Beach Resort Negril",
+      country: "Jamaica",
       role: "Photographer",
       phone: "529841578632",
       email: "jamaica@caribephoto.com",
-      image: "jamaica"
+      image: "https://lh3.googleusercontent.com/p/AF1QipPeYet8MXNGSNdYBCsGIeGSwLtEw2HVp5ODigoP=w253-h168-k-no"
     },
     {
-      location: "Margaritaville Island Reserve Riviera Maya - Mexico",
+      location: "Margaritaville Island Reserve Riviera Maya",
+      country: "Mexico",
       role: "Photographer",
       phone: "7398592004",
       email: "rrmphotoshop@caribephoto.com",
-      image: "margarita"
+      image: "https://lh3.googleusercontent.com/p/AF1QipNHCUPInCw_srgjvKtde8PV6lKefrMtCqXvRiQi=w253-h168-k-no"
     },
     {
-      location: "Margaritaville Island Reserve Riviera Cancun - Mexico",
+      location: "Margaritaville Island Reserve Riviera Cancun",
+      country: "Mexico",
       role: "Photographer",
       phone: "7080226202",
       email: "mvphotoshop@caribephoto.com",
-      image: "cancun"
+      image: "https://lh4.googleusercontent.com/proxy/xN2NAFuuqG856TTIx26cicyrpXgm8zLF4YVGwZ49xeKoYH9FEeuet6S_NcrJpS_1BK3JCzo7QZz6m4H3t4la05HWLeofV5IHVOosOg6eQFRM8mgdGhefVxqy8WgqRXXvFOvJ5yIgaBQcHOqUJSub3GeC7wzBWyw=w253-h316-k-no"
     },
     {
-      location: "Nickelodeon Hotels & Resorts Punta Cana - Dominican Republic",
+      location: "Nickelodeon Hotels & Resorts Punta Cana",
+      country: "Dominican Republic",
       role: "Photographer",
       phone: "7080226202",
       email: "mvphotoshop@caribephoto.com",
-      image: "dominican"
+      image: "https://lh3.googleusercontent.com/p/AF1QipMBGYnWZIzdDUHCvqjHvIAIbR0a9yDGWiVfYZCN=w253-h174-k-no"
     }
   ];
 
@@ -282,7 +286,7 @@ const About = () => {
         </Box>
 
         <Typography variant="h4" align="center" gutterBottom sx={{ mt: 10, mb: 6 }}>
-          Meet Our Photographer
+          Meet Our Hotels
         </Typography>
 
         <Grid
@@ -306,7 +310,7 @@ const About = () => {
               <Card
                 sx={{
                   height: "380px", // 🔥 ALTURA FIJA para todas
-                  width: "280px", // 🔥 ANCHO FIJO para todas
+                  width: "250px", // 🔥 ANCHO FIJO para todas
                   textAlign: "center",
                   display: "flex",
                   flexDirection: "column",
@@ -319,6 +323,7 @@ const About = () => {
                   display: "flex",
                   flexDirection: "column",
                   p: 3,
+                  marginBottom: 10,
                   '&:last-child': { pb: 3 } // 🔥 Elimina padding extra
                 }}>
                   {/* Imagen del hotel - Parte superior */}
@@ -333,7 +338,7 @@ const About = () => {
                   }}>
                     <Box
                       component="img"
-                      src={`/img/${photographer.image.toLowerCase().replace(/\s+/g, '-')}.jpg`}
+                      src={photographer.image}
                       alt={`${photographer.image} hotel`}
                       sx={{
                         width: "100%",
@@ -349,7 +354,7 @@ const About = () => {
                         e.target.src = "/img/wedding-vip-12.jpg";
                       }}
                     />
-                    {/* Badge del fotógrafo */}
+                    {/* Badge del fotógrafo 
                     <Box
                       sx={{
                         position: "absolute",
@@ -365,7 +370,7 @@ const About = () => {
                       }}
                     >
                       Photographer
-                    </Box>
+                    </Box>*/}
                   </Box>
 
                   {/* Texto - Parte media que crece */}
@@ -410,7 +415,7 @@ const About = () => {
                   {/* Información de contacto */}
                   <Box sx={{
                     flexShrink: 0,
-                    mb: 2,
+                    mb: 0,
                     textAlign: "center"
                   }}>
                     <Typography
@@ -441,7 +446,7 @@ const About = () => {
                     justifyContent="center"
                     sx={{
                       flexShrink: 0, // 🔥 No se reduce
-                      mt: "auto" // 🔥 Empuja hacia abajo
+                      mt: 1 // 🔥 Empuja hacia abajo
                     }}
                   >
                     <IconButton
