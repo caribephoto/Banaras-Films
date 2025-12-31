@@ -28,6 +28,7 @@ import StarIcon from '@mui/icons-material/Star';
 import CloseIcon from '@mui/icons-material/Close';
 import HotelSelector from './HotelSelector';
 import hotels from '../../utils/hotelData';
+import { hasDronePackage, getAvailableHotels, validateCartForCheckout, isHotelAllowed } from '../../utils/cartValidation';
 
 const Checkout = () => {
     useDocumentTitle('Checkout');
@@ -158,6 +159,15 @@ const Checkout = () => {
     };
 
     const handleHotelSelect = (hotelId) => {
+        // Validate if hotel is allowed with current cart (drone restrictions)
+        const hotelCheck = isHotelAllowed(cart, hotelId);
+
+        if (!hotelCheck.allowed) {
+            toast.error(hotelCheck.reason);
+            // Don't allow selection
+            return;
+        }
+
         setSelectedHotel(hotelId);
         // Clear hotel error when selected
         setFieldErrors(prev => ({
@@ -185,6 +195,13 @@ const Checkout = () => {
             // Mostrar todos los errores
             setFieldErrors(validation.errors);
             toast.error('Please complete all customer information correctly.');
+            return Promise.reject();
+        }
+
+        // Validate cart for checkout (drone restrictions)
+        const cartValidation = validateCartForCheckout(cart, selectedHotel);
+        if (!cartValidation.valid) {
+            cartValidation.errors.forEach(error => toast.error(error));
             return Promise.reject();
         }
 

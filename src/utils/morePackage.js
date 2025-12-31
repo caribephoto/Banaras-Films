@@ -9,6 +9,10 @@ export const morePkg = [
       "* Includes cinematic aerial shots"
     ],
     price: "$333.89 + Tax",
+    numericPrice: 333.89,
+    requiresVideo: true,
+    excludedHotels: ['azul-negril'],
+    category: "addon"
   },
   {
     id: "video-addon",
@@ -20,6 +24,9 @@ export const morePkg = [
       "* Delivered in high resolution"
     ],
     price: "$1,318.00 + Tax",
+    numericPrice: 1318.00,
+    isVideoPackage: true,
+    category: "addon"
   },
   {
     id: "video-extra-addon",
@@ -31,5 +38,8 @@ export const morePkg = [
       "* Includes extra footage in final delivery"
     ],
     price: "$1,099.79 + Tax",
+    numericPrice: 1099.79,
+    isVideoPackage: true,
+    category: "addon"
   },
 ];
