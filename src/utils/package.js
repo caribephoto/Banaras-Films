@@ -1,4 +1,4 @@
-export const pkg = [
+const pkg = [
   {
     id: 76,
     title: "Coconut Package",
@@ -72,4 +72,19 @@ export const pkg = [
     ],
     price: "$817.15 + Tax",
   },
+  {
+    id: 999,
+    title: "Live Test Package",
+    img: "/img/coconut-package.jpg", // Using a placeholder image
+    content: ["Test Item 1", "Test Item 2"],
+    price: "$20.00 MXN",
+    numericPrice: 20,
+    test: true
+  }
 ];
+
+// Verify if test package is enabled
+const enableTest = import.meta.env.VITE_ENABLE_TEST_PACKAGE === 'true';
+const finalPkg = enableTest ? pkg : pkg.filter(p => p.id !== 999);
+
+export { finalPkg as pkg };
