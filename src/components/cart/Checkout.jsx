@@ -343,6 +343,11 @@ const Checkout = () => {
         toast.error('Payment failed. Please try again.');
     };
 
+    const onCancel = (data) => {
+        console.log('Payment cancelled:', data);
+        toast.info('Payment process was cancelled.');
+    };
+
     if (cart.length === 0 && !orderComplete) {
         navigate('/cart');
         return null;
@@ -913,6 +918,7 @@ const Checkout = () => {
                                                 createOrder={createOrder}
                                                 onApprove={onApprove}
                                                 onError={onError}
+                                                onCancel={onCancel}
                                                 disabled={!formIsValid}
                                             />
                                         </PayPalScriptProvider>
