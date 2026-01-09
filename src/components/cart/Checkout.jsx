@@ -125,7 +125,7 @@ const Checkout = () => {
         }
 
         // Validar hotel (add before return statement)
-        if (!selectedHotel || selectedHotel.trim().length === 0) {
+        if (selectedHotel === null || selectedHotel === undefined) {
             errors.hotel = 'Please select your wedding venue';
             isValid = false;
         }
