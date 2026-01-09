@@ -1,6 +1,6 @@
 export const morePkg = [
   {
-    id: "drone-addon",
+    id: 57,
     title: "Drone",
     img: "/img/drone.jpg",
     content: [
@@ -11,7 +11,7 @@ export const morePkg = [
     price: "$333.89 + Tax",
     numericPrice: 333.89,
     requiresVideo: true,
-    excludedHotels: ['azul-negril'],
+    excludedHotels: [31],
     category: "addon"
   },
   {

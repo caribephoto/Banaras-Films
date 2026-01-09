@@ -1,6 +1,6 @@
 export const hotels = [
     {
-        id: 'azul-negril',
+        id: 31,
         name: 'Azul Beach Resort Negril',
         location: 'Norman Manley Blvd, Negril, Jamaica',
         description: 'All-inclusive resort on the famous Seven Mile Beach featuring ocean-front suites, a world-class spa, multiple pools, varied restaurants and plenty of activities for families, couples and friends.',
@@ -11,7 +11,7 @@ export const hotels = [
         url: 'https://www.google.com/travel/search?ts=CAESCgoCCAMKAggDEAAaMwoVEhMKCS9tLzA0bGtqODoGTmVncmlsEhoSFAoHCOkPEAwYDxIHCOkPEAwYEBgBMgIIAioHCgU6A01YTg&qs=CAEyJkNoZ0k4TUxPcTgzZi11b3RHZ3d2Wnk4eE1uWjBOV2RxZDJvUUFROARCCREcI3X8uWF97kIJEYLKRI-qdsFe&utm_campaign=sharing&utm_medium=link_btn&utm_source=htls'
     },
     {
-        id: 'margaritaville-riviera-maya',
+        id: 44,
         name: 'Margaritaville Island Reserve Riviera Maya',
         location: 'Bahia Petempich, Carr. Cancún - Tulum Km. 27.5-01, 77580 Puerto Morelos, Q.R, México',
         description: 'Luxury all-inclusive resort that blends laid-back island vibes with upscale amenities: gourmet dining, suites with private terraces and Caribbean views, pools, beach access, spa, bars, and nightly live entertainment — perfect for a worry-free adults’ getaway.',
@@ -22,7 +22,7 @@ export const hotels = [
         url: 'https://www.google.com/travel/search?ts=CAESCgoCCAMKAggDEAAaHBIaEhQKBwjpDxAMGA8SBwjpDxAMGBAYATICCAIqBwoFOgNNWE4&qs=CAEyE0Nnb0l3NFM3a0xhM3dQWkhFQUU4CEIJEREchcdoIFsUQgkRTuCHT-Qjs6NqHAoaDVdmi0USEwjms6jy4aaRAxU9oKsHHV9rHGk&utm_campaign=sharing&utm_medium=link_btn&utm_source=htls'
     },
     {
-        id: 'margaritaville-riviera-cancun',
+        id: 4,
         name: 'Margaritaville Island Reserve Riviera Cancun',
         location: 'Bahia Petempich, Carretera Cancún - Tulum Km. 27.5, 77580 Puerto Morelos, Q.R, México',
         description: 'Chic all-inclusive boutique-style resort featuring stylish suites, modern coastal design, pool and beach access, on-site bars and restaurants, entertainment and a relaxed island-style ambiance — great for couples or travelers looking for comfort and fun under the sun.',
@@ -33,7 +33,7 @@ export const hotels = [
         url: 'https://www.google.com/travel/search?ts=CAESCgoCCAMKAggDEAAaHBIaEhQKBwjpDxAMGA8SBwjpDxAMGBAYATICCAIqBwoFOgNNWE4&qs=CAEyFENnc0lpZDItbUx1cjI5UE5BUkFCOAhCCRERHIXHaCBbFEIJEU7gh0_kI7OjahwKGg0UwqxFEhMIkvj5iOKmkQMViKhaBR09IwTP&utm_campaign=sharing&utm_medium=link_btn&utm_source=htls'
     },
     {
-        id: 'nickelodeon-punta-cana',
+        id: 37,
         name: 'Nickelodeon Hotels & Resorts Punta Cana',
         location: 'Uvero Alto, Punta Cana, República Dominicana',
         description: 'Family-friendly resort blending five-star luxury with playful, themed fun: swim-up suites, a water-park, beachfront access, gourmet inclusive dining, and entertainment — ideal for families and fans of a lively, fun-filled vacation.',

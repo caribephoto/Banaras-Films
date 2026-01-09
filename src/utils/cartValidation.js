@@ -16,8 +16,8 @@ export const hasVideoPackage = (cart) => {
         // Check if it's a video addon
         if (item.isVideoPackage) return true;
 
-        // Check by ID
-        if (item.id === 'video-addon' || item.id === 'video-extra-addon') return true;
+        // Check by ID (matched with Supabase Legacy IDs)
+        if (item.id === 61) return true;
 
         // Check if it's a VIP package (they include video coverage)
         if (item.category === 'vip' || item.id?.includes('vip')) return true;
@@ -37,7 +37,7 @@ export const hasDronePackage = (cart) => {
     if (!cart || cart.length === 0) return false;
 
     return cart.some(item =>
-        item.id === 'drone-addon' ||
+        item.id === 57 ||
         item.requiresVideo === true ||
         item.title?.toLowerCase() === 'drone'
     );
@@ -67,8 +67,8 @@ export const canAddDrone = (cart) => {
 export const getExcludedHotelsForCart = (cart) => {
     if (!hasDronePackage(cart)) return [];
 
-    // Drone excludes Jamaica hotel
-    return ['azul-negril'];
+    // Drone excludes Azul Beach Negril (Legacy ID: 31)
+    return [31];
 };
 
 /**

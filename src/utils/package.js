@@ -1,6 +1,6 @@
 export const pkg = [
   {
-    id: "coconut-package",
+    id: 76,
     title: "Coconut Package",
     img: "/img/coconut-package.jpg",
     content: [
@@ -10,7 +10,7 @@ export const pkg = [
     price: "$4,287.87 + Tax",
   },
   {
-    id: "sand-package",
+    id: 75,
     title: "Sand Package",
     img: "/img/sand-package.jpg",
     content: [
@@ -20,7 +20,7 @@ export const pkg = [
     price: "$3,294.99 + Tax",
   },
   {
-    id: "seashell-package",
+    id: 74,
     title: "Seashell Package",
     img: "/img/seashell-package.jpg",
     content: [
@@ -30,7 +30,7 @@ export const pkg = [
     price: "$2,767.79 + Tax",
   },
   {
-    id: "starfish-package",
+    id: 73,
     title: "Starfish Package",
     img: "/img/starfish-package.jpg",
     content: [
@@ -40,7 +40,7 @@ export const pkg = [
     price: " $2,187.87 + Tax",
   },
   {
-    id: "pina-package",
+    id: 81,
     title: "Piña Package",
     img: "/img/piña-package.jpg",
     content: [
@@ -50,7 +50,7 @@ export const pkg = [
     price: "$1,739.75 + Tax",
   },
   {
-    id: "island-package",
+    id: 72,
     title: "Island Package",
     img: "/img/island-package.jpg",
     content: [
@@ -60,7 +60,7 @@ export const pkg = [
     price: "$1,318.00 + Tax",
   },
   {
-    id: "engagement-package",
+    id: 33,
     title: "Engagement Package",
     img: "/img/engagement-package.jpg",
     content: [

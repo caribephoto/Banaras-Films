@@ -1,6 +1,6 @@
 export const packagesVip = [
   {
-    id: "vip-12",
+    id: 80,
     title: "VIP 12",
     img: "/img/wedding-vip-12.jpg",
     content: [
@@ -13,7 +13,7 @@ export const packagesVip = [
     price: "$6,809.64 + Tax",
   },
   {
-    id: "vip-8",
+    id: 79,
     title: "VIP 8",
     img: "/img/wedding-vip-8.jpg",
     content: [
@@ -26,7 +26,7 @@ export const packagesVip = [
     price: "$4,946.87 + Tax",
   },
   {
-    id: "vip-6",
+    id: 78,
     title: "VIP 6",
     img: "/img/wedding-vip-6.jpg",
     content: [
@@ -39,7 +39,7 @@ export const packagesVip = [
     price: "$4,173.65 + Tax",
   },
   {
-    id: "vip-4",
+    id: 77,
     title: "VIP 4",
     img: "/img/wedding-vip-4.jpg",
     content: [
@@ -52,7 +52,7 @@ export const packagesVip = [
     price: "$3,294.99 + Tax",
   },
   {
-    id: "vip-2",
+    id: 71,
     title: "VIP 2",
     img: "/img/wedding-vip-2.jpg",
     content: [
