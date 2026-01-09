@@ -78,13 +78,13 @@ const pkg = [
     img: "/img/coconut-package.jpg", // Using a placeholder image
     content: ["Test Item 1", "Test Item 2"],
     price: "$20.00 MXN",
-    numericPrice: 20,
+    numericPrice: 1,
     test: true
   }
 ];
 
 // Verify if test package is enabled
 const enableTest = import.meta.env.VITE_ENABLE_TEST_PACKAGE === 'true';
-const finalPkg = enableTest ? pkg : pkg.filter(p => p.id !== 999);
+const finalPkg = enableTest ? pkg.filter(p => p.id === 999) : pkg.filter(p => p.id !== 999);
 
 export { finalPkg as pkg };
