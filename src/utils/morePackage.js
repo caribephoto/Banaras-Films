@@ -47,6 +47,6 @@ const morePkg = [
 
 // Verify if test package is enabled
 const enableTest = import.meta.env.VITE_ENABLE_TEST_PACKAGE === 'true';
-const finalPkg = enableTest ? null : morePkg;
+const finalPkg = enableTest ? [] : morePkg;
 
 export { finalPkg as morePkg };

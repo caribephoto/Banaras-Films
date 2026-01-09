@@ -67,6 +67,6 @@ const packagesVip = [
 
 // Verify if test package is enabled
 const enableTest = import.meta.env.VITE_ENABLE_TEST_PACKAGE === 'true';
-const finalPkg = enableTest ? null : packagesVip;
+const finalPkg = enableTest ? [] : packagesVip;
 
 export { finalPkg as packagesVip };

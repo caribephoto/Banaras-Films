@@ -167,23 +167,29 @@ const Services = () => {
               }}
             />
           </Box>
-          <Grid container spacing={{ xs: 3, md: 4, lg: 5 }} justifyContent="center">
-            {packagesVip.map((vip, idx) => (
-              <Grid
-                item
-                xs={12}
-                md={4}
-                key={idx}
-                sx={{ display: 'flex', justifyContent: 'center' }}
-              >
-                <Grid item xs={12} md={4} key={idx} sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Box sx={{ width: '100%', maxWidth: 350 }}>
-                    <PackageCard item={vip} category="VIP Package" />
-                  </Box>
+          {packagesVip && packagesVip.length > 0 ? (
+            <Grid container spacing={{ xs: 3, md: 4, lg: 5 }} justifyContent="center">
+              {packagesVip.map((vip, idx) => (
+                <Grid
+                  item
+                  xs={12}
+                  md={4}
+                  key={idx}
+                  sx={{ display: 'flex', justifyContent: 'center' }}
+                >
+                  <Grid item xs={12} md={4} key={idx} sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Box sx={{ width: '100%', maxWidth: 350 }}>
+                      <PackageCard item={vip} category="VIP Package" />
+                    </Box>
+                  </Grid>
                 </Grid>
-              </Grid>
-            ))}
-          </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <Typography variant="h6" align="center" color="text.secondary" sx={{ fontStyle: 'italic', my: 4 }}>
+              No VIP packages available at this moment.
+            </Typography>
+          )}
         </Box>
 
         {/* Regular Packages */}
@@ -203,23 +209,29 @@ const Services = () => {
               }}
             />
           </Box>
-          <Grid container spacing={{ xs: 3, md: 4, lg: 5 }} justifyContent="center">
-            {pkg.map((packages, idx) => (
-              <Grid
-                item
-                xs={12}
-                md={4}
-                key={idx}
-                sx={{ display: 'flex', justifyContent: 'center' }}
-              >
-                <Grid item xs={12} md={4} key={idx} sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Box sx={{ width: '100%', maxWidth: 350 }}>
-                    <PackageCard item={packages} category="Package" />
-                  </Box>
+          {pkg && pkg.length > 0 ? (
+            <Grid container spacing={{ xs: 3, md: 4, lg: 5 }} justifyContent="center">
+              {pkg.map((packages, idx) => (
+                <Grid
+                  item
+                  xs={12}
+                  md={4}
+                  key={idx}
+                  sx={{ display: 'flex', justifyContent: 'center' }}
+                >
+                  <Grid item xs={12} md={4} key={idx} sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Box sx={{ width: '100%', maxWidth: 350 }}>
+                      <PackageCard item={packages} category="Package" />
+                    </Box>
+                  </Grid>
                 </Grid>
-              </Grid>
-            ))}
-          </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <Typography variant="h6" align="center" color="text.secondary" sx={{ fontStyle: 'italic', my: 4 }}>
+              No packages available at this moment.
+            </Typography>
+          )}
         </Box>
 
         {/* More Packages */}
@@ -239,23 +251,29 @@ const Services = () => {
               }}
             />
           </Box>
-          <Grid container spacing={{ xs: 3, md: 4, lg: 5 }} justifyContent="center">
-            {morePkg.map((morepkg, idx) => (
-              <Grid
-                item
-                xs={12}
-                md={4}
-                key={idx}
-                sx={{ display: 'flex', justifyContent: 'center' }}
-              >
-                <Grid item xs={12} md={4} key={idx} sx={{ display: 'flex', justifyContent: 'center' }}>
-                  <Box sx={{ width: '100%', maxWidth: 350 }}>
-                    <PackageCard item={morepkg} category="Additional Service" />
-                  </Box>
+          {morePkg && morePkg.length > 0 ? (
+            <Grid container spacing={{ xs: 3, md: 4, lg: 5 }} justifyContent="center">
+              {morePkg.map((morepkg, idx) => (
+                <Grid
+                  item
+                  xs={12}
+                  md={4}
+                  key={idx}
+                  sx={{ display: 'flex', justifyContent: 'center' }}
+                >
+                  <Grid item xs={12} md={4} key={idx} sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Box sx={{ width: '100%', maxWidth: 350 }}>
+                      <PackageCard item={morepkg} category="Additional Service" />
+                    </Box>
+                  </Grid>
                 </Grid>
-              </Grid>
-            ))}
-          </Grid>
+              ))}
+            </Grid>
+          ) : (
+            <Typography variant="h6" align="center" color="text.secondary" sx={{ fontStyle: 'italic', my: 4 }}>
+              No additional packages available at this moment.
+            </Typography>
+          )}
         </Box>
       </Container>
     </Box>
