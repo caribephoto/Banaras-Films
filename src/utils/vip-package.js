@@ -1,4 +1,4 @@
-export const packagesVip = [
+const packagesVip = [
   {
     id: 80,
     title: "VIP 12",
@@ -64,3 +64,9 @@ export const packagesVip = [
     price: "$1,924.27 + Tax",
   },
 ];
+
+// Verify if test package is enabled
+const enableTest = import.meta.env.VITE_ENABLE_TEST_PACKAGE === 'true';
+const finalPkg = enableTest ? null : packagesVip;
+
+export { finalPkg as packagesVip };

@@ -1,4 +1,4 @@
-export const morePkg = [
+const morePkg = [
   {
     id: 57,
     title: "Drone",
@@ -43,3 +43,10 @@ export const morePkg = [
     category: "addon"
   },
 ];
+
+
+// Verify if test package is enabled
+const enableTest = import.meta.env.VITE_ENABLE_TEST_PACKAGE === 'true';
+const finalPkg = enableTest ? null : morePkg;
+
+export { finalPkg as morePkg };
