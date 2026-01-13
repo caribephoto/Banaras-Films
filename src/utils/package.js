@@ -77,7 +77,7 @@ const pkg = [
     title: "Live Test Package",
     img: "/img/coconut-package.jpg", // Using a placeholder image
     content: ["Test Item 1", "Test Item 2"],
-    price: "$1.00 MXN",
+    price: "$1.00",
     numericPrice: 1,
     test: true
   }

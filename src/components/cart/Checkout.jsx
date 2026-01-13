@@ -41,14 +41,22 @@ const Checkout = () => {
         name: '',
         email: '',
         phone: '',
-        hotel: ''
+        hotel: '',
+        groomName: '',
+        brideName: '',
+        weddingDate: '',
+        pax: ''
     });
 
     const [fieldErrors, setFieldErrors] = useState({
         name: '',
         email: '',
         phone: '',
-        hotel: ''
+        hotel: '',
+        groomName: '',
+        brideName: '',
+        weddingDate: '',
+        pax: ''
     });
 
     const [formIsValid, setFormIsValid] = useState(false);
@@ -67,7 +75,7 @@ const Checkout = () => {
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'MXN',
+            currency: 'USD',
         }).format(amount);
     };
 
@@ -124,14 +132,35 @@ const Checkout = () => {
             }
         }
 
-        // Validar hotel (add before return statement)
+        // Validar hotel
         if (selectedHotel === null || selectedHotel === undefined) {
             errors.hotel = 'Please select your wedding venue';
             isValid = false;
         }
 
+        // Validate Wedding Info
+        if (!customerInfo.groomName || customerInfo.groomName.trim().length === 0) {
+            errors.groomName = "Groom's name is required";
+            isValid = false;
+        }
+
+        if (!customerInfo.brideName || customerInfo.brideName.trim().length === 0) {
+            errors.brideName = "Bride's name is required";
+            isValid = false;
+        }
+
+        if (!customerInfo.weddingDate) {
+            errors.weddingDate = 'Wedding date is required';
+            isValid = false;
+        }
+
+        if (!customerInfo.pax || customerInfo.pax <= 0) {
+            errors.pax = 'Valid number of guests (PAX) is required';
+            isValid = false;
+        }
+
         return { errors, isValid };
-    }, [customerInfo.name, customerInfo.email, customerInfo.phone, selectedHotel]);
+    }, [customerInfo, selectedHotel]);
 
     // Efecto para validar el formulario cuando cambian los datos
     useEffect(() => {
@@ -184,7 +213,7 @@ const Checkout = () => {
     // PayPal configuration
     const initialOptions = {
         clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID || 'test',
-        currency: import.meta.env.VITE_CURRENCY || 'MXN',
+        currency: import.meta.env.VITE_CURRENCY || 'USD',
         intent: 'capture',
     };
 
@@ -205,7 +234,7 @@ const Checkout = () => {
             return Promise.reject();
         }
 
-        const currency = import.meta.env.VITE_CURRENCY || 'MXN';
+        const currency = import.meta.env.VITE_CURRENCY || 'USD';
 
         return actions.order.create({
             purchase_units: [
@@ -239,7 +268,12 @@ const Checkout = () => {
                     name: customerInfo.name,
                     email: customerInfo.email,
                     phone: customerInfo.phone,
+                    phone: customerInfo.phone,
                     hotel: getSelectedHotelName(),
+                    groomName: customerInfo.groomName,
+                    brideName: customerInfo.brideName,
+                    weddingDate: customerInfo.weddingDate,
+                    pax: customerInfo.pax
                 },
                 orderDetails: {
                     orderId: orderId,
@@ -386,6 +420,12 @@ const Checkout = () => {
                                 </Typography>
                                 <Typography>
                                     <strong>Wedding Venue:</strong> {getSelectedHotelName()}
+                                </Typography>
+                                <Typography>
+                                    <strong>Couple:</strong> {customerInfo.groomName} & {customerInfo.brideName}
+                                </Typography>
+                                <Typography>
+                                    <strong>Date:</strong> {customerInfo.weddingDate}
                                 </Typography>
                                 <Typography>
                                     <strong>Total Paid:</strong>{' '}
@@ -702,9 +742,7 @@ const Checkout = () => {
         <Box sx={{
             minHeight: '100vh',
             bgcolor: 'background.default',
-            display: 'flex',
-            alignItems: 'center',
-            py: { xs: 4, md: 8 }
+            py: 6
         }}>
             <Container maxWidth="lg">
                 <Typography
@@ -718,157 +756,244 @@ const Checkout = () => {
                     Checkout
                 </Typography>
 
-                <Grid
-                    container
-                    spacing={4}
-                    justifyContent="center"
-                    alignItems="stretch"
-                >
-                    {/* Customer Information */}
-                    <Grid item xs={12} md={6}>
-                        <Paper sx={{
+                <Stack spacing={4}>
+                    {/* Customer Information & Wedding Information - Full Width */}
+                    <Paper
+                        elevation={2}
+                        sx={{
                             p: 3,
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column'
-                        }}>
-                            <Typography variant="h5" component="h2" gutterBottom fontWeight="bold">
-                                Customer Information
+                            borderRadius: 2
+                        }}
+                    >
+                        <Typography variant="h5" component="h2" gutterBottom fontWeight="bold" sx={{ mb: 3 }}>
+                            Customer Information
+                        </Typography>
+                        <Stack spacing={3}>
+                            <Grid container spacing={3}>
+                                <Grid size={{ xs: 12, md: 4 }}>
+                                    <TextField
+                                        fullWidth
+                                        label="Full Name"
+                                        name="name"
+                                        value={customerInfo.name}
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        required
+                                        variant="outlined"
+                                        error={!!fieldErrors.name}
+                                        helperText={fieldErrors.name}
+                                    />
+                                </Grid>
+                                <Grid size={{ xs: 12, md: 4 }}>
+                                    <TextField
+                                        fullWidth
+                                        label="Email"
+                                        name="email"
+                                        type="email"
+                                        value={customerInfo.email}
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        required
+                                        variant="outlined"
+                                        error={!!fieldErrors.email}
+                                        helperText={fieldErrors.email}
+                                    />
+                                </Grid>
+                                <Grid size={{ xs: 12, md: 4 }}>
+                                    <TextField
+                                        fullWidth
+                                        label="Phone Number"
+                                        name="phone"
+                                        type="tel"
+                                        value={customerInfo.phone}
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        required
+                                        variant="outlined"
+                                        error={!!fieldErrors.phone}
+                                        helperText={fieldErrors.phone}
+                                    />
+                                </Grid>
+                                <Grid size={{ xs: 12, md: 4 }}>
+                                    <TextField
+                                        fullWidth
+                                        label="Hotel"
+                                        name="hotel"
+                                        type="text"
+                                        value={getSelectedHotelName()}
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        required
+                                        variant="outlined"
+                                        error={!!fieldErrors.hotel}
+                                        helperText={fieldErrors.hotel}
+                                        InputProps={{
+                                            endAdornment: selectedHotel && (
+                                                <IconButton
+                                                    onClick={() => setSelectedHotel(null)}
+                                                    edge="end"
+                                                >
+                                                    <CloseIcon />
+                                                </IconButton>
+                                            )
+                                        }}
+                                    />
+                                </Grid>
+                            </Grid>
+
+                            <Divider sx={{ my: 2 }} />
+
+                            <Typography variant="h6" component="h3" fontWeight="bold">
+                                Wedding Information
                             </Typography>
-                            <Stack spacing={3} sx={{ mt: 3, flex: 1 }}>
-                                <TextField
-                                    fullWidth
-                                    label="Full Name"
-                                    name="name"
-                                    value={customerInfo.name}
-                                    onChange={handleInputChange}
-                                    onBlur={handleBlur}
-                                    required
-                                    variant="outlined"
-                                    error={!!fieldErrors.name}
-                                    helperText={fieldErrors.name}
-                                />
-                                <TextField
-                                    fullWidth
-                                    label="Email"
-                                    name="email"
-                                    type="email"
-                                    value={customerInfo.email}
-                                    onChange={handleInputChange}
-                                    onBlur={handleBlur}
-                                    required
-                                    variant="outlined"
-                                    error={!!fieldErrors.email}
-                                    helperText={fieldErrors.email}
-                                />
-                                <TextField
-                                    fullWidth
-                                    label="Phone Number"
-                                    name="phone"
-                                    type="tel"
-                                    value={customerInfo.phone}
-                                    onChange={handleInputChange}
-                                    onBlur={handleBlur}
-                                    required
-                                    variant="outlined"
-                                    error={!!fieldErrors.phone}
-                                    helperText={fieldErrors.phone}
-                                />
 
-                                <TextField
-                                    fullWidth
-                                    label="Hotel"
-                                    name="hotel"
-                                    type="text"
-                                    value={getSelectedHotelName()}
-                                    onChange={handleInputChange}
-                                    onBlur={handleBlur}
-                                    required
-                                    variant="outlined"
-                                    error={!!fieldErrors.hotel}
-                                    helperText={fieldErrors.hotel}
-                                    InputProps={{
-                                        endAdornment: selectedHotel && (
-                                            <IconButton
-                                                onClick={() => setSelectedHotel(null)}
-                                                edge="end"
-                                            >
-                                                <CloseIcon />
-                                            </IconButton>
-                                        )
-                                    }}
-                                />
-
-                            </Stack>
-                        </Paper>
-                    </Grid>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12} sm={6} md={3}>
+                                    <TextField
+                                        fullWidth
+                                        label="Groom's Name"
+                                        name="groomName"
+                                        value={customerInfo.groomName}
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        required
+                                        variant="outlined"
+                                        error={!!fieldErrors.groomName}
+                                        helperText={fieldErrors.groomName}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6} md={3}>
+                                    <TextField
+                                        fullWidth
+                                        label="Bride's Name"
+                                        name="brideName"
+                                        value={customerInfo.brideName}
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        required
+                                        variant="outlined"
+                                        error={!!fieldErrors.brideName}
+                                        helperText={fieldErrors.brideName}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6} md={3}>
+                                    <TextField
+                                        fullWidth
+                                        label="Wedding Date"
+                                        name="weddingDate"
+                                        type="date"
+                                        value={customerInfo.weddingDate}
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        required
+                                        variant="outlined"
+                                        InputLabelProps={{ shrink: true }}
+                                        error={!!fieldErrors.weddingDate}
+                                        helperText={fieldErrors.weddingDate}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6} md={3}>
+                                    <TextField
+                                        fullWidth
+                                        label="Pax (Guests)"
+                                        name="pax"
+                                        type="number"
+                                        value={customerInfo.pax}
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        required
+                                        variant="outlined"
+                                        error={!!fieldErrors.pax}
+                                        helperText={fieldErrors.pax}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </Stack>
+                    </Paper>
 
 
-                    {/* Order Summary & Payment */}
-                    <Grid item xs={12} md={6}>
-                        <Stack spacing={3} height="100%">
-                            {/* Order Summary */}
-                            <Paper sx={{ p: 3, flex: 1 }}>
-                                <Typography variant="h5" component="h2" gutterBottom fontWeight="bold">
+
+                    <Grid container spacing={4}>
+                        {/* Order Summary */}
+                        <Grid size={{ xs: 12, md: 6 }}>
+                            <Paper
+                                elevation={2}
+                                sx={{
+                                    p: 3,
+                                    height: '100%',
+                                    borderRadius: 2
+                                }}
+                            >
+                                <Typography variant="h5" component="h2" gutterBottom fontWeight="bold" sx={{ mb: 3 }}>
                                     Order Summary
                                 </Typography>
-                                <Stack spacing={1} sx={{ my: 2 }}>
+                                <Stack spacing={1.5} sx={{ my: 2 }}>
                                     {cart.map((item) => (
                                         <Box
                                             key={item.id}
                                             sx={{
                                                 display: 'flex',
                                                 justifyContent: 'space-between',
-                                                py: 1,
-                                                borderBottom: 1,
+                                                alignItems: 'center',
+                                                py: 1.5,
+                                                borderBottom: '1px solid',
                                                 borderColor: 'divider'
                                             }}
                                         >
-                                            <Typography variant="body2">
-                                                {item.title} x {item.quantity}
-                                            </Typography>
-                                            <Typography variant="body2" fontWeight="600">
+                                            <Box sx={{ flex: 1 }}>
+                                                <Typography variant="body1" fontWeight="500">
+                                                    {item.title}
+                                                </Typography>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    Qty: {item.quantity}
+                                                </Typography>
+                                            </Box>
+                                            <Typography variant="body1" fontWeight="600">
                                                 {formatCurrency(item.numericPrice * item.quantity)}
                                             </Typography>
                                         </Box>
                                     ))}
                                 </Stack>
                                 <Divider sx={{ my: 2 }} />
-                                <Stack spacing={1}>
+                                <Stack spacing={1.5}>
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <Typography>Subtotal:</Typography>
-                                        <Typography fontWeight="600">{formatCurrency(subtotal)}</Typography>
+                                        <Typography variant="body1">Subtotal:</Typography>
+                                        <Typography variant="body1" fontWeight="600">{formatCurrency(subtotal)}</Typography>
                                     </Box>
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <Typography>VAT ({(TAX_RATE * 100).toFixed(0)}%):</Typography>
-                                        <Typography fontWeight="600">{formatCurrency(tax)}</Typography>
+                                        <Typography variant="body1">VAT ({(TAX_RATE * 100).toFixed(0)}%):</Typography>
+                                        <Typography variant="body1" fontWeight="600">{formatCurrency(tax)}</Typography>
                                     </Box>
                                     <Divider />
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 1 }}>
                                         <Typography variant="h6" fontWeight="bold">Total:</Typography>
-                                        <Typography variant="h6" color="primary" fontWeight="bold">
+                                        <Typography variant="h5" color="primary.main" fontWeight="bold">
                                             {formatCurrency(total)}
                                         </Typography>
                                     </Box>
                                 </Stack>
                             </Paper>
+                        </Grid>
 
-                            {/* Payment */}
-                            <Paper sx={{
-                                p: 3,
-                                minHeight: 280,
-                                width: '100%',
-                            }}>
-                                <Typography variant="h5" component="h2" gutterBottom fontWeight="bold">
+                        {/* Payment */}
+                        <Grid size={{ xs: 12, md: 6 }}>
+                            <Paper
+                                elevation={2}
+                                sx={{
+                                    p: 3,
+                                    height: '100%',
+                                    borderRadius: 2
+                                }}
+                            >
+                                <Typography variant="h5" component="h2" gutterBottom fontWeight="bold" sx={{ mb: 3 }}>
                                     Payment
                                 </Typography>
 
-                                <Stack spacing={2}>
+                                <Stack spacing={2} sx={{ height: '100%' }}>
                                     <Box sx={{
-                                        height: 60,
+                                        minHeight: 60,
                                         display: 'flex',
-                                        alignItems: 'center',
-                                        mb: 2
+                                        alignItems: 'center'
                                     }}>
                                         {!formIsValid ? (
                                             <Alert
@@ -887,7 +1012,7 @@ const Checkout = () => {
                                                     }
                                                 }}
                                             >
-                                                Please complete all customer information before proceeding with payment.
+                                                Please complete all information before proceeding
                                             </Alert>
                                         ) : (
                                             <Alert
@@ -906,12 +1031,12 @@ const Checkout = () => {
                                                     }
                                                 }}
                                             >
-                                                ✓ All information complete! You can safely proceed with payment.
+                                                ✓ Ready to proceed with payment
                                             </Alert>
                                         )}
                                     </Box>
 
-                                    <Box sx={{ flex: 1 }}>
+                                    <Box sx={{ mt: 'auto' }}>
                                         <PayPalScriptProvider options={initialOptions}>
                                             <PayPalButtons
                                                 style={{ layout: 'vertical' }}
@@ -925,9 +1050,9 @@ const Checkout = () => {
                                     </Box>
                                 </Stack>
                             </Paper>
-                        </Stack>
+                        </Grid>
                     </Grid>
-                </Grid>
+                </Stack>
             </Container>
         </Box>
     );

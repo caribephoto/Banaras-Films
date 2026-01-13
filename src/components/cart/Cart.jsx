@@ -36,7 +36,7 @@ const Cart = () => {
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat('es-MX', {
             style: 'currency',
-            currency: 'MXN',
+            currency: import.meta.env.VITE_CURRENCY,
         }).format(amount);
     };
 
