@@ -24,10 +24,11 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
   const parsePrice = (priceString) => {
+    const rate = parseFloat(import.meta.env.VITE_USD_RATE || '1');
     // Extract numeric value from price string like "$4,287.87 + Tax"
     const match = priceString.match(/\$?([\d,]+\.?\d*)/);
     if (match) {
-      return parseFloat(match[1].replace(/,/g, ''));
+      return parseFloat(match[1].replace(/,/g, '')) * rate;
     }
     return 0;
   };

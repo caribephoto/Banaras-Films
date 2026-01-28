@@ -73,9 +73,10 @@ const Checkout = () => {
     const total = subtotal + tax;
 
     const formatCurrency = (amount) => {
+        const currency = import.meta.env.VITE_CURRENCY || 'USD';
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'USD',
+            currency: currency,
         }).format(amount);
     };
 
@@ -285,6 +286,7 @@ const Checkout = () => {
                     subtotal: subtotal,
                     tax: tax,
                     total: total,
+                    currency: import.meta.env.VITE_CURRENCY || 'USD'
                 },
             };
 
@@ -342,7 +344,8 @@ const Checkout = () => {
                             })),
                             subtotal: parseFloat(subtotal.toFixed(2)),
                             tax: parseFloat(tax.toFixed(2)),
-                            total: parseFloat(total.toFixed(2))
+                            total: parseFloat(total.toFixed(2)),
+                            currency: import.meta.env.VITE_CURRENCY || 'USD'
                         }
                     })
                 });

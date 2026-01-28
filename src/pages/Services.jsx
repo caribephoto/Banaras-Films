@@ -32,6 +32,23 @@ const Services = () => {
   useTakeMeToTheTop();
   const { addToCart, isInCart } = useCart();
 
+  const rate = parseFloat(import.meta.env.VITE_USD_RATE || '1');
+  const currency = import.meta.env.VITE_CURRENCY || 'USD';
+
+  const formatItemPrice = (priceString) => {
+    const match = priceString.match(/\$?([\d,]+\.?\d*)/);
+    if (match) {
+      const usdAmount = parseFloat(match[1].replace(/,/g, ''));
+      const mxnAmount = usdAmount * rate;
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: currency,
+        maximumFractionDigits: 0
+      }).format(mxnAmount) + ' + Tax';
+    }
+    return priceString;
+  };
+
   const PackageCard = ({ item, category }) => (
     <Card
       component={motion.div}
@@ -78,7 +95,7 @@ const Services = () => {
           fontWeight="bold"
           sx={{ mb: 2 }}
         >
-          {item.price}
+          {formatItemPrice(item.price)}
         </Typography>
         <Stack direction="row" spacing={1}>
           <Button
