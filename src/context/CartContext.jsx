@@ -23,14 +23,9 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('caribephoto_cart', JSON.stringify(cart));
   }, [cart]);
 
-  const parsePrice = (priceString) => {
+  const calculatePrice = (usdPrice) => {
     const rate = parseFloat(import.meta.env.VITE_USD_RATE || '1');
-    // Extract numeric value from price string like "$4,287.87 + Tax"
-    const match = priceString.match(/\$?([\d,]+\.?\d*)/);
-    if (match) {
-      return parseFloat(match[1].replace(/,/g, '')) * rate;
-    }
-    return 0;
+    return (usdPrice || 0) * rate;
   };
 
   const addToCart = (packageItem, category) => {
@@ -68,7 +63,7 @@ export const CartProvider = ({ children }) => {
             id: packageItem.id,
             category,
             quantity: 1,
-            numericPrice: parsePrice(packageItem.price),
+            numericPrice: calculatePrice(packageItem.usdPrice),
           },
         ];
       }

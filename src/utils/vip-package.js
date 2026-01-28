@@ -10,7 +10,7 @@ const packagesVip = [
       "50 high-resolution photos in JPG format for each photo hour. In LINK with rights free for personal use.",
       "Edited video with songs of your preference in Link. For further information about the final video, please consult the following link.",
     ],
-    price: "$6,809.64 + Tax",
+    usdPrice: 6809.64,
   },
   {
     id: 79,
@@ -23,7 +23,7 @@ const packagesVip = [
       "50 high resolution photos in JPG format for each photo hour in LINK with rights free for personal use.",
       "Edited video with songs of your preferences in LINK. For further information about the final video, please consult the following link.",
     ],
-    price: "$4,946.87 + Tax",
+    usdPrice: 4946.87,
   },
   {
     id: 78,
@@ -36,7 +36,7 @@ const packagesVip = [
       "50 high resolution photos in JPG format for each photo hour in LINK with rights free for personal use. ",
       "Edited video with songs of your preferences in LINK. For further information about the length of  the final video, please consult the following link.",
     ],
-    price: "$4,173.65 + Tax",
+    usdPrice: 4173.65,
   },
   {
     id: 77,
@@ -49,7 +49,7 @@ const packagesVip = [
       "50 high resolution photos in JPG format for each photo hour in LINK with rights free for personal use.",
       "Edited video with songs of your preferences in LINK. For further information about the final video, please consult the following link.",
     ],
-    price: "$3,294.99 + Tax",
+    usdPrice: 3294.99,
   },
   {
     id: 71,
@@ -61,7 +61,7 @@ const packagesVip = [
       "Video Coverage time: 1 hour",
       "Edited video with songs of your preferences in LINK. For further information about the length of  the final video, please consult the following link.",
     ],
-    price: "$1,924.27 + Tax",
+    usdPrice: 1924.27,
   },
 ];
 

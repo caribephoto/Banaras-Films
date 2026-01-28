@@ -118,7 +118,7 @@ const Cart = () => {
                                                 Category: {item.category}
                                             </Typography>
                                             <Typography variant="h6" color="primary" fontWeight="600">
-                                                {item.price}
+                                                {formatCurrency(item.numericPrice)}
                                             </Typography>
                                         </CardContent>
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>

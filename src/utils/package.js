@@ -7,7 +7,7 @@ const pkg = [
       "Coverage time: 6 hours",
       "Around 480 high resolution photos in JPG format with rights free for personal use in LINK.",
     ],
-    price: "$4,287.87 + Tax",
+    usdPrice: 4287.87,
   },
   {
     id: 75,
@@ -17,7 +17,7 @@ const pkg = [
       "Coverage time: 5 hours",
       "Around 360 high resolution photos in JPG format with rights free for personal use in LINK.",
     ],
-    price: "$3,294.99 + Tax",
+    usdPrice: 3294.99,
   },
   {
     id: 74,
@@ -27,7 +27,7 @@ const pkg = [
       "Coverage time: 4 hours",
       "Around 300 high resolution photos in JPG format with rights free for personal use in LINK.",
     ],
-    price: "$2,767.79 + Tax",
+    usdPrice: 2767.79,
   },
   {
     id: 73,
@@ -37,7 +37,7 @@ const pkg = [
       "Coverage time: 3 hours",
       "Around 240 high resolution photos in JPG format with rights free for personal use in LINK.",
     ],
-    price: " $2,187.87 + Tax",
+    usdPrice: 2187.87,
   },
   {
     id: 81,
@@ -47,7 +47,7 @@ const pkg = [
       "Coverage time: 2 hours",
       "Around 200 high resolution photos in JPG format with rights free for personal use in LINK.",
     ],
-    price: "$1,739.75 + Tax",
+    usdPrice: 1739.75,
   },
   {
     id: 72,
@@ -57,7 +57,7 @@ const pkg = [
       "Coverage time: 1 hour and 30 min",
       "Around 110 high resolution photos in JPG format with rights free for personal use in LINK.",
     ],
-    price: "$1,318.00 + Tax",
+    usdPrice: 1318.00,
   },
   {
     id: 33,
@@ -70,15 +70,14 @@ const pkg = [
       "Not valid as a wedding package.",
       "*Please read the Terms and Conditions section.",
     ],
-    price: "$817.15 + Tax",
+    usdPrice: 817.15,
   },
   {
     id: 999,
     title: "Live Test Package",
     img: "/img/coconut-package.jpg", // Using a placeholder image
     content: ["Test Item 1", "Test Item 2"],
-    price: "$1.00",
-    numericPrice: 1,
+    usdPrice: 1.00,
     test: true
   }
 ];

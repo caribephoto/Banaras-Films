@@ -340,7 +340,7 @@ const Checkout = () => {
                                 id: item.id,
                                 title: item.title,
                                 quantity: item.quantity || 1,
-                                price: item.numericPrice || parseFloat(item.price.replace(/[^0-9.-]+/g, ''))
+                                price: item.numericPrice
                             })),
                             subtotal: parseFloat(subtotal.toFixed(2)),
                             tax: parseFloat(tax.toFixed(2)),

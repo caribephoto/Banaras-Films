@@ -8,8 +8,7 @@ const morePkg = [
       "* Not available for Jamaica locations",
       "* Includes cinematic aerial shots"
     ],
-    price: "$333.89 + Tax",
-    numericPrice: 333.89,
+    usdPrice: 333.89,
     requiresVideo: true,
     excludedHotels: [31],
     category: "addon"
@@ -23,8 +22,7 @@ const morePkg = [
       "* Edited highlight reel included",
       "* Delivered in high resolution"
     ],
-    price: "$1,318.00 + Tax",
-    numericPrice: 1318.00,
+    usdPrice: 1318.00,
     isVideoPackage: true,
     category: "addon"
   },
@@ -37,8 +35,7 @@ const morePkg = [
       "* Perfect for extended events",
       "* Includes extra footage in final delivery"
     ],
-    price: "$1,099.79 + Tax",
-    numericPrice: 1099.79,
+    usdPrice: 1099.79,
     isVideoPackage: true,
     category: "addon"
   },
