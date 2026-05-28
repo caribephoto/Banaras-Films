@@ -1,6 +1,7 @@
 export const hotels = [
     {
         id: 31,
+        country: 'JM',
         name: 'Azul Beach Resort Negril',
         location: 'Norman Manley Blvd, Negril, Jamaica',
         description: 'All-inclusive resort on the famous Seven Mile Beach featuring ocean-front suites, a world-class spa, multiple pools, varied restaurants and plenty of activities for families, couples and friends.',
@@ -12,6 +13,7 @@ export const hotels = [
     },
     {
         id: 44,
+        country: 'MX',
         name: 'Margaritaville Island Reserve Riviera Maya',
         location: 'Bahia Petempich, Carr. Cancún - Tulum Km. 27.5-01, 77580 Puerto Morelos, Q.R, México',
         description: 'Luxury all-inclusive resort that blends laid-back island vibes with upscale amenities: gourmet dining, suites with private terraces and Caribbean views, pools, beach access, spa, bars, and nightly live entertainment — perfect for a worry-free adults’ getaway.',
@@ -23,6 +25,7 @@ export const hotels = [
     },
     {
         id: 4,
+        country: 'MX',
         name: 'Margaritaville Island Reserve Riviera Cancun',
         location: 'Bahia Petempich, Carretera Cancún - Tulum Km. 27.5, 77580 Puerto Morelos, Q.R, México',
         description: 'Chic all-inclusive boutique-style resort featuring stylish suites, modern coastal design, pool and beach access, on-site bars and restaurants, entertainment and a relaxed island-style ambiance — great for couples or travelers looking for comfort and fun under the sun.',
@@ -34,6 +37,7 @@ export const hotels = [
     },
     {
         id: 37,
+        country: 'DO',
         name: 'Nickelodeon Hotels & Resorts Punta Cana',
         location: 'Uvero Alto, Punta Cana, República Dominicana',
         description: 'Family-friendly resort blending five-star luxury with playful, themed fun: swim-up suites, a water-park, beachfront access, gourmet inclusive dining, and entertainment — ideal for families and fans of a lively, fun-filled vacation.',

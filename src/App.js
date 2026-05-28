@@ -10,9 +10,17 @@ import Terms from "./pages/Terms";
 import Error from "./components/common/Error";
 import Cart from "./components/cart/Cart";
 import Checkout from "./components/cart/Checkout";
+import CheckoutReturn from "./pages/CheckoutReturn";
+import BeachSessions from "./pages/BeachSessions";
+import BeachCart from "./components/cart/BeachCart";
+import BeachCheckout from "./components/cart/BeachCheckout";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CartProvider } from "./context/CartContext";
+import { BeachCartProvider } from "./context/BeachCartContext";
+import { CountryProvider } from "./context/CountryContext";
+import CountryModal from "./components/country/CountryModal";
+import CountryChangeConfirmDialog from "./components/country/CountryChangeConfirmDialog";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -77,24 +85,34 @@ function App() {
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
       <CartProvider>
-        <Router>
-          <Header theme={theme} setTheme={setTheme} />
+        <BeachCartProvider>
+          <CountryProvider>
+            <Router>
+              <Header theme={theme} setTheme={setTheme} />
 
-          <Routes>
-            <Route path="/" exact element={<Home />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/video" element={<Video />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="*" element={<Error />} />
-          </Routes>
-          <Footer />
-          <ScrollToTop />
-        </Router>
-        <ToastContainer />
+              <Routes>
+                <Route path="/" exact element={<Home />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/video" element={<Video />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/checkout/return" element={<CheckoutReturn />} />
+                <Route path="/beach-sessions" element={<BeachSessions />} />
+                <Route path="/beach-sessions/cart" element={<BeachCart />} />
+                <Route path="/beach-sessions/checkout" element={<BeachCheckout />} />
+                <Route path="*" element={<Error />} />
+              </Routes>
+              <Footer />
+              <ScrollToTop />
+            </Router>
+            <CountryModal />
+            <CountryChangeConfirmDialog />
+            <ToastContainer />
+          </CountryProvider>
+        </BeachCartProvider>
       </CartProvider>
     </ThemeProvider>
   );

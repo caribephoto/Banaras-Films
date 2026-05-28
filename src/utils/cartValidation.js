@@ -132,3 +132,14 @@ export const getAvailableHotels = (allHotels, cart) => {
 
     return allHotels.filter(hotel => !excludedHotelIds.includes(hotel.id));
 };
+
+/**
+ * Filter hotels by destination country code.
+ * @param {Array} allHotels - All available hotels
+ * @param {string} countryCode - Country ISO-2 code (e.g. 'MX', 'JM', 'DO')
+ * @returns {Array} Hotels matching country
+ */
+export const getHotelsByCountry = (allHotels, countryCode) => {
+    if (!countryCode) return allHotels;
+    return allHotels.filter(hotel => hotel.country === countryCode);
+};

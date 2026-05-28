@@ -23,11 +23,6 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('caribephoto_cart', JSON.stringify(cart));
   }, [cart]);
 
-  const calculatePrice = (usdPrice) => {
-    const rate = parseFloat(import.meta.env.VITE_USD_RATE || '1');
-    return (usdPrice || 0) * rate;
-  };
-
   const addToCart = (packageItem, category) => {
     setCart((prevCart) => {
       // Check if item already exists in cart
@@ -63,7 +58,7 @@ export const CartProvider = ({ children }) => {
             id: packageItem.id,
             category,
             quantity: 1,
-            numericPrice: calculatePrice(packageItem.usdPrice),
+            numericPrice: packageItem.usdPrice || 0,
           },
         ];
       }
@@ -110,6 +105,10 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  const clearCartSilent = () => {
+    setCart([]);
+  };
+
   const getCartTotal = () => {
     return cart.reduce((total, item) => {
       return total + item.numericPrice * item.quantity;
@@ -130,6 +129,7 @@ export const CartProvider = ({ children }) => {
     removeFromCart,
     updateQuantity,
     clearCart,
+    clearCartSilent,
     getCartTotal,
     getCartCount,
     isInCart,

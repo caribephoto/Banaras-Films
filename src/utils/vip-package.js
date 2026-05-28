@@ -11,6 +11,7 @@ const packagesVip = [
       "Edited video with songs of your preference in Link. For further information about the final video, please consult the following link.",
     ],
     usdPrice: 6809.64,
+    pricesByCountry: { DO: 3875 },
   },
   {
     id: 79,
@@ -24,6 +25,7 @@ const packagesVip = [
       "Edited video with songs of your preferences in LINK. For further information about the final video, please consult the following link.",
     ],
     usdPrice: 4946.87,
+    pricesByCountry: { DO: 2815 },
   },
   {
     id: 78,
@@ -37,6 +39,7 @@ const packagesVip = [
       "Edited video with songs of your preferences in LINK. For further information about the length of  the final video, please consult the following link.",
     ],
     usdPrice: 4173.65,
+    pricesByCountry: { DO: 2375 },
   },
   {
     id: 77,
@@ -50,6 +53,7 @@ const packagesVip = [
       "Edited video with songs of your preferences in LINK. For further information about the final video, please consult the following link.",
     ],
     usdPrice: 3294.99,
+    pricesByCountry: { DO: 1875 },
   },
   {
     id: 71,
@@ -62,6 +66,7 @@ const packagesVip = [
       "Edited video with songs of your preferences in LINK. For further information about the length of  the final video, please consult the following link.",
     ],
     usdPrice: 1924.27,
+    pricesByCountry: { DO: 1095 },
   },
 ];
 

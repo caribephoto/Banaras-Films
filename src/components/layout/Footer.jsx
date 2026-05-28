@@ -99,66 +99,21 @@ const Footer = () => {
           </Grid>
         </Box>
 
-        {/* Promo Section */}
-        <Box sx={{ mb: 10 }}>
-          <Grid
-            container
-            spacing={4}
-            alignItems="center"
-            justifyContent="center"
-            textAlign="center"
-          >
-            {/* TITULOS */}
-            <Grid item xs={12} md={6}>
-              <Box sx={{ textAlign: "center" }}>
-                <Typography
-                  variant="h3"
-                  fontWeight="800"
-                  sx={{
-                    textTransform: "uppercase",
-                    mb: 1,
-                    fontSize: { xs: "1.8rem", md: "2.5rem" }
-                  }}
-                >
-                  Invest Once
-                </Typography>
-
-                <Typography
-                  variant="h3"
-                  fontWeight="800"
-                  sx={{
-                    textTransform: "uppercase",
-                    fontSize: { xs: "1.8rem", md: "2.5rem" }
-                  }}
-                >
-                  Enjoy Forever
-                </Typography>
-              </Box>
-            </Grid>
-
-            {/* IMAGEN */}
-            <Grid item xs={12} md={6}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center"
-                }}
-              >
-                <Box
-                  component="img"
-                  src="/img/footer.jpg"
-                  alt="hero"
-                  sx={{
-                    width: "100%",
-                    maxWidth: 500,       // 🔥 Imagen más grande
-                    borderRadius: 4,
-                    boxShadow: 4
-                  }}
-                />
-              </Box>
-            </Grid>
-          </Grid>
+        {/* Promo Image */}
+        <Box sx={{ mb: 10, display: "flex", justifyContent: "center" }}>
+          <Box
+            component="img"
+            src="/img/footer.jpg"
+            alt="hero"
+            sx={{
+              display: "block",
+              width: "100%",
+              maxWidth: 420,
+              height: "auto",
+              borderRadius: 4,
+              boxShadow: 4
+            }}
+          />
         </Box>
 
         <Divider sx={{ my: 4 }} />

@@ -1,9 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useCart } from '../../context/CartContext';
-import { useCountry } from '../../context/CountryContext';
-import { useDocumentTitle, useTakeMeToTheTop } from '../../hooks/hooks';
-import { motion } from 'framer-motion';
 import {
     Container,
     Box,
@@ -16,18 +12,22 @@ import {
     IconButton,
     Divider,
     Stack,
-    Paper
+    Paper,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import BeachAccessIcon from '@mui/icons-material/BeachAccess';
+import { motion } from 'framer-motion';
+import { useBeachCart } from '../../context/BeachCartContext';
+import { useCountry } from '../../context/CountryContext';
+import { useDocumentTitle, useTakeMeToTheTop } from '../../hooks/hooks';
 
-const Cart = () => {
-    useDocumentTitle('Carrito de Compras');
+const BeachCart = () => {
+    useDocumentTitle('Beach Cart');
     useTakeMeToTheTop();
 
-    const { cart, removeFromCart, updateQuantity, getCartTotal } = useCart();
+    const { cart, removeFromCart, updateQuantity, getCartTotal } = useBeachCart();
     const { formatCurrency, taxRate, taxLabel } = useCountry();
 
     const subtotal = getCartTotal();
@@ -36,30 +36,28 @@ const Cart = () => {
 
     if (cart.length === 0) {
         return (
-            <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', color: 'text.primary', py: 8 }}>
+            <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', py: 8 }}>
                 <Container maxWidth="md">
-                    <Typography variant="h3" component="h1" align="center" gutterBottom fontWeight="bold">
-                        Cart
+                    <Typography variant="h3" align="center" gutterBottom fontWeight="bold">
+                        Beach Sessions Cart
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 8 }}>
-                        <ShoppingCartIcon sx={{ fontSize: 80, color: 'text.disabled', mb: 2 }} />
+                        <BeachAccessIcon sx={{ fontSize: 80, color: 'text.disabled', mb: 2 }} />
                         <Typography variant="h6" color="text.secondary" gutterBottom>
-                            Your cart is empty
+                            Your beach cart is empty
                         </Typography>
                         <Button
                             component={Link}
-                            to="/services"
+                            to="/beach-sessions"
                             variant="contained"
                             size="large"
                             sx={{
                                 mt: 4,
                                 background: 'linear-gradient(to right, #ec4899, #db2777)',
-                                '&:hover': {
-                                    background: 'linear-gradient(to right, #db2777, #be185d)',
-                                }
+                                '&:hover': { background: 'linear-gradient(to right, #db2777, #be185d)' },
                             }}
                         >
-                            See Packages
+                            Browse Beach Sessions
                         </Button>
                     </Box>
                 </Container>
@@ -68,14 +66,13 @@ const Cart = () => {
     }
 
     return (
-        <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', color: 'text.primary', py: 8 }}>
+        <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', py: 8 }}>
             <Container maxWidth="lg">
-                <Typography variant="h3" component="h1" align="center" gutterBottom fontWeight="bold" sx={{ mb: 6 }}>
-                    Cart
+                <Typography variant="h3" align="center" gutterBottom fontWeight="bold" sx={{ mb: 6 }}>
+                    Beach Sessions Cart
                 </Typography>
 
                 <Grid container spacing={4}>
-                    {/* Cart Items */}
                     <Grid item xs={12} lg={8}>
                         <Stack spacing={2}>
                             {cart.map((item) => (
@@ -84,12 +81,11 @@ const Cart = () => {
                                     key={item.id}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, x: -100 }}
                                     sx={{
                                         display: 'flex',
                                         flexDirection: { xs: 'column', sm: 'row' },
                                         p: 2,
-                                        bgcolor: 'background.paper'
+                                        bgcolor: 'background.paper',
                                     }}
                                 >
                                     <CardMedia
@@ -98,18 +94,18 @@ const Cart = () => {
                                             width: { xs: '100%', sm: 160 },
                                             height: 160,
                                             objectFit: 'cover',
-                                            borderRadius: 2
+                                            borderRadius: 2,
                                         }}
                                         image={item.img}
                                         alt={item.title}
                                     />
                                     <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, ml: { xs: 0, sm: 2 }, mt: { xs: 2, sm: 0 } }}>
                                         <CardContent sx={{ flex: '1 0 auto', p: 0 }}>
-                                            <Typography variant="h6" component="h3" fontWeight="bold">
+                                            <Typography variant="h6" fontWeight="bold">
                                                 {item.title}
                                             </Typography>
                                             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                                                Category: {item.category}
+                                                {item.category}
                                             </Typography>
                                             <Typography variant="h6" color="primary" fontWeight="600">
                                                 {formatCurrency(item.numericPrice)}
@@ -117,38 +113,17 @@ const Cart = () => {
                                         </CardContent>
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
                                             <Stack direction="row" spacing={1} alignItems="center">
-                                                <IconButton
-                                                    size="small"
-                                                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                    sx={{ bgcolor: 'action.hover' }}
-                                                >
+                                                <IconButton size="small" onClick={() => updateQuantity(item.id, item.quantity - 1)} sx={{ bgcolor: 'action.hover' }}>
                                                     <RemoveIcon fontSize="small" />
                                                 </IconButton>
-                                                <Typography
-                                                    sx={{
-                                                        px: 2,
-                                                        py: 0.5,
-
-                                                        borderRadius: 1,
-                                                        fontWeight: 600,
-                                                        minWidth: 40,
-                                                        textAlign: 'center'
-                                                    }}
-                                                >
+                                                <Typography sx={{ px: 2, py: 0.5, fontWeight: 600, minWidth: 40, textAlign: 'center' }}>
                                                     {item.quantity}
                                                 </Typography>
-                                                <IconButton
-                                                    size="small"
-                                                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                    sx={{ bgcolor: 'action.hover' }}
-                                                >
+                                                <IconButton size="small" onClick={() => updateQuantity(item.id, item.quantity + 1)} sx={{ bgcolor: 'action.hover' }}>
                                                     <AddIcon fontSize="small" />
                                                 </IconButton>
                                             </Stack>
-                                            <IconButton
-                                                color="error"
-                                                onClick={() => removeFromCart(item.id)}
-                                            >
+                                            <IconButton color="error" onClick={() => removeFromCart(item.id)}>
                                                 <DeleteIcon />
                                             </IconButton>
                                         </Box>
@@ -158,17 +133,16 @@ const Cart = () => {
                         </Stack>
                     </Grid>
 
-                    {/* Order Summary */}
                     <Grid item xs={12} lg={4}>
                         <Paper
                             sx={{
                                 p: 3,
                                 position: { lg: 'sticky' },
                                 top: { lg: 100 },
-                                bgcolor: 'background.paper'
+                                bgcolor: 'background.paper',
                             }}
                         >
-                            <Typography variant="h5" component="h2" gutterBottom fontWeight="bold">
+                            <Typography variant="h5" gutterBottom fontWeight="bold">
                                 Order Summary
                             </Typography>
                             <Stack spacing={2} sx={{ my: 3 }}>
@@ -194,36 +168,27 @@ const Cart = () => {
                             </Stack>
                             <Button
                                 component={Link}
-                                to="/checkout"
+                                to="/beach-sessions/checkout"
                                 variant="contained"
                                 fullWidth
                                 size="large"
                                 sx={{
                                     mb: 2,
                                     background: 'linear-gradient(to right, #ec4899, #db2777)',
-                                    '&:hover': {
-                                        background: 'linear-gradient(to right, #db2777, #be185d)',
-                                    }
+                                    '&:hover': { background: 'linear-gradient(to right, #db2777, #be185d)' },
                                 }}
                             >
                                 Proceed to Payment
                             </Button>
                             <Button
                                 component={Link}
-                                to="/services"
+                                to="/beach-sessions"
                                 variant="outlined"
                                 fullWidth
                                 size="large"
-                                sx={{
-                                    borderColor: 'primary.main',
-                                    color: 'primary.main',
-                                    '&:hover': {
-                                        borderColor: 'primary.dark',
-                                        bgcolor: 'action.hover'
-                                    }
-                                }}
+                                sx={{ borderColor: 'primary.main', color: 'primary.main' }}
                             >
-                                Continue Shopping
+                                Continue Browsing
                             </Button>
                         </Paper>
                     </Grid>
@@ -233,4 +198,4 @@ const Cart = () => {
     );
 };
 
-export default Cart;
+export default BeachCart;

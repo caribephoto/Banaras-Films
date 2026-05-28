@@ -21,17 +21,21 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import CloseIcon from "@mui/icons-material/Close";
 import CartIcon from "../cart/CartIcon";
+import CountrySwitcher from "../country/CountrySwitcher";
 import { motion } from "framer-motion";
+import { useCountry } from "../../context/CountryContext";
 
 const Header = (props) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const location = useLocation();
+  const { country } = useCountry();
 
   const pages = [
     { name: "Home", link: "/" },
     { name: "Services", link: "/services" },
+    ...(country?.code === "DO" ? [{ name: "Beach Sessions", link: "/beach-sessions" }] : []),
     { name: "Video", link: "/video" },
     { name: "About", link: "/about" },
     { name: "Terms & Conditions", link: "/terms" },
@@ -128,8 +132,10 @@ const Header = (props) => {
               </Box>
             )}
 
-            {/* Right Side: Cart & Theme Toggle & Mobile Menu */}
+            {/* Right Side: Country & Cart & Theme Toggle & Mobile Menu */}
             <Stack direction="row" spacing={1} alignItems="center">
+              <CountrySwitcher />
+
               <Box sx={{ mr: 1 }}>
                 <CartIcon />
               </Box>

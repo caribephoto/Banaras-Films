@@ -8,6 +8,7 @@ const pkg = [
       "Around 480 high resolution photos in JPG format with rights free for personal use in LINK.",
     ],
     usdPrice: 4287.87,
+    pricesByCountry: { DO: 2500 },
   },
   {
     id: 75,
@@ -18,6 +19,7 @@ const pkg = [
       "Around 360 high resolution photos in JPG format with rights free for personal use in LINK.",
     ],
     usdPrice: 3294.99,
+    pricesByCountry: { DO: 1875 },
   },
   {
     id: 74,
@@ -28,6 +30,7 @@ const pkg = [
       "Around 300 high resolution photos in JPG format with rights free for personal use in LINK.",
     ],
     usdPrice: 2767.79,
+    pricesByCountry: { DO: 1575 },
   },
   {
     id: 73,
@@ -38,6 +41,7 @@ const pkg = [
       "Around 240 high resolution photos in JPG format with rights free for personal use in LINK.",
     ],
     usdPrice: 2187.87,
+    pricesByCountry: { DO: 1245 },
   },
   {
     id: 81,
@@ -48,6 +52,7 @@ const pkg = [
       "Around 200 high resolution photos in JPG format with rights free for personal use in LINK.",
     ],
     usdPrice: 1739.75,
+    excludedCountries: ['DO'],
   },
   {
     id: 72,
@@ -58,6 +63,7 @@ const pkg = [
       "Around 110 high resolution photos in JPG format with rights free for personal use in LINK.",
     ],
     usdPrice: 1318.00,
+    pricesByCountry: { DO: 750 },
   },
   {
     id: 33,

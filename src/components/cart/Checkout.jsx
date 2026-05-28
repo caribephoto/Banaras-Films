@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { useCart } from '../../context/CartContext';
+import { useCountry } from '../../context/CountryContext';
 import { useDocumentTitle, useTakeMeToTheTop } from '../../hooks/hooks';
 import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
@@ -28,7 +29,11 @@ import StarIcon from '@mui/icons-material/Star';
 import CloseIcon from '@mui/icons-material/Close';
 import HotelSelector from './HotelSelector';
 import hotels from '../../utils/hotelData';
-import { hasDronePackage, getAvailableHotels, validateCartForCheckout, isHotelAllowed } from '../../utils/cartValidation';
+import { hasDronePackage, getAvailableHotels, getHotelsByCountry, validateCartForCheckout, isHotelAllowed } from '../../utils/cartValidation';
+import TransportAddon from './TransportAddon';
+import { validateTransport } from '../../utils/transportValidation';
+import StripePaymentForm from './StripePaymentForm';
+import StripeVoucherDisplay from './StripeVoucherDisplay';
 
 const Checkout = () => {
     useDocumentTitle('Checkout');
@@ -36,6 +41,7 @@ const Checkout = () => {
 
     const navigate = useNavigate();
     const { cart, getCartTotal, clearCart } = useCart();
+    const { country, formatCurrency, taxRate, taxLabel, currency, paymentProviders } = useCountry();
 
     const [customerInfo, setCustomerInfo] = useState({
         name: '',
@@ -66,19 +72,30 @@ const Checkout = () => {
     const [orderTotal, setOrderTotal] = useState(0);
     const [selectedHotel, setSelectedHotel] = useState(null);
     const [selectedHotelPreview, setSelectedHotelPreview] = useState(null);
+    const [transport, setTransport] = useState(null);
+    const [stripeVoucher, setStripeVoucher] = useState(null);
+    const [stripeVoucherType, setStripeVoucherType] = useState(null);
 
-    const TAX_RATE = parseFloat(import.meta.env.VITE_TAX_RATE || 0.16);
-    const subtotal = getCartTotal();
-    const tax = subtotal * TAX_RATE;
+    // Drop a stale hotel selection and transport add-on if the user switches destination country mid-flow.
+    useEffect(() => {
+        if (selectedHotel) {
+            const stillValid = hotels.some(h => h.id === selectedHotel && h.country === country?.code);
+            if (!stillValid) {
+                setSelectedHotel(null);
+                setCustomerInfo(prev => ({ ...prev, hotel: '' }));
+            }
+        }
+        if (country?.code !== 'MX' && transport) {
+            setTransport(null);
+        }
+    }, [country?.code, selectedHotel, transport]);
+
+    const transportPriceUSD = transport?.priceUSD || 0;
+    const subtotal = getCartTotal() + transportPriceUSD;
+    const tax = subtotal * taxRate;
     const total = subtotal + tax;
-
-    const formatCurrency = (amount) => {
-        const currency = import.meta.env.VITE_CURRENCY || 'USD';
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: currency,
-        }).format(amount);
-    };
+    const transportValidation = transport ? validateTransport(transport) : { valid: true, errors: {} };
+    const transportPriceMissing = !!transport && transportPriceUSD <= 0;
 
     // Función de validación memoizada
     const validateForm = useCallback(() => {
@@ -167,8 +184,9 @@ const Checkout = () => {
     useEffect(() => {
         const validation = validateForm();
         setFieldErrors(validation.errors);
-        setFormIsValid(validation.isValid);
-    }, [validateForm]);
+        const transportOk = !transport || (transportValidation.valid && !transportPriceMissing);
+        setFormIsValid(validation.isValid && transportOk);
+    }, [validateForm, transport, transportValidation.valid, transportPriceMissing]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -211,10 +229,11 @@ const Checkout = () => {
         return hotel ? hotel.name : '';
     };
 
-    // PayPal configuration
+    // PayPal configuration — currency comes from selected country.
+    // PayPalScriptProvider must remount when currency changes (see `key` prop below).
     const initialOptions = {
         clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID || 'test',
-        currency: import.meta.env.VITE_CURRENCY || 'USD',
+        currency: currency,
         intent: 'capture',
     };
 
@@ -234,8 +253,6 @@ const Checkout = () => {
             cartValidation.errors.forEach(error => toast.error(error));
             return Promise.reject();
         }
-
-        const currency = import.meta.env.VITE_CURRENCY || 'USD';
 
         return actions.order.create({
             purchase_units: [
@@ -269,8 +286,8 @@ const Checkout = () => {
                     name: customerInfo.name,
                     email: customerInfo.email,
                     phone: customerInfo.phone,
-                    phone: customerInfo.phone,
                     hotel: getSelectedHotelName(),
+                    country: country?.code,
                     groomName: customerInfo.groomName,
                     brideName: customerInfo.brideName,
                     weddingDate: customerInfo.weddingDate,
@@ -286,7 +303,8 @@ const Checkout = () => {
                     subtotal: subtotal,
                     tax: tax,
                     total: total,
-                    currency: import.meta.env.VITE_CURRENCY || 'USD'
+                    currency: currency,
+                    transport: transport || null
                 },
             };
 
@@ -333,7 +351,8 @@ const Checkout = () => {
                         paypalOrderId: details.id,
                         customerInfo: {
                             ...customerInfo,
-                            hotel_id: selectedHotel
+                            hotel_id: selectedHotel,
+                            country: country?.code
                         },
                         orderDetails: {
                             items: cart.map(item => ({
@@ -345,7 +364,8 @@ const Checkout = () => {
                             subtotal: parseFloat(subtotal.toFixed(2)),
                             tax: parseFloat(tax.toFixed(2)),
                             total: parseFloat(total.toFixed(2)),
-                            currency: import.meta.env.VITE_CURRENCY || 'USD'
+                            currency: currency,
+                            transport: transport || null
                         }
                     })
                 });
@@ -385,6 +405,107 @@ const Checkout = () => {
         toast.info('Payment process was cancelled.');
     };
 
+    // Build the payload shared by all payment providers when persisting the order.
+    const buildOrderPersistencePayload = () => ({
+        customerInfo: {
+            ...customerInfo,
+            hotel: getSelectedHotelName(),
+            hotel_id: selectedHotel,
+            country: country?.code,
+        },
+        orderDetails: {
+            items: cart.map((item) => ({
+                id: item.id,
+                title: item.title,
+                quantity: item.quantity || 1,
+                price: item.numericPrice,
+            })),
+            subtotal: parseFloat(subtotal.toFixed(2)),
+            tax: parseFloat(tax.toFixed(2)),
+            total: parseFloat(total.toFixed(2)),
+            currency: currency,
+            transport: transport || null,
+        },
+    });
+
+    const onStripeSuccess = async (paymentIntentId) => {
+        try {
+            const payload = buildOrderPersistencePayload();
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+            // Save order (idempotent: webhook may have run first)
+            let saveResult = { success: false };
+            try {
+                const resp = await fetch(`${API_URL}/api/save-order`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ...payload,
+                        stripePaymentIntentId: paymentIntentId,
+                        paymentProvider: 'stripe',
+                        paymentStatus: 'completed',
+                    }),
+                });
+                saveResult = await resp.json();
+            } catch (e) {
+                console.error('Stripe save-order failed:', e);
+            }
+
+            // Only send email if this was a fresh insert (avoid duplicate vs webhook)
+            const isDuplicate = saveResult?.data?.isDuplicate === true;
+            if (!isDuplicate) {
+                await sendOrderEmail(paymentIntentId, cart);
+            }
+
+            setOrderDetails({ id: paymentIntentId });
+            setOrderTotal(total);
+            setOrderComplete(true);
+            clearCart();
+            toast.success('Payment successful! Thank you for your order.');
+        } catch (err) {
+            console.error('Stripe success handler error:', err);
+            toast.error('Payment captured but we could not finalize the order. We will contact you.');
+        }
+    };
+
+    const onStripePending = async (paymentIntentId, voucher, paymentMethodType) => {
+        try {
+            const payload = buildOrderPersistencePayload();
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+            try {
+                await fetch(`${API_URL}/api/save-order`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ...payload,
+                        stripePaymentIntentId: paymentIntentId,
+                        paymentProvider: 'stripe',
+                        paymentStatus: 'pending',
+                    }),
+                });
+            } catch (e) {
+                console.error('Pending save-order failed:', e);
+            }
+
+            setStripeVoucher(voucher);
+            setStripeVoucherType(paymentMethodType);
+            setOrderDetails({ id: paymentIntentId, voucher: true });
+            setOrderTotal(total);
+            setOrderComplete(true);
+            clearCart();
+            toast.info('Order saved. Complete the payment to receive your confirmation email.');
+        } catch (err) {
+            console.error('Stripe pending handler error:', err);
+            toast.error('We could not save your pending order. Please contact us.');
+        }
+    };
+
+    const onStripeError = (err) => {
+        console.error('Stripe Error:', err);
+        toast.error(err?.message || 'Payment failed. Please try again.');
+    };
+
     if (cart.length === 0 && !orderComplete) {
         navigate('/cart');
         return null;
@@ -400,13 +521,21 @@ const Checkout = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         sx={{ p: 4, textAlign: 'center' }}
                     >
-                        <CheckCircleIcon sx={{ fontSize: 80, color: 'success.main', mb: 2 }} />
-                        <Typography variant="h3" component="h1" gutterBottom fontWeight="bold" color="success.main">
-                            Order Confirmed!
+                        <CheckCircleIcon sx={{ fontSize: 80, color: orderDetails?.voucher ? 'warning.main' : 'success.main', mb: 2 }} />
+                        <Typography variant="h3" component="h1" gutterBottom fontWeight="bold" color={orderDetails?.voucher ? 'warning.main' : 'success.main'}>
+                            {orderDetails?.voucher ? 'Payment Pending' : 'Order Confirmed!'}
                         </Typography>
                         <Typography variant="h6" gutterBottom sx={{ mb: 4 }}>
-                            Thank you for your purchase, {customerInfo.name}!
+                            {orderDetails?.voucher
+                                ? `${customerInfo.name}, complete the payment to confirm your order.`
+                                : `Thank you for your purchase, ${customerInfo.name}!`}
                         </Typography>
+
+                        {orderDetails?.voucher && (
+                            <Box sx={{ mb: 4 }}>
+                                <StripeVoucherDisplay voucher={stripeVoucher} paymentMethod={stripeVoucherType} />
+                            </Box>
+                        )}
                         <Paper sx={{ p: 3, mb: 4, textAlign: 'left', bgcolor: 'background.default' }}>
                             <Typography variant="h6" gutterBottom fontWeight="bold">
                                 Order Details
@@ -438,21 +567,29 @@ const Checkout = () => {
                                 </Typography>
                             </Stack>
                         </Paper>
-                        <Typography color="text.secondary" paragraph sx={{ mb: 2 }}>
-                            ✓ Confirmation email sent to: <strong>{customerInfo.email}</strong>
-                        </Typography>
-                        <Alert
-                            severity="info"
-                            sx={{
-                                bgcolor: 'rgba(33, 150, 243, 0.1)',
-                                '& .MuiAlert-icon': { color: 'info.main' },
-                                mb: 2
-                            }}
-                        >
-                            <Typography variant="body2">
-                                <strong>Important:</strong> Check both your inbox and spam folder for our email.
+                        {orderDetails?.voucher ? (
+                            <Typography color="text.secondary" paragraph sx={{ mb: 2 }}>
+                                You'll receive a confirmation email at <strong>{customerInfo.email}</strong> once payment is detected.
                             </Typography>
-                        </Alert>
+                        ) : (
+                            <>
+                                <Typography color="text.secondary" paragraph sx={{ mb: 2 }}>
+                                    ✓ Confirmation email sent to: <strong>{customerInfo.email}</strong>
+                                </Typography>
+                                <Alert
+                                    severity="info"
+                                    sx={{
+                                        bgcolor: 'rgba(33, 150, 243, 0.1)',
+                                        '& .MuiAlert-icon': { color: 'info.main' },
+                                        mb: 2
+                                    }}
+                                >
+                                    <Typography variant="body2">
+                                        <strong>Important:</strong> Check both your inbox and spam folder for our email.
+                                    </Typography>
+                                </Alert>
+                            </>
+                        )}
                         <Button
                             variant="contained"
                             size="large"
@@ -512,7 +649,7 @@ const Checkout = () => {
                             Choose the perfect location for your special day
                         </Typography>
                         <Grid container spacing={{ xs: 3, md: 4 }} justifyContent="center">
-                            {hotels.map((hotel) => (
+                            {getHotelsByCountry(hotels, country?.code).map((hotel) => (
                                 <Grid
                                     item
                                     xs={12}
@@ -914,7 +1051,13 @@ const Checkout = () => {
                         </Stack>
                     </Paper>
 
-
+                    {country?.code === 'MX' && (
+                        <TransportAddon
+                            value={transport}
+                            onChange={setTransport}
+                            hotelAddress={getSelectedHotelName()}
+                        />
+                    )}
 
                     <Grid container spacing={4}>
                         {/* Order Summary */}
@@ -957,16 +1100,42 @@ const Checkout = () => {
                                         </Box>
                                     ))}
                                 </Stack>
+                                {transport && transportPriceUSD > 0 && (
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            py: 1.5,
+                                            borderBottom: '1px solid',
+                                            borderColor: 'divider'
+                                        }}
+                                    >
+                                        <Box sx={{ flex: 1 }}>
+                                            <Typography variant="body1" fontWeight="500">
+                                                Transport · {transport.vehicleType || 'vehicle'}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                {transport.tripType} · {transport.pax} pax
+                                            </Typography>
+                                        </Box>
+                                        <Typography variant="body1" fontWeight="600">
+                                            {formatCurrency(transportPriceUSD)}
+                                        </Typography>
+                                    </Box>
+                                )}
                                 <Divider sx={{ my: 2 }} />
                                 <Stack spacing={1.5}>
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                         <Typography variant="body1">Subtotal:</Typography>
                                         <Typography variant="body1" fontWeight="600">{formatCurrency(subtotal)}</Typography>
                                     </Box>
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <Typography variant="body1">VAT ({(TAX_RATE * 100).toFixed(0)}%):</Typography>
-                                        <Typography variant="body1" fontWeight="600">{formatCurrency(tax)}</Typography>
-                                    </Box>
+                                    {taxRate > 0 && (
+                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <Typography variant="body1">{taxLabel} ({(taxRate * 100).toFixed(0)}%):</Typography>
+                                            <Typography variant="body1" fontWeight="600">{formatCurrency(tax)}</Typography>
+                                        </Box>
+                                    )}
                                     <Divider />
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 1 }}>
                                         <Typography variant="h6" fontWeight="bold">Total:</Typography>
@@ -1040,16 +1209,56 @@ const Checkout = () => {
                                     </Box>
 
                                     <Box sx={{ mt: 'auto' }}>
-                                        <PayPalScriptProvider options={initialOptions}>
-                                            <PayPalButtons
-                                                style={{ layout: 'vertical' }}
-                                                createOrder={createOrder}
-                                                onApprove={onApprove}
-                                                onError={onError}
-                                                onCancel={onCancel}
+                                        {paymentProviders.stripe && country?.code === 'MX' && (
+                                            <StripePaymentForm
+                                                amountUSD={total}
+                                                customerInfo={{
+                                                    ...customerInfo,
+                                                    hotel: getSelectedHotelName(),
+                                                    hotel_id: selectedHotel,
+                                                    country: country?.code,
+                                                }}
+                                                orderDetails={{
+                                                    items: cart.map((item) => ({
+                                                        id: item.id,
+                                                        title: item.title,
+                                                        quantity: item.quantity || 1,
+                                                        price: item.numericPrice,
+                                                    })),
+                                                    subtotal,
+                                                    tax,
+                                                    total,
+                                                    transport,
+                                                }}
                                                 disabled={!formIsValid}
+                                                onSuccess={onStripeSuccess}
+                                                onPending={onStripePending}
+                                                onError={onStripeError}
                                             />
-                                        </PayPalScriptProvider>
+                                        )}
+
+                                        {paymentProviders.stripe && country?.code === 'MX' && paymentProviders.paypal && (
+                                            <Divider sx={{ my: 2 }}>OR</Divider>
+                                        )}
+
+                                        {paymentProviders.paypal && (
+                                            <PayPalScriptProvider key={currency} options={initialOptions}>
+                                                <PayPalButtons
+                                                    style={{ layout: 'vertical' }}
+                                                    createOrder={createOrder}
+                                                    onApprove={onApprove}
+                                                    onError={onError}
+                                                    onCancel={onCancel}
+                                                    disabled={!formIsValid}
+                                                />
+                                            </PayPalScriptProvider>
+                                        )}
+
+                                        {!paymentProviders.paypal && !paymentProviders.stripe && (
+                                            <Alert severity="error">
+                                                No payment method available — please contact us at info@caribephoto.com
+                                            </Alert>
+                                        )}
                                     </Box>
                                 </Stack>
                             </Paper>

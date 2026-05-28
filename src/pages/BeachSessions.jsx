@@ -1,0 +1,253 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import {
+    Container,
+    Box,
+    Typography,
+    Grid,
+    Card,
+    CardMedia,
+    CardContent,
+    Button,
+    Stack,
+    List,
+    ListItem,
+    ListItemText,
+    Alert,
+    IconButton,
+    Badge,
+} from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import BeachAccessIcon from '@mui/icons-material/BeachAccess';
+import InfoIcon from '@mui/icons-material/Info';
+import LaunchIcon from '@mui/icons-material/Launch';
+import { useDocumentTitle, useTakeMeToTheTop } from '../hooks/hooks';
+import { useCountry } from '../context/CountryContext';
+import { useBeachCart } from '../context/BeachCartContext';
+import { photoSessions } from '../utils/photoSessionsPackage';
+import { staggerContainer } from '../utils/motions';
+
+// Resolve effective USD price for an item, given the active country.
+const resolvePrice = (item, countryCode) => {
+    if (item?.pricesByCountry && countryCode && item.pricesByCountry[countryCode] != null) {
+        return item.pricesByCountry[countryCode];
+    }
+    return item?.usdPrice ?? 0;
+};
+
+// Filter items by current country (countries[] include / excludedCountries[] exclude).
+const filterByCountry = (items, countryCode) => {
+    if (!Array.isArray(items)) return [];
+    return items.filter((item) => {
+        if (item.excludedCountries?.includes(countryCode)) return false;
+        if (item.countries && !item.countries.includes(countryCode)) return false;
+        return true;
+    });
+};
+
+const BeachSessions = () => {
+    useDocumentTitle('Beach Sessions');
+    useTakeMeToTheTop();
+    const navigate = useNavigate();
+    const { country, formatCurrency, taxRate, countryCode } = useCountry();
+    const { addToCart, isInCart, getCartCount } = useBeachCart();
+
+    const items = React.useMemo(() => filterByCountry(photoSessions, countryCode), [countryCode]);
+    const isAvailableCountry = country?.code === 'DO';
+
+    const formatItemPrice = (usdPrice) => {
+        const base = formatCurrency(usdPrice);
+        return taxRate > 0 ? `${base} + Tax` : base;
+    };
+
+    return (
+        <Box
+            component={motion.div}
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.15 }}
+            sx={{ bgcolor: 'background.default', color: 'text.primary', minHeight: '100vh' }}
+        >
+            <Box sx={{ textAlign: 'center', py: { xs: 6, lg: 8 } }}>
+                <BeachAccessIcon sx={{ fontSize: 56, color: 'primary.main', mb: 1 }} />
+                <Typography
+                    variant="h2"
+                    component="h1"
+                    fontWeight="800"
+                    sx={{
+                        textTransform: 'uppercase',
+                        fontSize: { xs: '2rem', md: '3rem', lg: '4rem' },
+                        letterSpacing: 2,
+                    }}
+                >
+                    Beach Sessions
+                </Typography>
+                <Typography variant="h6" color="text.secondary" sx={{ mt: 2, maxWidth: 720, mx: 'auto', px: 2 }}>
+                    Professional photo sessions on the beach — no venue or wedding required.
+                </Typography>
+            </Box>
+
+            <Container maxWidth="lg" sx={{ pb: 10 }}>
+                {!isAvailableCountry && (
+                    <Alert severity="info" sx={{ mb: 4 }}>
+                        Beach Sessions are currently available only in the Dominican Republic.
+                        Switch destination from the header to browse them.
+                    </Alert>
+                )}
+
+                {isAvailableCountry && items.length === 0 && (
+                    <Alert severity="warning" sx={{ mb: 4 }}>
+                        No beach sessions available right now. Please contact us at info@caribephoto.com.
+                    </Alert>
+                )}
+
+                {isAvailableCountry && items.length > 0 && (
+                    <Box sx={{ position: 'relative' }}>
+                        {/* Floating cart button */}
+                        {getCartCount() > 0 && (
+                            <Box sx={{ position: 'fixed', bottom: 24, right: 24, zIndex: 1100 }}>
+                                <IconButton
+                                    onClick={() => navigate('/beach-sessions/cart')}
+                                    size="large"
+                                    sx={{
+                                        bgcolor: 'primary.main',
+                                        color: 'white',
+                                        boxShadow: 6,
+                                        '&:hover': { bgcolor: 'primary.dark' },
+                                    }}
+                                    aria-label="View beach cart"
+                                >
+                                    <Badge badgeContent={getCartCount()} color="error">
+                                        <ShoppingCartIcon />
+                                    </Badge>
+                                </IconButton>
+                            </Box>
+                        )}
+
+                        <Grid container spacing={4} justifyContent="center">
+                            {items.map((item) => {
+                                const effectivePrice = resolvePrice(item, countryCode);
+                                return (
+                                    <Grid item xs={12} md={8} lg={6} key={item.id}>
+                                        <Card
+                                            component={motion.div}
+                                            whileHover={{
+                                                scale: 1.03,
+                                                boxShadow: '0px 12px 32px rgba(236, 72, 153, 0.28)',
+                                            }}
+                                            transition={{ type: 'spring', stiffness: 100 }}
+                                            sx={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                borderRadius: 3,
+                                                overflow: 'hidden',
+                                                width: '100%',
+                                            }}
+                                        >
+                                            <CardMedia
+                                                component="img"
+                                                height="260"
+                                                image={item.img}
+                                                alt={item.title}
+                                                sx={{ objectFit: 'cover' }}
+                                            />
+                                            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+                                                <Typography
+                                                    variant="h4"
+                                                    component="h3"
+                                                    align="center"
+                                                    gutterBottom
+                                                    fontWeight="bold"
+                                                    sx={{ fontSize: { xs: '1.4rem', md: '1.75rem' } }}
+                                                >
+                                                    {item.title}
+                                                </Typography>
+                                                <Typography align="center" color="text.secondary" sx={{ mb: 2 }}>
+                                                    Punta Cana · Bavaro Beach
+                                                </Typography>
+
+                                                <Typography variant="overline" sx={{ fontWeight: 700, letterSpacing: 1, color: 'primary.main' }}>
+                                                    Included with the service
+                                                </Typography>
+                                                <List dense sx={{ mb: 2 }}>
+                                                    {item.content.map((line, idx) => (
+                                                        <ListItem key={idx} sx={{ py: 0.5 }}>
+                                                            <CheckCircleIcon sx={{ fontSize: 18, mr: 1, color: 'primary.main' }} />
+                                                            <ListItemText primary={line} primaryTypographyProps={{ variant: 'body2' }} />
+                                                        </ListItem>
+                                                    ))}
+                                                </List>
+
+                                                {item.additionalInfo?.length > 0 && (
+                                                    <>
+                                                        <Typography variant="overline" sx={{ fontWeight: 700, letterSpacing: 1, color: 'text.secondary' }}>
+                                                            Additional information
+                                                        </Typography>
+                                                        <List dense sx={{ mb: 2 }}>
+                                                            {item.additionalInfo.map((line, idx) => (
+                                                                <ListItem key={idx} sx={{ py: 0.25 }}>
+                                                                    <InfoIcon sx={{ fontSize: 16, mr: 1, color: 'text.secondary' }} />
+                                                                    <ListItemText
+                                                                        primary={line}
+                                                                        primaryTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                                                                    />
+                                                                </ListItem>
+                                                            ))}
+                                                        </List>
+                                                    </>
+                                                )}
+
+                                                <Typography variant="h5" align="center" color="primary" fontWeight="bold" sx={{ mb: 2 }}>
+                                                    {formatItemPrice(effectivePrice)}
+                                                </Typography>
+
+                                                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+                                                    <Button
+                                                        variant="contained"
+                                                        fullWidth
+                                                        startIcon={isInCart(item.id) ? <CheckCircleIcon /> : <ShoppingCartIcon />}
+                                                        onClick={() => addToCart({ ...item, usdPrice: effectivePrice }, 'Photo Session')}
+                                                        disabled={isInCart(item.id)}
+                                                        sx={{
+                                                            background: isInCart(item.id)
+                                                                ? 'grey.400'
+                                                                : 'linear-gradient(to right, #ec4899, #db2777)',
+                                                            '&:hover': {
+                                                                background: 'linear-gradient(to right, #db2777, #be185d)',
+                                                            },
+                                                            '&:disabled': { color: 'white', opacity: 0.7 },
+                                                        }}
+                                                    >
+                                                        {isInCart(item.id) ? 'In Cart' : 'Add to Cart'}
+                                                    </Button>
+                                                    {item.bookingUrl && (
+                                                        <Button
+                                                            component="a"
+                                                            href={item.bookingUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            variant="outlined"
+                                                            fullWidth
+                                                            endIcon={<LaunchIcon />}
+                                                        >
+                                                            View on Booking.com
+                                                        </Button>
+                                                    )}
+                                                </Stack>
+                                            </CardContent>
+                                        </Card>
+                                    </Grid>
+                                );
+                            })}
+                        </Grid>
+                    </Box>
+                )}
+            </Container>
+        </Box>
+    );
+};
+
+export default BeachSessions;
