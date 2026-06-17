@@ -76,7 +76,7 @@ const Cart = () => {
 
                 <Grid container spacing={4}>
                     {/* Cart Items */}
-                    <Grid item xs={12} lg={8}>
+                    <Grid size={{ xs: 12, lg: 8 }}>
                         <Stack spacing={2}>
                             {cart.map((item) => (
                                 <Card
@@ -159,7 +159,7 @@ const Cart = () => {
                     </Grid>
 
                     {/* Order Summary */}
-                    <Grid item xs={12} lg={4}>
+                    <Grid size={{ xs: 12, lg: 4 }}>
                         <Paper
                             sx={{
                                 p: 3,

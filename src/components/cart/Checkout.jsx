@@ -988,7 +988,7 @@ const Checkout = () => {
                             </Typography>
 
                             <Grid container spacing={3}>
-                                <Grid item xs={12} sm={6} md={3}>
+                                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                                     <TextField
                                         fullWidth
                                         label="Groom's Name"
@@ -1002,7 +1002,7 @@ const Checkout = () => {
                                         helperText={fieldErrors.groomName}
                                     />
                                 </Grid>
-                                <Grid item xs={12} sm={6} md={3}>
+                                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                                     <TextField
                                         fullWidth
                                         label="Bride's Name"
@@ -1016,7 +1016,7 @@ const Checkout = () => {
                                         helperText={fieldErrors.brideName}
                                     />
                                 </Grid>
-                                <Grid item xs={12} sm={6} md={3}>
+                                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                                     <TextField
                                         fullWidth
                                         label="Wedding Date"
@@ -1032,7 +1032,7 @@ const Checkout = () => {
                                         helperText={fieldErrors.weddingDate}
                                     />
                                 </Grid>
-                                <Grid item xs={12} sm={6} md={3}>
+                                <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                                     <TextField
                                         fullWidth
                                         label="Pax (Guests)"
@@ -1209,7 +1209,7 @@ const Checkout = () => {
                                     </Box>
 
                                     <Box sx={{ mt: 'auto' }}>
-                                        {paymentProviders.stripe && country?.code === 'MX' && (
+                                        {paymentProviders.stripe && (
                                             <StripePaymentForm
                                                 amountUSD={total}
                                                 customerInfo={{
@@ -1237,7 +1237,7 @@ const Checkout = () => {
                                             />
                                         )}
 
-                                        {paymentProviders.stripe && country?.code === 'MX' && paymentProviders.paypal && (
+                                        {paymentProviders.stripe && paymentProviders.paypal && (
                                             <Divider sx={{ my: 2 }}>OR</Divider>
                                         )}
 

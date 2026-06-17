@@ -22,7 +22,6 @@ import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import { useBeachCart } from '../../context/BeachCartContext';
 import { useCountry } from '../../context/CountryContext';
 import { useDocumentTitle, useTakeMeToTheTop } from '../../hooks/hooks';
-import StripePaymentForm from './StripePaymentForm';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -102,15 +101,14 @@ const BeachCheckout = () => {
             name: customerInfo.name,
             email: customerInfo.email,
             phone: customerInfo.phone,
-            hotel: venueLabel,           // venue placeholder for BD compatibility
+            hotel: venueLabel,           // used as location label in beach email
             hotel_id: null,
             country: country?.code,
             sessionDate: customerInfo.sessionDate,
             pax: customerInfo.pax,
             notes: customerInfo.notes,
-            // Wedding-only fields left blank so the order email template still renders
-            groomName: '',
-            brideName: '',
+            // Mirror sessionDate into wedding_date so the orders.wedding_date column
+            // (NOT NULL legacy) keeps a meaningful value for analytics.
             weddingDate: customerInfo.sessionDate,
         },
         orderDetails: {
@@ -132,7 +130,7 @@ const BeachCheckout = () => {
         const payload = buildPersistencePayload();
         if (!isDuplicate) {
             try {
-                await fetch(`${API_URL}/api/send-order-email`, {
+                await fetch(`${API_URL}/api/send-beach-session-email`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -194,54 +192,6 @@ const BeachCheckout = () => {
         }
     };
 
-    // Stripe handlers
-    const onStripeSuccess = async (paymentIntentId) => {
-        try {
-            const payload = buildPersistencePayload();
-            const saveResp = await fetch(`${API_URL}/api/save-order`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    stripePaymentIntentId: paymentIntentId,
-                    paymentProvider: 'stripe',
-                    paymentStatus: 'completed',
-                    ...payload,
-                }),
-            });
-            const saveJson = await saveResp.json();
-            await completeAndShow(paymentIntentId, !!saveJson.data?.isDuplicate);
-            toast.success('Payment successful!');
-        } catch (err) {
-            console.error('Stripe success error:', err);
-            toast.error('We could not finalize the order. We will contact you.');
-        }
-    };
-    const onStripePending = async (paymentIntentId, voucher, paymentMethodType) => {
-        try {
-            const payload = buildPersistencePayload();
-            await fetch(`${API_URL}/api/save-order`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    stripePaymentIntentId: paymentIntentId,
-                    paymentProvider: 'stripe',
-                    paymentStatus: 'pending',
-                    ...payload,
-                }),
-            });
-            setOrderDetails({ id: paymentIntentId, voucher: true, voucherData: voucher, voucherType: paymentMethodType });
-            setOrderTotal(total);
-            setOrderComplete(true);
-            clearCart();
-            toast.info('Order saved. Complete the payment to receive confirmation.');
-        } catch (err) {
-            console.error('Stripe pending error:', err);
-        }
-    };
-    const onStripeError = (err) => {
-        toast.error(err?.message || 'Payment failed.');
-    };
-
     if (cart.length === 0 && !orderComplete) {
         navigate('/beach-sessions/cart');
         return null;
@@ -298,29 +248,29 @@ const BeachCheckout = () => {
                             <Chip label={venueLabel} size="small" color="primary" variant="outlined" sx={{ ml: 1 }} />
                         </Stack>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, md: 4 }}>
                                 <TextField fullWidth required name="name" label="Full Name" value={customerInfo.name} onChange={handleChange} error={!!fieldErrors.name} helperText={fieldErrors.name} />
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, md: 4 }}>
                                 <TextField fullWidth required name="email" type="email" label="Email" value={customerInfo.email} onChange={handleChange} error={!!fieldErrors.email} helperText={fieldErrors.email} />
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, md: 4 }}>
                                 <TextField fullWidth required name="phone" type="tel" label="Phone" value={customerInfo.phone} onChange={handleChange} error={!!fieldErrors.phone} helperText={fieldErrors.phone} />
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, md: 4 }}>
                                 <TextField fullWidth required name="sessionDate" type="date" label="Session date" InputLabelProps={{ shrink: true }} value={customerInfo.sessionDate} onChange={handleChange} error={!!fieldErrors.sessionDate} helperText={fieldErrors.sessionDate} />
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, md: 4 }}>
                                 <TextField fullWidth required name="pax" type="number" label="People" inputProps={{ min: 1 }} value={customerInfo.pax} onChange={handleChange} error={!!fieldErrors.pax} helperText={fieldErrors.pax || 'Up to 4 included; contact us for larger groups'} />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid size={12}>
                                 <TextField fullWidth multiline rows={2} name="notes" label="Notes (optional)" placeholder="Preferred beach, time of day, etc." value={customerInfo.notes} onChange={handleChange} />
                             </Grid>
                         </Grid>
                     </Paper>
 
                     <Grid container spacing={4}>
-                        <Grid item xs={12} md={6}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                             <Paper elevation={2} sx={{ p: 3, borderRadius: 2, height: '100%' }}>
                                 <Typography variant="h5" fontWeight="bold" sx={{ mb: 3 }}>Order Summary</Typography>
                                 <Stack spacing={1.5}>
@@ -355,7 +305,7 @@ const BeachCheckout = () => {
                             </Paper>
                         </Grid>
 
-                        <Grid item xs={12} md={6}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                             <Paper elevation={2} sx={{ p: 3, borderRadius: 2, height: '100%' }}>
                                 <Typography variant="h5" fontWeight="bold" sx={{ mb: 3 }}>Payment</Typography>
 
@@ -366,22 +316,7 @@ const BeachCheckout = () => {
                                 )}
 
                                 <Stack spacing={2}>
-                                    {paymentProviders.stripe && country?.code === 'MX' && (
-                                        <StripePaymentForm
-                                            amountUSD={total}
-                                            customerInfo={buildPersistencePayload().customerInfo}
-                                            orderDetails={buildPersistencePayload().orderDetails}
-                                            disabled={!formIsValid}
-                                            onSuccess={onStripeSuccess}
-                                            onPending={onStripePending}
-                                            onError={onStripeError}
-                                        />
-                                    )}
-
-                                    {paymentProviders.stripe && country?.code === 'MX' && paymentProviders.paypal && (
-                                        <Divider sx={{ my: 2 }}>OR</Divider>
-                                    )}
-
+                                    {/* Beach sessions are PayPal-only by design. */}
                                     {paymentProviders.paypal && (
                                         <PayPalScriptProvider key={currency} options={initialOptions}>
                                             <PayPalButtons
@@ -395,7 +330,7 @@ const BeachCheckout = () => {
                                         </PayPalScriptProvider>
                                     )}
 
-                                    {!paymentProviders.paypal && !paymentProviders.stripe && (
+                                    {!paymentProviders.paypal && (
                                         <Alert severity="error">
                                             No payment method available — contact info@caribephoto.com
                                         </Alert>

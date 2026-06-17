@@ -140,7 +140,7 @@ const TransportAddon = ({ value, onChange, hotelAddress }) => {
             {enabled && (
                 <Stack spacing={2} sx={{ mt: 2 }}>
                     <Grid container spacing={2}>
-                        <Grid item xs={12} md={6}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                             <TextField
                                 select
                                 fullWidth
@@ -155,7 +155,7 @@ const TransportAddon = ({ value, onChange, hotelAddress }) => {
                                 ))}
                             </TextField>
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid size={{ xs: 12, md: 6 }}>
                             <TextField
                                 select
                                 fullWidth
@@ -177,7 +177,7 @@ const TransportAddon = ({ value, onChange, hotelAddress }) => {
                             </TextField>
                         </Grid>
 
-                        <Grid item xs={12} md={3}>
+                        <Grid size={{ xs: 12, md: 3 }}>
                             <TextField
                                 fullWidth
                                 type="date"
@@ -187,7 +187,7 @@ const TransportAddon = ({ value, onChange, hotelAddress }) => {
                                 onChange={(e) => updateField('pickupDate', e.target.value)}
                             />
                         </Grid>
-                        <Grid item xs={12} md={3}>
+                        <Grid size={{ xs: 12, md: 3 }}>
                             <TextField
                                 fullWidth
                                 type="time"
@@ -199,7 +199,7 @@ const TransportAddon = ({ value, onChange, hotelAddress }) => {
                         </Grid>
                         {value?.tripType === 'roundtrip' && (
                             <>
-                                <Grid item xs={12} md={3}>
+                                <Grid size={{ xs: 12, md: 3 }}>
                                     <TextField
                                         fullWidth
                                         type="date"
@@ -209,7 +209,7 @@ const TransportAddon = ({ value, onChange, hotelAddress }) => {
                                         onChange={(e) => updateField('returnDate', e.target.value)}
                                     />
                                 </Grid>
-                                <Grid item xs={12} md={3}>
+                                <Grid size={{ xs: 12, md: 3 }}>
                                     <TextField
                                         fullWidth
                                         type="time"
@@ -223,7 +223,7 @@ const TransportAddon = ({ value, onChange, hotelAddress }) => {
                         )}
 
                         {value?.tripType !== 'oneway-departure' && (
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, md: 4 }}>
                                 <TextField
                                     fullWidth
                                     label="Arrival flight #"
@@ -234,7 +234,7 @@ const TransportAddon = ({ value, onChange, hotelAddress }) => {
                             </Grid>
                         )}
                         {value?.tripType !== 'oneway-arrival' && (
-                            <Grid item xs={12} md={4}>
+                            <Grid size={{ xs: 12, md: 4 }}>
                                 <TextField
                                     fullWidth
                                     label="Departure flight #"
@@ -244,7 +244,7 @@ const TransportAddon = ({ value, onChange, hotelAddress }) => {
                                 />
                             </Grid>
                         )}
-                        <Grid item xs={12} md={4}>
+                        <Grid size={{ xs: 12, md: 4 }}>
                             <TextField
                                 fullWidth
                                 type="number"

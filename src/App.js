@@ -101,6 +101,8 @@ function App() {
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/checkout/return" element={<CheckoutReturn />} />
                 <Route path="/beach-sessions" element={<BeachSessions />} />
+                {/* External promo deep-link: lands on Beach Sessions pinned to RD */}
+                <Route path="/rd/beach-sessions" element={<BeachSessions forceCountry="DO" />} />
                 <Route path="/beach-sessions/cart" element={<BeachCart />} />
                 <Route path="/beach-sessions/checkout" element={<BeachCheckout />} />
                 <Route path="*" element={<Error />} />

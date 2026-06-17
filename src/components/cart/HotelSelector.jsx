@@ -182,7 +182,7 @@ const HotelSelector = ({ selectedHotel, onHotelSelect, hotels, error }) => {
 
             <Grid container spacing={2}>
                 {hotels.map((hotel) => (
-                    <Grid item xs={12} sm={6} md={4} key={hotel.id}>
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={hotel.id}>
                         <HotelCard
                             hotel={hotel}
                             selected={selectedHotel === hotel.id}

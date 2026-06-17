@@ -55,7 +55,7 @@ const Footer = () => {
 
           <Grid container spacing={2} justifyContent="center" sx={{ mt: 2, width: { xs: "80%", sm: "80%", md: "60%" }, mx: "auto" }}>
             {socialIcons.map((item, index) => (
-              <Grid item key={index}>
+              <Grid key={index}>
                 {item.href ? (
                   <IconButton
                     component="a"
@@ -120,7 +120,7 @@ const Footer = () => {
 
         {/* Links Section */}
         <Grid container spacing={4} justifyContent={{ xs: 'center', md: 'center' }} sx={{ mb: 4 }}>
-          <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'center', md: 'left' } }}>
+          <Grid size={{ xs: 12, md: 4 }} sx={{ textAlign: { xs: 'center', md: 'left' } }}>
             <Typography variant="subtitle1" fontWeight="bold" gutterBottom sx={{ textTransform: "uppercase" }}>
               Navigations
             </Typography>
@@ -130,7 +130,7 @@ const Footer = () => {
             </Stack>
           </Grid>
 
-          <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'center', md: 'left' } }}>
+          <Grid size={{ xs: 12, md: 4 }} sx={{ textAlign: { xs: 'center', md: 'left' } }}>
             <Typography variant="subtitle1" fontWeight="bold" gutterBottom sx={{ textTransform: "uppercase" }}>
               Legal
             </Typography>
@@ -139,7 +139,7 @@ const Footer = () => {
             </Stack>
           </Grid>
 
-          <Grid item xs={12} md={4} sx={{ textAlign: { xs: 'center', md: 'left' } }}>
+          <Grid size={{ xs: 12, md: 4 }} sx={{ textAlign: { xs: 'center', md: 'left' } }}>
             <Typography variant="subtitle1" fontWeight="bold" gutterBottom sx={{ textTransform: "uppercase" }}>
               Social
             </Typography>

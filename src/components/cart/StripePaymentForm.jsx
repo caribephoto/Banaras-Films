@@ -16,7 +16,6 @@ const STRIPE_PK = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 
 const StripeInner = ({
     amountUSD,
-    amountMXN,
     paymentIntentId,
     customerInfo,
     orderDetails,
@@ -102,7 +101,7 @@ const StripeInner = ({
                 {submitting ? 'Processing…' : `Pay $${amountUSD.toFixed(2)} USD`}
             </Button>
             <Typography variant="caption" color="text.secondary" textAlign="center">
-                Charged in MXN at today's rate (~${amountMXN?.toFixed(2)} MXN). Card, Apple Pay, Google Pay, OXXO and SPEI accepted.
+                Charged in USD. Card, Apple Pay and Google Pay accepted.
             </Typography>
         </Stack>
     );
@@ -111,7 +110,6 @@ const StripeInner = ({
 const StripePaymentForm = ({ amountUSD, customerInfo, orderDetails, disabled, onSuccess, onPending, onError }) => {
     const stripePromise = useMemo(() => (STRIPE_PK ? loadStripe(STRIPE_PK) : null), []);
     const [clientSecret, setClientSecret] = useState(null);
-    const [amountMXN, setAmountMXN] = useState(null);
     const [paymentIntentId, setPaymentIntentId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [loadError, setLoadError] = useState(null);
@@ -137,7 +135,6 @@ const StripePaymentForm = ({ amountUSD, customerInfo, orderDetails, disabled, on
                 if (json.success) {
                     setClientSecret(json.clientSecret);
                     setPaymentIntentId(json.paymentIntentId);
-                    setAmountMXN(json.amountMXN);
                 } else {
                     setLoadError(json.message || 'Could not initialize Stripe');
                     toast.error(json.message || 'Could not initialize Stripe');
@@ -185,7 +182,6 @@ const StripePaymentForm = ({ amountUSD, customerInfo, orderDetails, disabled, on
         >
             <StripeInner
                 amountUSD={amountUSD}
-                amountMXN={amountMXN}
                 paymentIntentId={paymentIntentId}
                 customerInfo={customerInfo}
                 orderDetails={orderDetails}

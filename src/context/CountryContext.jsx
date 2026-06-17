@@ -12,7 +12,23 @@ export const useCountry = () => {
   return ctx;
 };
 
+// Detect a country hint from the entry URL so external promo links land on the
+// right destination with no country-modal flash. Examples:
+//   /rd/beach-sessions      → DO   (rd = República Dominicana)
+//   /beach-sessions?country=DO → DO
+const readCountryFromUrl = () => {
+  if (typeof window === 'undefined') return null;
+  const { pathname, search } = window.location;
+  if (/^\/(rd|do)(\/|$)/i.test(pathname)) return 'DO';
+  const q = new URLSearchParams(search).get('country');
+  if (q && getCountry(q.toUpperCase())) return q.toUpperCase();
+  return null;
+};
+
 const readInitialCode = () => {
+  // A URL hint wins so a promo link always opens in its intended country.
+  const fromUrl = readCountryFromUrl();
+  if (fromUrl) return fromUrl;
   const fromStorage = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
   if (fromStorage && getCountry(fromStorage)) return fromStorage;
   const fromEnv = import.meta.env.VITE_DEFAULT_COUNTRY;

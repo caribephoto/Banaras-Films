@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -17,12 +17,18 @@ import {
     Alert,
     IconButton,
     Badge,
+    Dialog,
+    DialogContent,
+    Divider,
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import InfoIcon from '@mui/icons-material/Info';
 import LaunchIcon from '@mui/icons-material/Launch';
+import CloseIcon from '@mui/icons-material/Close';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useDocumentTitle, useTakeMeToTheTop } from '../hooks/hooks';
 import { useCountry } from '../context/CountryContext';
 import { useBeachCart } from '../context/BeachCartContext';
@@ -47,12 +53,171 @@ const filterByCountry = (items, countryCode) => {
     });
 };
 
-const BeachSessions = () => {
+const GalleryPreview = ({ images = [], title = '' }) => {
+    const [lightboxIdx, setLightboxIdx] = useState(null);
+    const open = lightboxIdx !== null;
+
+    const close = () => setLightboxIdx(null);
+    const prev = (e) => {
+        e?.stopPropagation?.();
+        setLightboxIdx((i) => (i === null ? null : (i - 1 + images.length) % images.length));
+    };
+    const next = (e) => {
+        e?.stopPropagation?.();
+        setLightboxIdx((i) => (i === null ? null : (i + 1) % images.length));
+    };
+
+    useEffect(() => {
+        if (!open) return;
+        const onKey = (e) => {
+            if (e.key === 'ArrowLeft') prev();
+            if (e.key === 'ArrowRight') next();
+            if (e.key === 'Escape') close();
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [open, images.length]);
+
+    if (!images.length) return null;
+
+    return (
+        <Box sx={{ mt: 1 }}>
+            <Divider sx={{ mb: 2 }} />
+            <Typography variant="overline" sx={{ fontWeight: 700, letterSpacing: 1, color: 'text.secondary' }}>
+                Gallery preview ({images.length})
+            </Typography>
+            <Box
+                sx={{
+                    display: 'grid',
+                    gridTemplateColumns: { xs: 'repeat(3, 1fr)', sm: 'repeat(4, 1fr)', md: 'repeat(6, 1fr)' },
+                    gap: 1,
+                    mt: 1,
+                }}
+            >
+                {images.map((entry, i) => {
+                    const thumbSrc = typeof entry === 'string' ? entry : entry.thumb;
+                    return (
+                        <Box
+                            key={thumbSrc}
+                            component="img"
+                            loading="lazy"
+                            src={thumbSrc}
+                            alt={`${title} preview ${i + 1}`}
+                            onClick={() => setLightboxIdx(i)}
+                            sx={{
+                                width: '100%',
+                                aspectRatio: '1 / 1',
+                                objectFit: 'cover',
+                                borderRadius: 1,
+                                cursor: 'pointer',
+                                transition: 'transform .15s ease, box-shadow .15s ease',
+                                '&:hover': {
+                                    transform: 'scale(1.03)',
+                                    boxShadow: '0 6px 16px rgba(0,0,0,.18)',
+                                },
+                            }}
+                        />
+                    );
+                })}
+            </Box>
+
+            <Dialog
+                open={open}
+                onClose={close}
+                maxWidth="lg"
+                fullWidth
+                PaperProps={{ sx: { bgcolor: 'rgba(0,0,0,.92)', boxShadow: 'none', borderRadius: 2 } }}
+            >
+                <DialogContent
+                    onClick={close}
+                    sx={{
+                        p: 0,
+                        position: 'relative',
+                        minHeight: { xs: '60vh', md: '70vh' },
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'zoom-out',
+                    }}
+                >
+                    <IconButton
+                        onClick={(e) => { e.stopPropagation(); close(); }}
+                        sx={{ position: 'absolute', top: 8, right: 8, color: 'white', bgcolor: 'rgba(0,0,0,.4)', '&:hover': { bgcolor: 'rgba(0,0,0,.65)' } }}
+                        aria-label="Close gallery"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                    {images.length > 1 && (
+                        <>
+                            <IconButton
+                                onClick={prev}
+                                sx={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', color: 'white', bgcolor: 'rgba(0,0,0,.4)', '&:hover': { bgcolor: 'rgba(0,0,0,.65)' } }}
+                                aria-label="Previous image"
+                            >
+                                <ChevronLeftIcon fontSize="large" />
+                            </IconButton>
+                            <IconButton
+                                onClick={next}
+                                sx={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', color: 'white', bgcolor: 'rgba(0,0,0,.4)', '&:hover': { bgcolor: 'rgba(0,0,0,.65)' } }}
+                                aria-label="Next image"
+                            >
+                                <ChevronRightIcon fontSize="large" />
+                            </IconButton>
+                        </>
+                    )}
+                    {open && (
+                        <Box
+                            component="img"
+                            src={typeof images[lightboxIdx] === 'string' ? images[lightboxIdx] : images[lightboxIdx].full}
+                            alt={`${title} ${lightboxIdx + 1} of ${images.length}`}
+                            onClick={(e) => e.stopPropagation()}
+                            sx={{
+                                maxWidth: '100%',
+                                maxHeight: { xs: '70vh', md: '85vh' },
+                                objectFit: 'contain',
+                                display: 'block',
+                                cursor: 'default',
+                            }}
+                        />
+                    )}
+                    {open && (
+                        <Typography
+                            variant="caption"
+                            sx={{
+                                position: 'absolute',
+                                bottom: 12,
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                color: 'white',
+                                bgcolor: 'rgba(0,0,0,.5)',
+                                px: 1.5,
+                                py: 0.5,
+                                borderRadius: 1,
+                            }}
+                        >
+                            {lightboxIdx + 1} / {images.length}
+                        </Typography>
+                    )}
+                </DialogContent>
+            </Dialog>
+        </Box>
+    );
+};
+
+const BeachSessions = ({ forceCountry }) => {
     useDocumentTitle('Beach Sessions');
     useTakeMeToTheTop();
     const navigate = useNavigate();
-    const { country, formatCurrency, taxRate, countryCode } = useCountry();
+    const { country, formatCurrency, taxRate, countryCode, setCountry } = useCountry();
     const { addToCart, isInCart, getCartCount } = useBeachCart();
+
+    // Promo entry (e.g. /rd/beach-sessions): pin the destination so prices,
+    // availability and PayPal-only checkout all match. readInitialCode already
+    // handles a fresh page load; this covers in-app (SPA) navigation.
+    useEffect(() => {
+        if (forceCountry && country?.code !== forceCountry) setCountry(forceCountry);
+    }, [forceCountry, country?.code, setCountry]);
 
     const items = React.useMemo(() => filterByCountry(photoSessions, countryCode), [countryCode]);
     const isAvailableCountry = country?.code === 'DO';
@@ -131,7 +296,7 @@ const BeachSessions = () => {
                             {items.map((item) => {
                                 const effectivePrice = resolvePrice(item, countryCode);
                                 return (
-                                    <Grid item xs={12} md={8} lg={6} key={item.id}>
+                                    <Grid size={{ xs: 12, md: 8, lg: 6 }} key={item.id}>
                                         <Card
                                             component={motion.div}
                                             whileHover={{
@@ -149,10 +314,13 @@ const BeachSessions = () => {
                                         >
                                             <CardMedia
                                                 component="img"
-                                                height="260"
                                                 image={item.img}
                                                 alt={item.title}
-                                                sx={{ objectFit: 'cover' }}
+                                                sx={{
+                                                    height: { xs: 160, md: 200 },
+                                                    objectFit: 'cover',
+                                                    objectPosition: 'center',
+                                                }}
                                             />
                                             <CardContent sx={{ p: { xs: 3, md: 4 } }}>
                                                 <Typography
@@ -237,6 +405,12 @@ const BeachSessions = () => {
                                                         </Button>
                                                     )}
                                                 </Stack>
+
+                                                {item.gallery?.length > 0 && (
+                                                    <Box sx={{ mt: 3 }}>
+                                                        <GalleryPreview images={item.gallery} title={item.title} />
+                                                    </Box>
+                                                )}
                                             </CardContent>
                                         </Card>
                                     </Grid>

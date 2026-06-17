@@ -6,8 +6,17 @@ const photoSessions = [
   {
     id: 'photo-session-bavaro',
     title: 'Professional Photo Session at Bavaro Beach',
-    // TODO: replace with a dedicated Bavaro Beach photo when available.
-    img: '/img/slide-4.jpg',
+    // Wide landscape WebP banner for the card header (1920×720 cover crop).
+    img: '/img/punta-cana/banner.webp',
+    // Each gallery entry has a small thumb (~15-20 kB) for the grid
+    // and a full-size WebP (~100-400 kB) for the lightbox.
+    gallery: Array.from({ length: 22 }, (_, i) => {
+      const n = String(i + 1).padStart(2, '0');
+      return {
+        thumb: `/img/punta-cana/bavaro-${n}-thumb.webp`,
+        full: `/img/punta-cana/bavaro-${n}.webp`,
+      };
+    }),
     content: [
       'Up to 4 people included',
       'Professional Photographer',
