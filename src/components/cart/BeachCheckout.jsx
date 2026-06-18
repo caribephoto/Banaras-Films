@@ -36,7 +36,9 @@ const BeachCheckout = () => {
         name: '',
         email: '',
         phone: '',
+        hotel: '',
         sessionDate: '',
+        sessionTime: '',
         pax: '',
         notes: '',
     });
@@ -47,6 +49,17 @@ const BeachCheckout = () => {
     const [orderTotal, setOrderTotal] = useState(0);
 
     const venueLabel = cart[0]?.venueLabel || 'Beach (Dominican Republic)';
+
+    // Minimum booking lead time: 3 days from today (sessions must be booked
+    // at least 72h in advance). Used both as the date input `min` and in validation.
+    const MIN_LEAD_DAYS = 3;
+    const minSessionDate = (() => {
+        const d = new Date();
+        d.setHours(0, 0, 0, 0);
+        d.setDate(d.getDate() + MIN_LEAD_DAYS);
+        const off = d.getTimezoneOffset();
+        return new Date(d.getTime() - off * 60000).toISOString().slice(0, 10);
+    })();
 
     const subtotal = getCartTotal();
     const tax = subtotal * taxRate;
@@ -74,8 +87,19 @@ const BeachCheckout = () => {
                 valid = false;
             }
         }
+        if (!customerInfo.hotel?.trim() || customerInfo.hotel.trim().length < 2) {
+            errors.hotel = 'Hotel is required';
+            valid = false;
+        }
         if (!customerInfo.sessionDate) {
             errors.sessionDate = 'Session date is required';
+            valid = false;
+        } else if (customerInfo.sessionDate < minSessionDate) {
+            errors.sessionDate = `Minimum booking time is ${MIN_LEAD_DAYS} days in advance`;
+            valid = false;
+        }
+        if (!customerInfo.sessionTime) {
+            errors.sessionTime = 'Session time is required';
             valid = false;
         }
         if (!customerInfo.pax || parseInt(customerInfo.pax, 10) <= 0) {
@@ -101,10 +125,12 @@ const BeachCheckout = () => {
             name: customerInfo.name,
             email: customerInfo.email,
             phone: customerInfo.phone,
-            hotel: venueLabel,           // used as location label in beach email
+            hotel: customerInfo.hotel,   // hotel where the guest stays = pickup point
             hotel_id: null,
+            venue: venueLabel,           // beach location label shown in the email
             country: country?.code,
             sessionDate: customerInfo.sessionDate,
+            sessionTime: customerInfo.sessionTime,
             pax: customerInfo.pax,
             notes: customerInfo.notes,
             // Mirror sessionDate into wedding_date so the orders.wedding_date column
@@ -213,7 +239,10 @@ const BeachCheckout = () => {
                             <Stack spacing={1}>
                                 <Typography><strong>Order ID:</strong> {orderDetails?.id}</Typography>
                                 <Typography><strong>Email:</strong> {customerInfo.email}</Typography>
+                                <Typography><strong>Phone:</strong> {customerInfo.phone}</Typography>
+                                <Typography><strong>Hotel:</strong> {customerInfo.hotel}</Typography>
                                 <Typography><strong>Session date:</strong> {customerInfo.sessionDate}</Typography>
+                                <Typography><strong>Session time:</strong> {customerInfo.sessionTime}</Typography>
                                 <Typography><strong>Location:</strong> {venueLabel}</Typography>
                                 <Typography><strong>People:</strong> {customerInfo.pax}</Typography>
                                 <Typography>
@@ -255,10 +284,16 @@ const BeachCheckout = () => {
                                 <TextField fullWidth required name="email" type="email" label="Email" value={customerInfo.email} onChange={handleChange} error={!!fieldErrors.email} helperText={fieldErrors.email} />
                             </Grid>
                             <Grid size={{ xs: 12, md: 4 }}>
-                                <TextField fullWidth required name="phone" type="tel" label="Phone" value={customerInfo.phone} onChange={handleChange} error={!!fieldErrors.phone} helperText={fieldErrors.phone} />
+                                <TextField fullWidth required name="phone" type="tel" label="Contact phone" value={customerInfo.phone} onChange={handleChange} error={!!fieldErrors.phone} helperText={fieldErrors.phone} />
                             </Grid>
                             <Grid size={{ xs: 12, md: 4 }}>
-                                <TextField fullWidth required name="sessionDate" type="date" label="Session date" InputLabelProps={{ shrink: true }} value={customerInfo.sessionDate} onChange={handleChange} error={!!fieldErrors.sessionDate} helperText={fieldErrors.sessionDate} />
+                                <TextField fullWidth required name="hotel" label="Hotel where you stay" value={customerInfo.hotel} onChange={handleChange} error={!!fieldErrors.hotel} helperText={fieldErrors.hotel || 'Used as the pickup point (private transport included)'} />
+                            </Grid>
+                            <Grid size={{ xs: 12, md: 4 }}>
+                                <TextField fullWidth required name="sessionDate" type="date" label="Session date" InputLabelProps={{ shrink: true }} inputProps={{ min: minSessionDate }} value={customerInfo.sessionDate} onChange={handleChange} error={!!fieldErrors.sessionDate} helperText={fieldErrors.sessionDate || `Book at least ${MIN_LEAD_DAYS} days in advance`} />
+                            </Grid>
+                            <Grid size={{ xs: 12, md: 4 }}>
+                                <TextField fullWidth required name="sessionTime" type="time" label="Session time" InputLabelProps={{ shrink: true }} value={customerInfo.sessionTime} onChange={handleChange} error={!!fieldErrors.sessionTime} helperText={fieldErrors.sessionTime} />
                             </Grid>
                             <Grid size={{ xs: 12, md: 4 }}>
                                 <TextField fullWidth required name="pax" type="number" label="People" inputProps={{ min: 1 }} value={customerInfo.pax} onChange={handleChange} error={!!fieldErrors.pax} helperText={fieldErrors.pax || 'Up to 4 included; contact us for larger groups'} />

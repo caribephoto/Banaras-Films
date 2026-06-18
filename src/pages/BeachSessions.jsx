@@ -251,7 +251,7 @@ const BeachSessions = ({ forceCountry }) => {
                     Beach Sessions
                 </Typography>
                 <Typography variant="h6" color="text.secondary" sx={{ mt: 2, maxWidth: 720, mx: 'auto', px: 2 }}>
-                    Professional photo sessions on the beach — no venue or wedding required.
+                    Professional Photoshoot in Punta Cana - Bavaro - Macao - Uvero Alto.
                 </Typography>
             </Box>
 
@@ -317,9 +317,9 @@ const BeachSessions = ({ forceCountry }) => {
                                                 image={item.img}
                                                 alt={item.title}
                                                 sx={{
-                                                    height: { xs: 160, md: 200 },
-                                                    objectFit: 'cover',
-                                                    objectPosition: 'center',
+                                                    height: { xs: 200, md: 200 },
+                                                    objectFit: 'fill',
+                                                    objectPosition: 'fill',
                                                 }}
                                             />
                                             <CardContent sx={{ p: { xs: 3, md: 4 } }}>
@@ -391,7 +391,7 @@ const BeachSessions = ({ forceCountry }) => {
                                                     >
                                                         {isInCart(item.id) ? 'In Cart' : 'Add to Cart'}
                                                     </Button>
-                                                    {item.bookingUrl && (
+                                                    { /*item.bookingUrl && (
                                                         <Button
                                                             component="a"
                                                             href={item.bookingUrl}
@@ -403,7 +403,7 @@ const BeachSessions = ({ forceCountry }) => {
                                                         >
                                                             View on Booking.com
                                                         </Button>
-                                                    )}
+                                                    ) */}
                                                 </Stack>
 
                                                 {item.gallery?.length > 0 && (
