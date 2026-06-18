@@ -317,9 +317,9 @@ const BeachSessions = ({ forceCountry }) => {
                                                 image={item.img}
                                                 alt={item.title}
                                                 sx={{
-                                                    height: { xs: 200, md: 200 },
-                                                    objectFit: 'fill',
-                                                    objectPosition: 'fill',
+                                                    height: { xs: 160, md: 200 },
+                                                    objectFit: 'cover',
+                                                    objectPosition: 'cover',
                                                 }}
                                             />
                                             <CardContent sx={{ p: { xs: 3, md: 4 } }}>
