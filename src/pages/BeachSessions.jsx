@@ -250,9 +250,7 @@ const BeachSessions = ({ forceCountry }) => {
                 >
                     Beach Sessions
                 </Typography>
-                <Typography variant="h6" color="text.secondary" sx={{ mt: 2, maxWidth: 720, mx: 'auto', px: 2 }}>
-                    Professional Photoshoot in Punta Cana - Bavaro - Macao - Uvero Alto.
-                </Typography>
+                
             </Box>
 
             <Container maxWidth="lg" sx={{ pb: 10 }}>
@@ -334,7 +332,7 @@ const BeachSessions = ({ forceCountry }) => {
                                                     {item.title}
                                                 </Typography>
                                                 <Typography align="center" color="text.secondary" sx={{ mb: 2 }}>
-                                                    Punta Cana · Bavaro Beach
+                                                    Bavaro · Macao · Uvero Alto
                                                 </Typography>
 
                                                 <Typography variant="overline" sx={{ fontWeight: 700, letterSpacing: 1, color: 'primary.main' }}>

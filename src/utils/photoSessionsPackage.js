@@ -5,7 +5,7 @@
 const photoSessions = [
   {
     id: 'photo-session-bavaro',
-    title: 'Professional Photo Session at Bavaro Beach',
+    title: 'Professional Photoshoot in Punta-Cana',
     // Wide landscape WebP banner for the card header (1920×720 cover crop).
     img: '/img/punta-cana/bavaro-03.webp',
     // Each gallery entry has a small thumb (~15-20 kB) for the grid
