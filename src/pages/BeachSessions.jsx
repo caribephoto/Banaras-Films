@@ -90,9 +90,9 @@ const GalleryPreview = ({ images = [], title = '' }) => {
             <Box
                 sx={{
                     display: 'grid',
-                    gridTemplateColumns: { xs: 'repeat(3, 1fr)', sm: 'repeat(4, 1fr)', md: 'repeat(6, 1fr)' },
-                    gap: 1,
-                    mt: 1,
+                    gridTemplateColumns: { xs: 'repeat(3, 1fr)', sm: 'repeat(4, 1fr)', md: 'repeat(5, 1fr)' },
+                    gap: 1.5,
+                    mt: 1.5,
                 }}
             >
                 {images.map((entry, i) => {
@@ -294,90 +294,100 @@ const BeachSessions = ({ forceCountry }) => {
                             {items.map((item) => {
                                 const effectivePrice = resolvePrice(item, countryCode);
                                 return (
-                                    <Grid size={{ xs: 12, md: 8, lg: 6 }} key={item.id}>
+                                    <Grid size={12} key={item.id}>
                                         <Card
                                             component={motion.div}
-                                            whileHover={{
-                                                scale: 1.03,
-                                                boxShadow: '0px 12px 32px rgba(236, 72, 153, 0.28)',
-                                            }}
-                                            transition={{ type: 'spring', stiffness: 100 }}
+                                            initial={{ opacity: 0, y: 24 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true, amount: 0.15 }}
+                                            transition={{ duration: 0.5 }}
                                             sx={{
                                                 display: 'flex',
                                                 flexDirection: 'column',
-                                                borderRadius: 3,
+                                                borderRadius: 4,
                                                 overflow: 'hidden',
                                                 width: '100%',
+                                                maxWidth: 1120,
+                                                mx: 'auto',
+                                                boxShadow: '0 18px 48px -20px rgba(236, 72, 153, 0.30)',
                                             }}
                                         >
+                                            {/* Full-width landscape banner — respects the wide photo's ratio */}
                                             <CardMedia
                                                 component="img"
                                                 image={item.img}
                                                 alt={item.title}
                                                 sx={{
-                                                    height: { xs: 160, md: 200 },
+                                                    width: '100%',
+                                                    height: { xs: 240, sm: 340, md: 460 },
                                                     objectFit: 'cover',
-                                                    objectPosition: 'cover',
+                                                    objectPosition: 'center',
                                                 }}
                                             />
-                                            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+                                            <CardContent sx={{ p: { xs: 3, md: 5 } }}>
                                                 <Typography
-                                                    variant="h4"
+                                                    variant="h3"
                                                     component="h3"
                                                     align="center"
                                                     gutterBottom
                                                     fontWeight="bold"
-                                                    sx={{ fontSize: { xs: '1.4rem', md: '1.75rem' } }}
+                                                    sx={{ fontSize: { xs: '1.6rem', md: '2.25rem' } }}
                                                 >
                                                     {item.title}
                                                 </Typography>
-                                                <Typography align="center" color="text.secondary" sx={{ mb: 2 }}>
+                                                <Typography align="center" color="text.secondary" sx={{ mb: 4 }}>
                                                     Bavaro · Macao · Uvero Alto
                                                 </Typography>
 
-                                                <Typography variant="overline" sx={{ fontWeight: 700, letterSpacing: 1, color: 'primary.main' }}>
-                                                    Included with the service
-                                                </Typography>
-                                                <List dense sx={{ mb: 2 }}>
-                                                    {item.content.map((line, idx) => (
-                                                        <ListItem key={idx} sx={{ py: 0.5 }}>
-                                                            <CheckCircleIcon sx={{ fontSize: 18, mr: 1, color: 'primary.main' }} />
-                                                            <ListItemText primary={line} primaryTypographyProps={{ variant: 'body2' }} />
-                                                        </ListItem>
-                                                    ))}
-                                                </List>
-
-                                                {item.additionalInfo?.length > 0 && (
-                                                    <>
-                                                        <Typography variant="overline" sx={{ fontWeight: 700, letterSpacing: 1, color: 'text.secondary' }}>
-                                                            Additional information
+                                                {/* Details in two columns to use the full width */}
+                                                <Grid container spacing={{ xs: 1, md: 5 }} sx={{ maxWidth: 900, mx: 'auto' }}>
+                                                    <Grid size={{ xs: 12, md: item.additionalInfo?.length ? 6 : 12 }}>
+                                                        <Typography variant="overline" sx={{ fontWeight: 700, letterSpacing: 1, color: 'primary.main' }}>
+                                                            Included with the service
                                                         </Typography>
-                                                        <List dense sx={{ mb: 2 }}>
-                                                            {item.additionalInfo.map((line, idx) => (
-                                                                <ListItem key={idx} sx={{ py: 0.25 }}>
-                                                                    <InfoIcon sx={{ fontSize: 16, mr: 1, color: 'text.secondary' }} />
-                                                                    <ListItemText
-                                                                        primary={line}
-                                                                        primaryTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
-                                                                    />
+                                                        <List dense>
+                                                            {item.content.map((line, idx) => (
+                                                                <ListItem key={idx} sx={{ py: 0.5 }} disableGutters>
+                                                                    <CheckCircleIcon sx={{ fontSize: 18, mr: 1, color: 'primary.main' }} />
+                                                                    <ListItemText primary={line} primaryTypographyProps={{ variant: 'body2' }} />
                                                                 </ListItem>
                                                             ))}
                                                         </List>
-                                                    </>
-                                                )}
+                                                    </Grid>
 
-                                                <Typography variant="h5" align="center" color="primary" fontWeight="bold" sx={{ mb: 2 }}>
-                                                    {formatItemPrice(effectivePrice)}
-                                                </Typography>
+                                                    {item.additionalInfo?.length > 0 && (
+                                                        <Grid size={{ xs: 12, md: 6 }}>
+                                                            <Typography variant="overline" sx={{ fontWeight: 700, letterSpacing: 1, color: 'text.secondary' }}>
+                                                                Additional information
+                                                            </Typography>
+                                                            <List dense>
+                                                                {item.additionalInfo.map((line, idx) => (
+                                                                    <ListItem key={idx} sx={{ py: 0.25 }} disableGutters>
+                                                                        <InfoIcon sx={{ fontSize: 16, mr: 1, color: 'text.secondary' }} />
+                                                                        <ListItemText
+                                                                            primary={line}
+                                                                            primaryTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                                                                        />
+                                                                    </ListItem>
+                                                                ))}
+                                                            </List>
+                                                        </Grid>
+                                                    )}
+                                                </Grid>
 
-                                                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+                                                <Stack alignItems="center" spacing={2} sx={{ mt: 4 }}>
+                                                    <Typography variant="h4" color="primary" fontWeight="bold">
+                                                        {formatItemPrice(effectivePrice)}
+                                                    </Typography>
                                                     <Button
                                                         variant="contained"
-                                                        fullWidth
+                                                        size="large"
                                                         startIcon={isInCart(item.id) ? <CheckCircleIcon /> : <ShoppingCartIcon />}
                                                         onClick={() => addToCart({ ...item, usdPrice: effectivePrice }, 'Photo Session')}
                                                         disabled={isInCart(item.id)}
                                                         sx={{
+                                                            width: '100%',
+                                                            maxWidth: 440,
                                                             background: isInCart(item.id)
                                                                 ? 'grey.400'
                                                                 : 'linear-gradient(to right, #ec4899, #db2777)',
@@ -389,27 +399,15 @@ const BeachSessions = ({ forceCountry }) => {
                                                     >
                                                         {isInCart(item.id) ? 'In Cart' : 'Add to Cart'}
                                                     </Button>
-                                                    { /*item.bookingUrl && (
-                                                        <Button
-                                                            component="a"
-                                                            href={item.bookingUrl}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            variant="outlined"
-                                                            fullWidth
-                                                            endIcon={<LaunchIcon />}
-                                                        >
-                                                            View on Booking.com
-                                                        </Button>
-                                                    ) */}
                                                 </Stack>
-
-                                                {item.gallery?.length > 0 && (
-                                                    <Box sx={{ mt: 3 }}>
-                                                        <GalleryPreview images={item.gallery} title={item.title} />
-                                                    </Box>
-                                                )}
                                             </CardContent>
+
+                                            {/* Full-width gallery below */}
+                                            {item.gallery?.length > 0 && (
+                                                <Box sx={{ px: { xs: 3, md: 5 }, pb: { xs: 3, md: 5 } }}>
+                                                    <GalleryPreview images={item.gallery} title={item.title} />
+                                                </Box>
+                                            )}
                                         </Card>
                                     </Grid>
                                 );
