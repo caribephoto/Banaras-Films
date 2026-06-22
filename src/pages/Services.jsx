@@ -51,12 +51,7 @@ const Services = () => {
   useDocumentTitle("Services");
   useTakeMeToTheTop();
   const { addToCart, isInCart } = useCart();
-  const { formatCurrency, taxRate, countryCode } = useCountry();
-
-  const formatItemPrice = (usdPrice) => {
-    const base = formatCurrency(usdPrice);
-    return taxRate > 0 ? `${base} + Tax` : base;
-  };
+  const { formatCurrency, taxRate, taxLabel, countryCode } = useCountry();
 
   const vipForCountry = useMemo(() => filterByCountry(packagesVip, countryCode), [countryCode]);
   const pkgForCountry = useMemo(() => filterByCountry(pkg, countryCode), [countryCode]);
@@ -103,15 +98,16 @@ const Services = () => {
               </ListItem>
             ))}
           </List>
-          <Typography
-            variant="h6"
-            align="center"
-            color="primary"
-            fontWeight="bold"
-            sx={{ mb: 2 }}
-          >
-            {formatItemPrice(effectivePrice)}
-          </Typography>
+          <Box sx={{ textAlign: 'center', mb: 2 }}>
+            <Typography variant="h6" color="primary" fontWeight="bold">
+              {formatCurrency(effectivePrice)}
+            </Typography>
+            {taxRate > 0 && (
+              <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.25 }}>
+                + {formatCurrency(effectivePrice * taxRate)} {taxLabel} ({(taxRate * 100).toFixed(0)}%) · Total {formatCurrency(effectivePrice * (1 + taxRate))}
+              </Typography>
+            )}
+          </Box>
           <Stack direction="row" spacing={1}>
             <Button
               variant="contained"
