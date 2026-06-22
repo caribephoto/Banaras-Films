@@ -1,6 +1,6 @@
 const TAX_RATE_MX = parseFloat(import.meta.env.VITE_TAX_RATE_MX ?? '0.16');
 const TAX_RATE_JM = parseFloat(import.meta.env.VITE_TAX_RATE_JM ?? '0');
-const TAX_RATE_DO = parseFloat(import.meta.env.VITE_TAX_RATE_DO ?? '0');
+const TAX_RATE_DO = parseFloat(import.meta.env.VITE_TAX_RATE_DO ?? '0.18'); // ITBIS
 
 const flag = (envVar, def = 'false') => (import.meta.env[envVar] ?? def) === 'true';
 
@@ -45,7 +45,7 @@ export const COUNTRIES = [
     currency: 'USD',
     defaultLocale: 'en-US',
     taxRate: TAX_RATE_DO,
-    taxLabel: 'Tax',
+    taxLabel: 'ITBIS',
     paymentProviders: {
       paypal: flag('VITE_ENABLE_PAYPAL_DO', 'true'),
       stripe: flag('VITE_ENABLE_STRIPE_DO', 'false'),
