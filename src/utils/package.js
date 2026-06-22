@@ -67,7 +67,7 @@ const pkg = [
     content: [
       "Ideal package for a rehearsal dinner or if you want to surprise your partner at the moment you pop the question.",
       "Coverage time: 1 hour",
-      "Around 80 high resolution photos in JPG format with rights free for personal use in LINK.",
+      "Around 50 high resolution photos in JPG format with rights free for personal use in LINK.",
       "Not valid as a wedding package.",
       "*Please read the Terms and Conditions section.",
     ],
