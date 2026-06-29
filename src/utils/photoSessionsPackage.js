@@ -10,13 +10,13 @@ const photoSessions = [
     img: '/img/punta-cana/bavaro-03.webp',
     // Each gallery entry has a small thumb (~15-20 kB) for the grid
     // and a full-size WebP (~100-400 kB) for the lightbox.
-    gallery: Array.from({ length: 21 }, (_, i) => {
-      const n = String(i + 2).padStart(2, '0');
-      return {
+    gallery: Array.from({ length: 21 }, (_, i) => String(i + 2).padStart(2, '0'))
+      // Skip bavaro-05 (excluded).
+      .filter((n) => n !== '05')
+      .map((n) => ({
         thumb: `/img/punta-cana/bavaro-${n}-thumb.webp`,
         full: `/img/punta-cana/bavaro-${n}.webp`,
-      };
-    }),
+      })),
     content: [
       'Up to 4 people',
       'Professional Photographer',
