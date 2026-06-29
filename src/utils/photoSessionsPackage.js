@@ -22,7 +22,7 @@ const photoSessions = [
       'Professional Photographer',
       'Bottled water',
       '1 hour professional photoshoot',
-      'Private transportation',
+      'Private transportation in the area',
       '50 pictures with manual single-frame color correction in Lightroom',
     ],
     additionalInfo: [
