@@ -35,7 +35,9 @@ const Header = (props) => {
   const pages = [
     { name: "Home", link: "/" },
     { name: "Services", link: "/services" },
-    ...(country?.code === "DO" ? [{ name: "Beach Sessions", link: "/beach-sessions" }] : []),
+    // Beach Sessions temporarily disabled (VITE_ENABLE_BEACH_SESSIONS=true to restore).
+    ...(country?.code === "DO" && import.meta.env.VITE_ENABLE_BEACH_SESSIONS === "true"
+      ? [{ name: "Beach Sessions", link: "/beach-sessions" }] : []),
     { name: "Video", link: "/video" },
     { name: "About", link: "/about" },
     { name: "Terms & Conditions", link: "/terms" },

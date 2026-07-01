@@ -14,7 +14,7 @@ import CheckoutReturn from "./pages/CheckoutReturn";
 import BeachSessions from "./pages/BeachSessions";
 import BeachCart from "./components/cart/BeachCart";
 import BeachCheckout from "./components/cart/BeachCheckout";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CartProvider } from "./context/CartContext";
 import { BeachCartProvider } from "./context/BeachCartContext";
@@ -81,6 +81,10 @@ function App() {
   const effectiveTheme = theme === "system" ? systemTheme : theme;
   const muiTheme = getTheme(effectiveTheme);
 
+  // Beach Sessions is temporarily disabled. Re-enable by setting
+  // VITE_ENABLE_BEACH_SESSIONS=true (and redeploying).
+  const beachEnabled = import.meta.env.VITE_ENABLE_BEACH_SESSIONS === "true";
+
   return (
     <ThemeProvider theme={muiTheme}>
       <CssBaseline />
@@ -100,11 +104,21 @@ function App() {
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/checkout/return" element={<CheckoutReturn />} />
-                <Route path="/beach-sessions" element={<BeachSessions />} />
-                {/* External promo deep-link: lands on Beach Sessions pinned to RD */}
-                <Route path="/rd/beach-sessions" element={<BeachSessions forceCountry="DO" />} />
-                <Route path="/beach-sessions/cart" element={<BeachCart />} />
-                <Route path="/beach-sessions/checkout" element={<BeachCheckout />} />
+                {beachEnabled ? (
+                  <>
+                    <Route path="/beach-sessions" element={<BeachSessions />} />
+                    {/* External promo deep-link: lands on Beach Sessions pinned to RD */}
+                    <Route path="/rd/beach-sessions" element={<BeachSessions forceCountry="DO" />} />
+                    <Route path="/beach-sessions/cart" element={<BeachCart />} />
+                    <Route path="/beach-sessions/checkout" element={<BeachCheckout />} />
+                  </>
+                ) : (
+                  // Temporarily disabled — send any Beach Sessions URL home.
+                  <Route path="/beach-sessions/*" element={<Navigate to="/" replace />} />
+                )}
+                {!beachEnabled && (
+                  <Route path="/rd/beach-sessions" element={<Navigate to="/" replace />} />
+                )}
                 <Route path="*" element={<Error />} />
               </Routes>
               <Footer />
