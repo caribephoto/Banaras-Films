@@ -27,7 +27,7 @@ import { useDocumentTitle, useTakeMeToTheTop } from '../../hooks/hooks';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 // Fixed pick-up times offered for beach sessions (morning + afternoon).
-const PICKUP_TIMES = ['8:30 AM', '9:00 AM', '9:30 AM', '10:00 AM', '4:00 PM', '4:30 PM', '5:00 PM', '5:30 PM'];
+const PICKUP_TIMES = ['8:30 AM', '9:00 AM', '9:30 AM', '4:00 PM', '4:30 PM', '5:00 PM'];
 
 const BeachCheckout = () => {
     useDocumentTitle('Beach Checkout');

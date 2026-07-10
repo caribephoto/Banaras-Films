@@ -383,7 +383,7 @@ const BeachSessions = ({ forceCountry }) => {
                                                         <ListItem sx={{ py: 0.25 }} disableGutters>
                                                             <AccessTimeIcon sx={{ fontSize: 16, mr: 1, color: 'text.secondary' }} />
                                                             <ListItemText
-                                                                primary="Pick-up times: 8:30 · 9:00 · 9:30 · 10:00 am — 4:00 · 4:30 · 5:00 · 5:30 pm"
+                                                                primary="Pick-up times: 8:30 · 9:00 · 9:30 am — 4:00 · 4:30 · 5:00 pm"
                                                                 primaryTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
                                                             />
                                                         </ListItem>
