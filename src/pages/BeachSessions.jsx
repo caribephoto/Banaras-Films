@@ -14,6 +14,7 @@ import {
     List,
     ListItem,
     ListItemText,
+    Link,
     Alert,
     IconButton,
     Badge,
@@ -25,6 +26,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import InfoIcon from '@mui/icons-material/Info';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LaunchIcon from '@mui/icons-material/Launch';
 import CloseIcon from '@mui/icons-material/Close';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -374,6 +376,33 @@ const BeachSessions = ({ forceCountry }) => {
                                                         </Grid>
                                                     )}
                                                 </Grid>
+
+                                                {/* Pick-up times + contact */}
+                                                <Box sx={{ maxWidth: 900, mx: 'auto', mt: 3 }}>
+                                                    <List dense>
+                                                        <ListItem sx={{ py: 0.25 }} disableGutters>
+                                                            <AccessTimeIcon sx={{ fontSize: 16, mr: 1, color: 'text.secondary' }} />
+                                                            <ListItemText
+                                                                primary="Pick-up times: 8:30 · 9:00 · 9:30 · 10:00 am — 4:00 · 4:30 · 5:00 · 5:30 pm"
+                                                                primaryTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                                                            />
+                                                        </ListItem>
+                                                        <ListItem sx={{ py: 0.25 }} disableGutters>
+                                                            <InfoIcon sx={{ fontSize: 16, mr: 1, color: 'text.secondary' }} />
+                                                            <ListItemText
+                                                                primary={
+                                                                    <>
+                                                                        For questions or comments:{' '}
+                                                                        <Link href="mailto:adminrd@caribephoto.com" underline="hover" sx={{ fontWeight: 600 }}>
+                                                                            adminrd@caribephoto.com
+                                                                        </Link>
+                                                                    </>
+                                                                }
+                                                                primaryTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                                                            />
+                                                        </ListItem>
+                                                    </List>
+                                                </Box>
 
                                                 <Stack alignItems="center" spacing={2} sx={{ mt: 4 }}>
                                                     <Typography variant="h4" color="primary" fontWeight="bold">

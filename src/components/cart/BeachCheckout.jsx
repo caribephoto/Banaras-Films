@@ -103,7 +103,7 @@ const BeachCheckout = () => {
             valid = false;
         }
         if (!customerInfo.pax || parseInt(customerInfo.pax, 10) <= 0) {
-            errors.pax = 'Number of people is required';
+            errors.pax = 'Number of PAX is required';
             valid = false;
         }
         return { errors, valid };
@@ -244,7 +244,7 @@ const BeachCheckout = () => {
                                 <Typography><strong>Session date:</strong> {customerInfo.sessionDate}</Typography>
                                 <Typography><strong>Session time:</strong> {customerInfo.sessionTime}</Typography>
                                 <Typography><strong>Location:</strong> {venueLabel}</Typography>
-                                <Typography><strong>People:</strong> {customerInfo.pax}</Typography>
+                                <Typography><strong>PAX:</strong> {customerInfo.pax}</Typography>
                                 <Typography>
                                     <strong>Total:</strong>{' '}
                                     <Box component="span" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
@@ -296,7 +296,7 @@ const BeachCheckout = () => {
                                 <TextField fullWidth required name="sessionTime" type="time" label="Session time" InputLabelProps={{ shrink: true }} value={customerInfo.sessionTime} onChange={handleChange} error={!!fieldErrors.sessionTime} helperText={fieldErrors.sessionTime} />
                             </Grid>
                             <Grid size={{ xs: 12, md: 4 }}>
-                                <TextField fullWidth required name="pax" type="number" label="People" inputProps={{ min: 1 }} value={customerInfo.pax} onChange={handleChange} error={!!fieldErrors.pax} helperText={fieldErrors.pax || 'Up to 4 included; contact us for larger groups'} />
+                                <TextField fullWidth required name="pax" type="number" label="PAX" inputProps={{ min: 1 }} value={customerInfo.pax} onChange={handleChange} error={!!fieldErrors.pax} helperText={fieldErrors.pax || 'Up to 4 included; contact us for larger groups'} />
                             </Grid>
                             <Grid size={12}>
                                 <TextField fullWidth multiline rows={2} name="notes" label="Notes (optional)" placeholder="Preferred beach, time of day, etc." value={customerInfo.notes} onChange={handleChange} />
