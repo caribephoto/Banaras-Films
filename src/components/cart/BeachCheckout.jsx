@@ -16,6 +16,7 @@ import {
     Stack,
     Card,
     Chip,
+    MenuItem,
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
@@ -24,6 +25,9 @@ import { useCountry } from '../../context/CountryContext';
 import { useDocumentTitle, useTakeMeToTheTop } from '../../hooks/hooks';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+// Fixed pick-up times offered for beach sessions (morning + afternoon).
+const PICKUP_TIMES = ['8:30 AM', '9:00 AM', '9:30 AM', '10:00 AM', '4:00 PM', '4:30 PM', '5:00 PM', '5:30 PM'];
 
 const BeachCheckout = () => {
     useDocumentTitle('Beach Checkout');
@@ -99,7 +103,7 @@ const BeachCheckout = () => {
             valid = false;
         }
         if (!customerInfo.sessionTime) {
-            errors.sessionTime = 'Session time is required';
+            errors.sessionTime = 'Pick-up time is required';
             valid = false;
         }
         if (!customerInfo.pax || parseInt(customerInfo.pax, 10) <= 0) {
@@ -242,7 +246,7 @@ const BeachCheckout = () => {
                                 <Typography><strong>Phone:</strong> {customerInfo.phone}</Typography>
                                 <Typography><strong>Hotel:</strong> {customerInfo.hotel}</Typography>
                                 <Typography><strong>Session date:</strong> {customerInfo.sessionDate}</Typography>
-                                <Typography><strong>Session time:</strong> {customerInfo.sessionTime}</Typography>
+                                <Typography><strong>Pick-up time:</strong> {customerInfo.sessionTime}</Typography>
                                 <Typography><strong>Location:</strong> {venueLabel}</Typography>
                                 <Typography><strong>PAX:</strong> {customerInfo.pax}</Typography>
                                 <Typography>
@@ -293,7 +297,9 @@ const BeachCheckout = () => {
                                 <TextField fullWidth required name="sessionDate" type="date" label="Session date" InputLabelProps={{ shrink: true }} inputProps={{ min: minSessionDate }} value={customerInfo.sessionDate} onChange={handleChange} error={!!fieldErrors.sessionDate} helperText={fieldErrors.sessionDate || `Book at least ${MIN_LEAD_DAYS} days in advance`} />
                             </Grid>
                             <Grid size={{ xs: 12, md: 4 }}>
-                                <TextField fullWidth required name="sessionTime" type="time" label="Session time" InputLabelProps={{ shrink: true }} value={customerInfo.sessionTime} onChange={handleChange} error={!!fieldErrors.sessionTime} helperText={fieldErrors.sessionTime} />
+                                <TextField fullWidth required select name="sessionTime" label="Pick-up time" value={customerInfo.sessionTime} onChange={handleChange} error={!!fieldErrors.sessionTime} helperText={fieldErrors.sessionTime || 'Choose a pick-up time'}>
+                                    {PICKUP_TIMES.map((t) => <MenuItem key={t} value={t}>{t}</MenuItem>)}
+                                </TextField>
                             </Grid>
                             <Grid size={{ xs: 12, md: 4 }}>
                                 <TextField fullWidth required name="pax" type="number" label="PAX" inputProps={{ min: 1 }} value={customerInfo.pax} onChange={handleChange} error={!!fieldErrors.pax} helperText={fieldErrors.pax || 'Up to 4 included; contact us for larger groups'} />
