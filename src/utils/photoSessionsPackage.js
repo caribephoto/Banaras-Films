@@ -34,7 +34,7 @@ const photoSessions = [
     ],
     bookingUrl:
       'https://www.booking.com/attractions/en-gb/prru7zya2zen-professional-photo-session-at-a-bavaro-beach.en-gb.html',
-    usdPrice: 450,
+    usdPrice: 300,
     paxIncluded: 4,
     countries: ['DO'],
     category: 'photo-session',

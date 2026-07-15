@@ -211,7 +211,7 @@ const BeachSessions = ({ forceCountry }) => {
     useDocumentTitle('Beach Sessions');
     useTakeMeToTheTop();
     const navigate = useNavigate();
-    const { country, formatCurrency, taxRate, countryCode, setCountry } = useCountry();
+    const { country, formatCurrency, countryCode, setCountry } = useCountry();
     const { addToCart, isInCart, getCartCount } = useBeachCart();
 
     // Promo entry (e.g. /rd/beach-sessions): pin the destination so prices,
@@ -224,10 +224,9 @@ const BeachSessions = ({ forceCountry }) => {
     const items = React.useMemo(() => filterByCountry(photoSessions, countryCode), [countryCode]);
     const isAvailableCountry = country?.code === 'DO';
 
-    const formatItemPrice = (usdPrice) => {
-        const base = formatCurrency(usdPrice);
-        return taxRate > 0 ? `${base} + Tax` : base;
-    };
+    // Prices are now a starting estimate — the final price is confirmed with the
+    // quote, so we show "starting at $X" instead of a fixed price + tax.
+    const formatItemPrice = (usdPrice) => `starting at ${formatCurrency(usdPrice)}`;
 
     return (
         <Box
