@@ -160,11 +160,14 @@ const BeachCart = () => {
                                 )}
                                 <Divider />
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    <Typography variant="h6" fontWeight="bold">Total:</Typography>
+                                    <Typography variant="h6" fontWeight="bold">Estimated total:</Typography>
                                     <Typography variant="h6" color="primary" fontWeight="bold">
                                         {formatCurrency(total)}
                                     </Typography>
                                 </Box>
+                                <Typography variant="caption" color="text.secondary">
+                                    Estimate only — request a quote or reserve with a $100 USD deposit at checkout.
+                                </Typography>
                             </Stack>
                             <Button
                                 component={Link}
@@ -178,7 +181,7 @@ const BeachCart = () => {
                                     '&:hover': { background: 'linear-gradient(to right, #db2777, #be185d)' },
                                 }}
                             >
-                                Proceed to Payment
+                                Continue to Booking
                             </Button>
                             <Button
                                 component={Link}

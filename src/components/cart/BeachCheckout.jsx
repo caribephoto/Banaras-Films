@@ -51,6 +51,10 @@ const BeachCheckout = () => {
     const [orderComplete, setOrderComplete] = useState(false);
     const [orderDetails, setOrderDetails] = useState(null);
     const [orderTotal, setOrderTotal] = useState(0);
+    // 'quote' = customer only requested a quote (no payment taken).
+    // 'deposit' = customer paid the fixed $100 USD deposit; balance billed later by link.
+    const [confirmationMode, setConfirmationMode] = useState('quote');
+    const [submitting, setSubmitting] = useState(false);
 
     const venueLabel = cart[0]?.venueLabel || 'Beach (Dominican Republic)';
 
@@ -68,6 +72,11 @@ const BeachCheckout = () => {
     const subtotal = getCartTotal();
     const tax = subtotal * taxRate;
     const total = subtotal + tax;
+
+    // Fixed deposit charged now. Always in USD regardless of the country's
+    // display currency — the remaining balance is billed later via a link the
+    // team sends manually once the final price is agreed.
+    const DEPOSIT_USD = 100;
 
     const validateForm = useCallback(() => {
         const errors = {};
@@ -156,7 +165,9 @@ const BeachCheckout = () => {
         },
     });
 
-    const completeAndShow = async (orderId, isDuplicate) => {
+    // Shows the confirmation screen and fires the notification email.
+    // `mode` is 'quote' (no payment) or 'deposit' ($100 USD paid).
+    const completeAndShow = async (orderId, isDuplicate, mode) => {
         const payload = buildPersistencePayload();
         if (!isDuplicate) {
             try {
@@ -165,41 +176,63 @@ const BeachCheckout = () => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         customerInfo: payload.customerInfo,
-                        orderDetails: { ...payload.orderDetails, orderId },
+                        orderDetails: {
+                            ...payload.orderDetails,
+                            orderId,
+                            requestType: mode,
+                            ...(mode === 'deposit' ? { depositUSD: DEPOSIT_USD } : {}),
+                        },
                     }),
                 });
             } catch (e) {
                 console.error('Email send failed:', e);
             }
         }
+        setConfirmationMode(mode);
         setOrderDetails({ id: orderId });
         setOrderTotal(total);
         setOrderComplete(true);
         clearCart();
     };
 
-    // PayPal handlers
-    const initialOptions = {
+    // Client-side reference for quote requests (no payment provider id exists yet).
+    const genReference = (prefix) => `${prefix}-${Date.now().toString(36).toUpperCase()}`;
+
+    // "Request Quote" — sends the request by email only, no payment taken.
+    const submitQuoteRequest = async () => {
+        if (!formIsValid) {
+            toast.warning('Please complete the session info first.');
+            return;
+        }
+        setSubmitting(true);
+        try {
+            await completeAndShow(genReference('QR'), false, 'quote');
+            toast.success('Quote request sent! We\'ll be in touch shortly.');
+        } catch (e) {
+            console.error('Quote request failed:', e);
+            toast.error('Could not send your request. Please contact info@caribephoto.com');
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    // PayPal deposit handlers — the deposit is a fixed $100 USD charge, so this
+    // provider runs in USD independently of the country's display currency.
+    const depositOptions = {
         clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID || 'test',
-        currency,
+        currency: 'USD',
         intent: 'capture',
     };
-    const createPayPalOrder = (data, actions) =>
+    const createDepositOrder = (data, actions) =>
         actions.order.create({
             purchase_units: [
                 {
-                    amount: {
-                        value: total.toFixed(2),
-                        breakdown: {
-                            item_total: { currency_code: currency, value: subtotal.toFixed(2) },
-                            tax_total: { currency_code: currency, value: tax.toFixed(2) },
-                        },
-                    },
-                    description: `Beach Session — ${cart.map((c) => c.title).join(', ')}`,
+                    amount: { currency_code: 'USD', value: DEPOSIT_USD.toFixed(2) },
+                    description: `Beach Session Deposit — ${cart.map((c) => c.title).join(', ')}`,
                 },
             ],
         });
-    const onPayPalApprove = async (data, actions) => {
+    const onDepositApprove = async (data, actions) => {
         try {
             const details = await actions.order.capture();
             const payload = buildPersistencePayload();
@@ -209,16 +242,22 @@ const BeachCheckout = () => {
                 body: JSON.stringify({
                     paypalOrderId: details.id,
                     paymentProvider: 'paypal',
-                    paymentStatus: 'completed',
+                    paymentStatus: 'deposit',
                     ...payload,
+                    orderDetails: {
+                        ...payload.orderDetails,
+                        requestType: 'deposit',
+                        depositUSD: DEPOSIT_USD,
+                        depositCurrency: 'USD',
+                    },
                 }),
             });
             const saveJson = await saveResp.json();
-            await completeAndShow(details.id, !!saveJson.data?.isDuplicate);
-            toast.success('Payment successful!');
+            await completeAndShow(details.id, !!saveJson.data?.isDuplicate, 'deposit');
+            toast.success('Deposit received!');
         } catch (err) {
-            console.error('PayPal capture error:', err);
-            toast.error('Payment capture failed. Please contact support.');
+            console.error('PayPal deposit error:', err);
+            toast.error('Deposit capture failed. Please contact support.');
         }
     };
 
@@ -228,20 +267,21 @@ const BeachCheckout = () => {
     }
 
     if (orderComplete) {
+        const isDeposit = confirmationMode === 'deposit';
         return (
             <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', py: 8 }}>
                 <Container maxWidth="md">
                     <Card component={motion.div} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} sx={{ p: 4, textAlign: 'center' }}>
-                        <CheckCircleIcon sx={{ fontSize: 80, color: orderDetails?.voucher ? 'warning.main' : 'success.main', mb: 2 }} />
-                        <Typography variant="h3" gutterBottom fontWeight="bold" color={orderDetails?.voucher ? 'warning.main' : 'success.main'}>
-                            {orderDetails?.voucher ? 'Payment Pending' : 'Order Confirmed!'}
+                        <CheckCircleIcon sx={{ fontSize: 80, color: isDeposit ? 'success.main' : 'primary.main', mb: 2 }} />
+                        <Typography variant="h3" gutterBottom fontWeight="bold" color={isDeposit ? 'success.main' : 'primary.main'}>
+                            {isDeposit ? 'Deposit Received!' : 'Request Received!'}
                         </Typography>
                         <Typography variant="h6" sx={{ mb: 4 }}>
                             Thanks, {customerInfo.name}!
                         </Typography>
                         <Paper sx={{ p: 3, mb: 4, textAlign: 'left', bgcolor: 'background.default' }}>
                             <Stack spacing={1}>
-                                <Typography><strong>Order ID:</strong> {orderDetails?.id}</Typography>
+                                <Typography><strong>Reference:</strong> {orderDetails?.id}</Typography>
                                 <Typography><strong>Email:</strong> {customerInfo.email}</Typography>
                                 <Typography><strong>Phone:</strong> {customerInfo.phone}</Typography>
                                 <Typography><strong>Hotel:</strong> {customerInfo.hotel}</Typography>
@@ -250,13 +290,26 @@ const BeachCheckout = () => {
                                 <Typography><strong>Location:</strong> {venueLabel}</Typography>
                                 <Typography><strong>PAX:</strong> {customerInfo.pax}</Typography>
                                 <Typography>
-                                    <strong>Total:</strong>{' '}
+                                    <strong>Estimated total:</strong>{' '}
                                     <Box component="span" sx={{ color: 'primary.main', fontWeight: 'bold' }}>
                                         {formatCurrency(orderTotal)}
                                     </Box>
                                 </Typography>
+                                {isDeposit && (
+                                    <Typography>
+                                        <strong>Deposit paid:</strong>{' '}
+                                        <Box component="span" sx={{ color: 'success.main', fontWeight: 'bold' }}>
+                                            ${DEPOSIT_USD.toFixed(2)} USD
+                                        </Box>
+                                    </Typography>
+                                )}
                             </Stack>
                         </Paper>
+                        <Alert severity="info" sx={{ mb: 4, textAlign: 'left' }}>
+                            {isDeposit
+                                ? `We received your $${DEPOSIT_USD} USD deposit. Our team will confirm the final price and email you a secure link to pay the remaining balance.`
+                                : 'We received your request. Our team will review it and email you a quote along with a secure payment link. No payment has been taken yet.'}
+                        </Alert>
                         <Button variant="contained" size="large" onClick={() => navigate('/beach-sessions')}>
                             Continue
                         </Button>
@@ -339,16 +392,25 @@ const BeachCheckout = () => {
                                     )}
                                     <Divider />
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 1 }}>
-                                        <Typography variant="h6" fontWeight="bold">Total:</Typography>
+                                        <Typography variant="h6" fontWeight="bold">Estimated total:</Typography>
                                         <Typography variant="h5" color="primary.main" fontWeight="bold">{formatCurrency(total)}</Typography>
                                     </Box>
+                                    <Typography variant="caption" color="text.secondary">
+                                        This is an estimate. We'll confirm the final price and send a payment link.
+                                        Deposit today: <strong>${DEPOSIT_USD} USD</strong> · remaining balance billed later.
+                                    </Typography>
                                 </Stack>
                             </Paper>
                         </Grid>
 
                         <Grid size={{ xs: 12, md: 6 }}>
                             <Paper elevation={2} sx={{ p: 3, borderRadius: 2, height: '100%' }}>
-                                <Typography variant="h5" fontWeight="bold" sx={{ mb: 3 }}>Payment</Typography>
+                                <Typography variant="h5" fontWeight="bold" sx={{ mb: 1 }}>Book your session</Typography>
+                                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                                    Request a quote and we'll confirm your final price — or secure your date now
+                                    with a ${DEPOSIT_USD} USD deposit. The remaining balance is billed later via a
+                                    link we send you.
+                                </Typography>
 
                                 {!formIsValid && (
                                     <Alert severity="warning" sx={{ mb: 2 }}>
@@ -357,23 +419,42 @@ const BeachCheckout = () => {
                                 )}
 
                                 <Stack spacing={2}>
-                                    {/* Beach sessions are PayPal-only by design. */}
-                                    {paymentProviders.paypal && (
-                                        <PayPalScriptProvider key={currency} options={initialOptions}>
+                                    {/* Primary action: request a quote (no payment taken). */}
+                                    <Button
+                                        variant="contained"
+                                        size="large"
+                                        fullWidth
+                                        disabled={!formIsValid || submitting}
+                                        onClick={submitQuoteRequest}
+                                        sx={{
+                                            background: 'linear-gradient(to right, #ec4899, #db2777)',
+                                            '&:hover': { background: 'linear-gradient(to right, #db2777, #be185d)' },
+                                        }}
+                                    >
+                                        {submitting ? 'Sending…' : 'Request Quote'}
+                                    </Button>
+
+                                    <Divider>
+                                        <Typography variant="caption" color="text.secondary">
+                                            or secure your date now (optional)
+                                        </Typography>
+                                    </Divider>
+
+                                    {/* Optional secondary action: pay the fixed $100 USD deposit. */}
+                                    {paymentProviders.paypal ? (
+                                        <PayPalScriptProvider key="deposit-usd" options={depositOptions}>
                                             <PayPalButtons
                                                 style={{ layout: 'vertical' }}
-                                                createOrder={createPayPalOrder}
-                                                onApprove={onPayPalApprove}
-                                                onError={(err) => { console.error('PayPal Error:', err); toast.error('Payment failed.'); }}
-                                                onCancel={() => toast.info('Payment cancelled.')}
+                                                createOrder={createDepositOrder}
+                                                onApprove={onDepositApprove}
+                                                onError={(err) => { console.error('PayPal Error:', err); toast.error('Deposit failed.'); }}
+                                                onCancel={() => toast.info('Deposit cancelled.')}
                                                 disabled={!formIsValid}
                                             />
                                         </PayPalScriptProvider>
-                                    )}
-
-                                    {!paymentProviders.paypal && (
-                                        <Alert severity="error">
-                                            No payment method available — contact info@caribephoto.com
+                                    ) : (
+                                        <Alert severity="info">
+                                            Online deposit unavailable here — request a quote and we'll send a payment link.
                                         </Alert>
                                     )}
                                 </Stack>
