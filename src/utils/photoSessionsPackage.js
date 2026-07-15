@@ -18,7 +18,7 @@ const photoSessions = [
         full: `/img/punta-cana/bavaro-${n}.webp`,
       })),
     content: [
-      // 'Up to 4 people',
+      // 'Up to 4 people', 
       'Professional Photographer',
       'Bottled water',
       '1 hour professional photoshoot',
