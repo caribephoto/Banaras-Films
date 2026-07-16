@@ -28,10 +28,13 @@ const BeachCart = () => {
     useTakeMeToTheTop();
 
     const { cart, removeFromCart, updateQuantity, getCartTotal } = useBeachCart();
-    const { formatCurrency, taxRate, taxLabel } = useCountry();
+    const { formatCurrency } = useCountry();
 
     const subtotal = getCartTotal();
-    const tax = subtotal * taxRate;
+    // ITBIS/tax intentionally NOT applied to beach sessions — the final price
+    // is agreed with the quote. To re-enable: destructure taxRate/taxLabel from
+    // useCountry() and restore `const tax = subtotal * taxRate;`.
+    const tax = 0;
     const total = subtotal + tax;
 
     if (cart.length === 0) {
@@ -150,6 +153,7 @@ const BeachCart = () => {
                                     <Typography color="text.secondary">Subtotal:</Typography>
                                     <Typography fontWeight="600">{formatCurrency(subtotal)}</Typography>
                                 </Box>
+                                {/* ITBIS row disabled for beach sessions (tax = 0). Re-enable with taxRate/taxLabel:
                                 {taxRate > 0 && (
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                         <Typography color="text.secondary">
@@ -157,7 +161,7 @@ const BeachCart = () => {
                                         </Typography>
                                         <Typography fontWeight="600">{formatCurrency(tax)}</Typography>
                                     </Box>
-                                )}
+                                )} */}
                                 <Divider />
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Typography variant="h6" fontWeight="bold">Estimated total:</Typography>

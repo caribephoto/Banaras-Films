@@ -34,7 +34,7 @@ const BeachCheckout = () => {
     useTakeMeToTheTop();
     const navigate = useNavigate();
     const { cart, getCartTotal, clearCart } = useBeachCart();
-    const { country, formatCurrency, taxRate, taxLabel, currency, paymentProviders } = useCountry();
+    const { country, formatCurrency, currency, paymentProviders } = useCountry();
 
     const [customerInfo, setCustomerInfo] = useState({
         name: '',
@@ -70,7 +70,9 @@ const BeachCheckout = () => {
     })();
 
     const subtotal = getCartTotal();
-    const tax = subtotal * taxRate;
+    // ITBIS/tax intentionally NOT applied to beach sessions — the final price
+    // is agreed with the quote. Restore `subtotal * taxRate` to re-enable.
+    const tax = 0;
     const total = subtotal + tax;
 
     // Fixed deposit charged now. Always in USD regardless of the country's
@@ -210,7 +212,7 @@ const BeachCheckout = () => {
             toast.success('Quote request sent! We\'ll be in touch shortly.');
         } catch (e) {
             console.error('Quote request failed:', e);
-            toast.error('Could not send your request. Please contact info@caribephoto.com');
+            toast.error('Could not send your request. Please contact adminrd@caribephoto.com');
         } finally {
             setSubmitting(false);
         }
@@ -384,12 +386,13 @@ const BeachCheckout = () => {
                                         <Typography>Subtotal:</Typography>
                                         <Typography fontWeight={600}>{formatCurrency(subtotal)}</Typography>
                                     </Box>
+                                    {/* ITBIS row disabled for beach sessions (tax = 0). Re-enable together with the tax calc above:
                                     {taxRate > 0 && (
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                             <Typography>{taxLabel} ({(taxRate * 100).toFixed(0)}%):</Typography>
                                             <Typography fontWeight={600}>{formatCurrency(tax)}</Typography>
                                         </Box>
-                                    )}
+                                    )} */}
                                     <Divider />
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 1 }}>
                                         <Typography variant="h6" fontWeight="bold">Estimated total:</Typography>

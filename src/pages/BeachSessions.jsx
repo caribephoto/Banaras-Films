@@ -264,7 +264,7 @@ const BeachSessions = ({ forceCountry }) => {
 
                 {isAvailableCountry && items.length === 0 && (
                     <Alert severity="warning" sx={{ mb: 4 }}>
-                        No beach sessions available right now. Please contact us at info@caribephoto.com.
+                        No beach sessions available right now. Please contact us at adminrd@caribephoto.com.
                     </Alert>
                 )}
 
@@ -411,21 +411,21 @@ const BeachSessions = ({ forceCountry }) => {
                                                         variant="contained"
                                                         size="large"
                                                         startIcon={isInCart(item.id) ? <CheckCircleIcon /> : <ShoppingCartIcon />}
-                                                        onClick={() => addToCart({ ...item, usdPrice: effectivePrice }, 'Photo Session')}
-                                                        disabled={isInCart(item.id)}
+                                                        // Once the item is in the cart, the CTA becomes "Reserve"
+                                                        // and takes the visitor to the cart to complete the request.
+                                                        onClick={() => (isInCart(item.id)
+                                                            ? navigate('/beach-sessions/cart')
+                                                            : addToCart({ ...item, usdPrice: effectivePrice }, 'Photo Session'))}
                                                         sx={{
                                                             width: '100%',
                                                             maxWidth: 440,
-                                                            background: isInCart(item.id)
-                                                                ? 'grey.400'
-                                                                : 'linear-gradient(to right, #ec4899, #db2777)',
+                                                            background: 'linear-gradient(to right, #ec4899, #db2777)',
                                                             '&:hover': {
                                                                 background: 'linear-gradient(to right, #db2777, #be185d)',
                                                             },
-                                                            '&:disabled': { color: 'white', opacity: 0.7 },
                                                         }}
                                                     >
-                                                        {isInCart(item.id) ? 'In Cart' : 'Add to Cart'}
+                                                        {isInCart(item.id) ? 'Reserve' : 'Add to Cart'}
                                                     </Button>
                                                 </Stack>
                                             </CardContent>
